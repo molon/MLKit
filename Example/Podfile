@@ -1,0 +1,11 @@
+#source 'https://github.com/CocoaPods/Specs.git'
+
+platform :ios, '7.0'
+
+workspace 'MLKitExample.xcworkspace'
+
+target 'MLKitExample' do
+	project 'MLKitExample.xcodeproj'
+	
+	pod 'MLKit', :path => '../MLKit.podspec'
+end

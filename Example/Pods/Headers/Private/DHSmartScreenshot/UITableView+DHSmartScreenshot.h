@@ -1,0 +1,1 @@
+../../../DHSmartScreenshot/Classes/UITableView+DHSmartScreenshot.h
