@@ -7,7 +7,6 @@
 //
 
 #import "BaseAPIHelper.h"
-#import "MLKit.h"
 
 NSString * const MLAPICommonErrorDomainForRequestFailed = @"com.molon.molonapi.MLAPICommonErrorDomainForRequestFailed";
 NSInteger const MLAPICommonErrorCodeForRequestFailed = -1;

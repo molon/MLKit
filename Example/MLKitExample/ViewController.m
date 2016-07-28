@@ -7,9 +7,7 @@
 //
 
 #import "ViewController.h"
-#import "MLKit.h"
 #import "BaseAPIHelper.h"
-#import <YYModel.h>
 #import "UIViewController+MLAPI.h"
 
 @protocol Article

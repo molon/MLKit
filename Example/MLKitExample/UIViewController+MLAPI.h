@@ -7,7 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "NSObject+MLAPI.h"
 
 @interface UIViewController (MLAPI)<MLAPICallbackProtocol>
 

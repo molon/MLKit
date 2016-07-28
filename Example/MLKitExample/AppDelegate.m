@@ -7,8 +7,6 @@
 //
 
 #import "AppDelegate.h"
-#import "MLKit.h"
-#import <YYModel.h>
 
 @interface MLAPIModelTransformProtocol : YYModelTransformProtocol
 

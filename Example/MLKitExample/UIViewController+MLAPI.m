@@ -7,8 +7,6 @@
 //
 
 #import "UIViewController+MLAPI.h"
-#import "MLKitMacro.h"
-#import "MLAPIHelper.h"
 
 @implementation UIViewController (MLAPI)
 

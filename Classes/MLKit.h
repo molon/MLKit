@@ -8,6 +8,7 @@
 #pragma once
 
 #import "MLKitMacro.h"
+#import <YYModel.h>
 
 #import "MLThread.h"
 #import "MLWeakProxy.h"
@@ -54,4 +55,5 @@
 #import "MLAPIManager.h"
 #import "MLAPIHelper.h"
 #import "NSObject+MLAPI.h"
+#import "MLAPICacheItem.h"
 
