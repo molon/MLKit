@@ -23,7 +23,23 @@
 @implementation Article
 @end
 
-@interface TestAPIHelper: BaseAPIHelper
+@interface UUIDAPIHelper : BaseAPIHelper
+
+@property (nonatomic, copy) NSString *p_uuid;
+
+@end
+@implementation UUIDAPIHelper
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+        _p_uuid = [UIDevice currentDevice].UUID;
+    }
+    return self;
+}
+@end
+
+@interface TestAPIHelper: UUIDAPIHelper
 
 @property (nonatomic, copy) NSString *p_test;
 @property (nonatomic, assign) NSInteger p_test2;
@@ -55,6 +71,20 @@
 @end
 
 @implementation ViewController
+
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+        [self careAboutMLAPIHelperClass:[UUIDAPIHelper class]];
+    }
+    return self;
+}
+
+- (void)awakeFromNib {
+    [super awakeFromNib];
+    [self careAboutMLAPIHelperClass:[UUIDAPIHelper class]];
+}
 
 - (UITableView *)tableView
 {
@@ -141,17 +171,17 @@
     //        [helper requestWithCallbackObject:self];
     
     [helper requestWithBefore:^(MLAPIHelper * _Nonnull apiHelper) {
-        DDLogDebug(@"请求之前咯:%@",helper);
+        DDLogInfo(@"请求之前咯:%@",helper);
     } uploadProgress:nil downloadProgress:nil cachePreload:^(MLAPIHelper * _Nonnull apiHelper) {
         DDLogInfo(@"预加载咯: %@",helper.r_rows);
     } complete:^(MLAPIHelper * _Nonnull apiHelper) {
-        DDLogDebug(@"请求结束咯:%@",helper);
+        DDLogInfo(@"请求结束咯:%@",helper);
     } success:^(MLAPIHelper * _Nonnull apiHelper) {
-        DDLogDebug(@"请求成功咯:%@",helper.r_rows);
+        DDLogInfo(@"请求成功咯:%@",helper.r_rows);
     } failure:^(MLAPIHelper * _Nonnull apiHelper, NSError * _Nonnull error) {
-        DDLogDebug(@"请求失败咯:%@",helper.responseError.localizedDescription);
+        DDLogInfo(@"请求失败咯:%@",helper.responseError.localizedDescription);
     } error:^(MLAPIHelper * _Nonnull apiHelper, NSError * _Nonnull error) {
-        DDLogDebug(@"请求错误咯:%@",helper.responseError.localizedDescription);
+        DDLogInfo(@"请求错误咯:%@",helper.responseError.localizedDescription);
     }];
 }
 
@@ -159,7 +189,7 @@
     if (buttonIndex == [alertView cancelButtonIndex]) {
         return;
     }
-    DDLogDebug(@"alert");
+    DDLogInfo(@"alert");
 }
 
 #pragma mark - request
@@ -182,6 +212,12 @@
         DDLogError(@"请求失败回调 %@",apiHelper.responseError.localizedDescription);
     }else{
         [super afterRequestFailed:apiHelper];
+    }
+}
+
+- (void)afterRequestSucceedForCaredAboutAPIHelper:(MLAPIHelper*)apiHelper {
+    if ([apiHelper isKindOfClass:[UUIDAPIHelper class]]) {
+        DDLogInfo(@"关心请求成功 %@",apiHelper);
     }
 }
 
