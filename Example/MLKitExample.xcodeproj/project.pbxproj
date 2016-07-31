@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		3621C75B1D2CB60C0012DAED /* avatar.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 3621C75A1D2CB60C0012DAED /* avatar.jpg */; };
+		36408B071D4E42E600E78ACA /* DefaultMLLazyLoadTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 36408B021D4E42E600E78ACA /* DefaultMLLazyLoadTableViewCell.m */; };
+		36408B081D4E42E600E78ACA /* MLLazyLoadTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 36408B041D4E42E600E78ACA /* MLLazyLoadTableView.m */; };
+		36408B091D4E42E600E78ACA /* MLLazyLoadTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 36408B061D4E42E600E78ACA /* MLLazyLoadTableViewCell.m */; };
 		36A374251D2640EE00EDD9A8 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 36A374241D2640EE00EDD9A8 /* main.m */; };
 		36A374281D2640EE00EDD9A8 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 36A374271D2640EE00EDD9A8 /* AppDelegate.m */; };
 		36A3742B1D2640EE00EDD9A8 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 36A3742A1D2640EE00EDD9A8 /* ViewController.m */; };
@@ -40,6 +43,12 @@
 
 /* Begin PBXFileReference section */
 		3621C75A1D2CB60C0012DAED /* avatar.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = avatar.jpg; sourceTree = "<group>"; };
+		36408B011D4E42E600E78ACA /* DefaultMLLazyLoadTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DefaultMLLazyLoadTableViewCell.h; sourceTree = "<group>"; };
+		36408B021D4E42E600E78ACA /* DefaultMLLazyLoadTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DefaultMLLazyLoadTableViewCell.m; sourceTree = "<group>"; };
+		36408B031D4E42E600E78ACA /* MLLazyLoadTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MLLazyLoadTableView.h; sourceTree = "<group>"; };
+		36408B041D4E42E600E78ACA /* MLLazyLoadTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MLLazyLoadTableView.m; sourceTree = "<group>"; };
+		36408B051D4E42E600E78ACA /* MLLazyLoadTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MLLazyLoadTableViewCell.h; sourceTree = "<group>"; };
+		36408B061D4E42E600E78ACA /* MLLazyLoadTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MLLazyLoadTableViewCell.m; sourceTree = "<group>"; };
 		36A374201D2640EE00EDD9A8 /* MLKitExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MLKitExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		36A374241D2640EE00EDD9A8 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		36A374261D2640EE00EDD9A8 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -102,6 +111,19 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		36408B001D4E42E600E78ACA /* MLLazyLoadTableView */ = {
+			isa = PBXGroup;
+			children = (
+				36408B011D4E42E600E78ACA /* DefaultMLLazyLoadTableViewCell.h */,
+				36408B021D4E42E600E78ACA /* DefaultMLLazyLoadTableViewCell.m */,
+				36408B031D4E42E600E78ACA /* MLLazyLoadTableView.h */,
+				36408B041D4E42E600E78ACA /* MLLazyLoadTableView.m */,
+				36408B051D4E42E600E78ACA /* MLLazyLoadTableViewCell.h */,
+				36408B061D4E42E600E78ACA /* MLLazyLoadTableViewCell.m */,
+			);
+			path = MLLazyLoadTableView;
+			sourceTree = "<group>";
+		};
 		36A374171D2640EE00EDD9A8 = {
 			isa = PBXGroup;
 			children = (
@@ -127,6 +149,7 @@
 		36A374221D2640EE00EDD9A8 /* MLKitExample */ = {
 			isa = PBXGroup;
 			children = (
+				36408B001D4E42E600E78ACA /* MLLazyLoadTableView */,
 				36D198241D49A77900434111 /* UIViewController+MLAPI.h */,
 				36D198251D49A77900434111 /* UIViewController+MLAPI.m */,
 				36D198211D45C19300434111 /* BaseAPIHelper.h */,
@@ -363,8 +386,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				36408B091D4E42E600E78ACA /* MLLazyLoadTableViewCell.m in Sources */,
 				36A3742B1D2640EE00EDD9A8 /* ViewController.m in Sources */,
+				36408B081D4E42E600E78ACA /* MLLazyLoadTableView.m in Sources */,
 				36A374281D2640EE00EDD9A8 /* AppDelegate.m in Sources */,
+				36408B071D4E42E600E78ACA /* DefaultMLLazyLoadTableViewCell.m in Sources */,
 				36D198231D45C19300434111 /* BaseAPIHelper.m in Sources */,
 				36D198261D49A77900434111 /* UIViewController+MLAPI.m in Sources */,
 				36A374251D2640EE00EDD9A8 /* main.m in Sources */,

@@ -225,10 +225,16 @@ FOUNDATION_EXPORT NSString * HTTPMethod(MLAPIHelperRequestMethod requestMethod);
  接口完整地址
  */
 - (NSURL*)apiURL;
+
 /**
  获取缓存内容，其为接口返回的原始数据，非MLAPIHelperRequestMethodGET类型直接返回nil
  */
 - (nullable MLAPICacheItem*)cache;
+
+/**
+ 取消请求
+ */
+- (void)cancel;
 
 #pragma mark - block及callbackObject的混合回调请求方法
 /**

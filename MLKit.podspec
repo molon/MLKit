@@ -18,7 +18,7 @@ s.public_header_files = 'Classes/**/*.h'
 s.source_files  = 'Classes/**/*.{h,m}'
 s.libraries = 'z'
 
-s.dependency 'MLPersonalModel'
+s.dependency 'MLPersonalModel', '~> 11.0.4'
 s.dependency 'SAMKeychain', '~> 1.5.0'
 s.dependency 'DHSmartScreenshot', '~> 1.3.1'
 s.dependency 'AFNetworking', '~> 3.1.0'

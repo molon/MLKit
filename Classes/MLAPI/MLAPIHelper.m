@@ -144,6 +144,12 @@ NSString * HTTPMethod(MLAPIHelperRequestMethod requestMethod) {
     return [[MLAPIManager defaultManager]cacheForAPIHelper:self];
 }
 
+- (void)cancel {
+    if (_state==MLAPIHelperStateRequesting&&_dataTask) {
+        [_dataTask cancel];
+    }
+}
+
 #pragma mark - helper
 - (NSMutableDictionary*)constructRequestParams {
     NSMutableDictionary *params = [NSMutableDictionary dictionary];

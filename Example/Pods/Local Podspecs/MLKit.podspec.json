@@ -22,7 +22,7 @@
   "libraries": "z",
   "dependencies": {
     "MLPersonalModel": [
-
+      "~> 11.0.4"
     ],
     "SAMKeychain": [
       "~> 1.5.0"

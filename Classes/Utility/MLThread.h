@@ -28,10 +28,14 @@ static inline void dispatch_async_on_global_queue(void (^block)()) {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), block);
 }
 
+/*
+ Copy from ASyncDisplayKit below
+ */
+
 #if defined (__cplusplus) && defined (__GNUC__)
-# define MLDISPLAYNODE_NOTHROW __attribute__ ((nothrow))
+# define MLTHREAD_NOTHROW __attribute__ ((nothrow))
 #else
-# define MLDISPLAYNODE_NOTHROW
+# define MLTHREAD_NOTHROW
 #endif
 
 /**
@@ -42,13 +46,13 @@ static inline void dispatch_async_on_global_queue(void (^block)()) {
 /**
  For use with MLDN::StaticMutex only.
  */
-#define MLDISPLAYNODE_MUTEX_INITIALIZER {PTHREAD_MUTEX_INITIALIZER}
-#define MLDISPLAYNODE_MUTEX_RECURSIVE_INITIALIZER {PTHREAD_RECURSIVE_MUTEX_INITIALIZER}
+#define MLTHREAD_MUTEX_INITIALIZER {PTHREAD_MUTEX_INITIALIZER}
+#define MLTHREAD_MUTEX_RECURSIVE_INITIALIZER {PTHREAD_RECURSIVE_MUTEX_INITIALIZER}
 
 // This MUST always execute, even when assertions are disabled. Otherwise all lock operations become no-ops!
 // (To be explicit, do not turn this into an NSAssert, assert(), or any other kind of statement where the
 // evaluation of x_ can be compiled out.)
-#define MLDISPLAYNODE_THREAD_ASSERT_ON_ERROR(x_) do { \
+#define MLTHREAD_THREAD_ASSERT_ON_ERROR(x_) do { \
 _Pragma("clang diagnostic push"); \
 _Pragma("clang diagnostic ignored \"-Wunused-variable\""); \
 volatile int res = (x_); \
@@ -64,7 +68,7 @@ namespace MLDN {
         T &_l;
         
     public:
-        Locker (T &l) MLDISPLAYNODE_NOTHROW : _l (l) {
+        Locker (T &l) MLTHREAD_NOTHROW : _l (l) {
             _l.lock ();
         }
         
@@ -83,7 +87,7 @@ namespace MLDN {
     {
         T &_l;
     public:
-        Unlocker (T &l) MLDISPLAYNODE_NOTHROW : _l (l) {_l.unlock ();}
+        Unlocker (T &l) MLTHREAD_NOTHROW : _l (l) {_l.unlock ();}
         ~Unlocker () {_l.lock ();}
         Unlocker(Unlocker<T>&) = delete;
         Unlocker &operator=(Unlocker<T>&) = delete;
@@ -95,18 +99,18 @@ namespace MLDN {
         Mutex () : Mutex (false) {}
         
         ~Mutex () {
-            MLDISPLAYNODE_THREAD_ASSERT_ON_ERROR(pthread_mutex_destroy (&_m));
+            MLTHREAD_THREAD_ASSERT_ON_ERROR(pthread_mutex_destroy (&_m));
         }
         
         Mutex (const Mutex&) = delete;
         Mutex &operator=(const Mutex&) = delete;
         
         void lock () {
-            MLDISPLAYNODE_THREAD_ASSERT_ON_ERROR(pthread_mutex_lock (this->mutex()));
+            MLTHREAD_THREAD_ASSERT_ON_ERROR(pthread_mutex_lock (this->mutex()));
         }
         
         void unlock () {
-            MLDISPLAYNODE_THREAD_ASSERT_ON_ERROR(pthread_mutex_unlock (this->mutex()));
+            MLTHREAD_THREAD_ASSERT_ON_ERROR(pthread_mutex_unlock (this->mutex()));
         }
         
         pthread_mutex_t *mutex () { return &_m; }
@@ -114,13 +118,13 @@ namespace MLDN {
     protected:
         explicit Mutex (bool recursive) {
             if (!recursive) {
-                MLDISPLAYNODE_THREAD_ASSERT_ON_ERROR(pthread_mutex_init (&_m, NULL));
+                MLTHREAD_THREAD_ASSERT_ON_ERROR(pthread_mutex_init (&_m, NULL));
             } else {
                 pthread_mutexattr_t attr;
-                MLDISPLAYNODE_THREAD_ASSERT_ON_ERROR(pthread_mutexattr_init (&attr));
-                MLDISPLAYNODE_THREAD_ASSERT_ON_ERROR(pthread_mutexattr_settype (&attr, PTHREAD_MUTEX_RECURSIVE));
-                MLDISPLAYNODE_THREAD_ASSERT_ON_ERROR(pthread_mutex_init (&_m, &attr));
-                MLDISPLAYNODE_THREAD_ASSERT_ON_ERROR(pthread_mutexattr_destroy (&attr));
+                MLTHREAD_THREAD_ASSERT_ON_ERROR(pthread_mutexattr_init (&attr));
+                MLTHREAD_THREAD_ASSERT_ON_ERROR(pthread_mutexattr_settype (&attr, PTHREAD_MUTEX_RECURSIVE));
+                MLTHREAD_THREAD_ASSERT_ON_ERROR(pthread_mutex_init (&_m, &attr));
+                MLTHREAD_THREAD_ASSERT_ON_ERROR(pthread_mutexattr_destroy (&attr));
             }
         }
         
@@ -146,25 +150,25 @@ namespace MLDN {
     typedef Unlocker<Mutex> MutexUnlocker;
     
     /**
-     If you are creating a static mutex, use StaticMutex and specify its default value as one of MLDISPLAYNODE_MUTEX_INITIALIZER
-     or MLDISPLAYNODE_MUTEX_RECURSIVE_INITIALIZER. This avoids expensive constructor overhead at startup (or worse, ordering
+     If you are creating a static mutex, use StaticMutex and specify its default value as one of MLTHREAD_MUTEX_INITIALIZER
+     or MLTHREAD_MUTEX_RECURSIVE_INITIALIZER. This avoids expensive constructor overhead at startup (or worse, ordering
      issues between different static objects). It also avoids running a destructor on app exit time (needless expense).
      
      Note that you can, but should not, use StaticMutex for non-static objects. It will leak its mutex on destruction,
      so avoid that!
      
-     If you fail to specify a default value (like MLDISPLAYNODE_MUTEX_INITIALIZER) an assert will be thrown when you attempt to lock.
+     If you fail to specify a default value (like MLTHREAD_MUTEX_INITIALIZER) an assert will be thrown when you attempt to lock.
      */
     struct StaticMutex
     {
-        pthread_mutex_t _m; // public so it can be provided by MLDISPLAYNODE_MUTEX_INITIALIZER and friends
+        pthread_mutex_t _m; // public so it can be provided by MLTHREAD_MUTEX_INITIALIZER and friends
         
         void lock () {
-            MLDISPLAYNODE_THREAD_ASSERT_ON_ERROR(pthread_mutex_lock (this->mutex()));
+            MLTHREAD_THREAD_ASSERT_ON_ERROR(pthread_mutex_lock (this->mutex()));
         }
         
         void unlock () {
-            MLDISPLAYNODE_THREAD_ASSERT_ON_ERROR(pthread_mutex_unlock (this->mutex()));
+            MLTHREAD_THREAD_ASSERT_ON_ERROR(pthread_mutex_unlock (this->mutex()));
         }
         
         pthread_mutex_t *mutex () { return &_m; }
@@ -179,11 +183,11 @@ namespace MLDN {
     struct Condition
     {
         Condition () {
-            MLDISPLAYNODE_THREAD_ASSERT_ON_ERROR(pthread_cond_init(&_c, NULL));
+            MLTHREAD_THREAD_ASSERT_ON_ERROR(pthread_cond_init(&_c, NULL));
         }
         
         ~Condition () {
-            MLDISPLAYNODE_THREAD_ASSERT_ON_ERROR(pthread_cond_destroy(&_c));
+            MLTHREAD_THREAD_ASSERT_ON_ERROR(pthread_cond_destroy(&_c));
         }
         
         // non-copyable.
@@ -191,11 +195,11 @@ namespace MLDN {
         Condition &operator=(const Condition&) = delete;
         
         void signal() {
-            MLDISPLAYNODE_THREAD_ASSERT_ON_ERROR(pthread_cond_signal(&_c));
+            MLTHREAD_THREAD_ASSERT_ON_ERROR(pthread_cond_signal(&_c));
         }
         
         void wait(Mutex &m) {
-            MLDISPLAYNODE_THREAD_ASSERT_ON_ERROR(pthread_cond_wait(&_c, m.mutex()));
+            MLTHREAD_THREAD_ASSERT_ON_ERROR(pthread_cond_wait(&_c, m.mutex()));
         }
         
         pthread_cond_t *condition () {
@@ -209,11 +213,11 @@ namespace MLDN {
     struct ReadWriteLock
     {
         ReadWriteLock() {
-            MLDISPLAYNODE_THREAD_ASSERT_ON_ERROR(pthread_rwlock_init(&_rwlock, NULL));
+            MLTHREAD_THREAD_ASSERT_ON_ERROR(pthread_rwlock_init(&_rwlock, NULL));
         }
         
         ~ReadWriteLock() {
-            MLDISPLAYNODE_THREAD_ASSERT_ON_ERROR(pthread_rwlock_destroy(&_rwlock));
+            MLTHREAD_THREAD_ASSERT_ON_ERROR(pthread_rwlock_destroy(&_rwlock));
         }
         
         // non-copyable.
@@ -221,15 +225,15 @@ namespace MLDN {
         ReadWriteLock &operator=(const ReadWriteLock&) = delete;
         
         void readlock() {
-            MLDISPLAYNODE_THREAD_ASSERT_ON_ERROR(pthread_rwlock_rdlock(&_rwlock));
+            MLTHREAD_THREAD_ASSERT_ON_ERROR(pthread_rwlock_rdlock(&_rwlock));
         }
         
         void writelock() {
-            MLDISPLAYNODE_THREAD_ASSERT_ON_ERROR(pthread_rwlock_wrlock(&_rwlock));
+            MLTHREAD_THREAD_ASSERT_ON_ERROR(pthread_rwlock_wrlock(&_rwlock));
         }
         
         void unlock() {
-            MLDISPLAYNODE_THREAD_ASSERT_ON_ERROR(pthread_rwlock_unlock(&_rwlock));
+            MLTHREAD_THREAD_ASSERT_ON_ERROR(pthread_rwlock_unlock(&_rwlock));
         }
         
     private:
@@ -240,7 +244,7 @@ namespace MLDN {
     {
         ReadWriteLock &_lock;	
     public:
-        ReadWriteLockReadLocker(ReadWriteLock &lock) MLDISPLAYNODE_NOTHROW : _lock(lock) {
+        ReadWriteLockReadLocker(ReadWriteLock &lock) MLTHREAD_NOTHROW : _lock(lock) {
             _lock.readlock();
         }
         
@@ -257,7 +261,7 @@ namespace MLDN {
     {
         ReadWriteLock &_lock;
     public:
-        ReadWriteLockWriteLocker(ReadWriteLock &lock) MLDISPLAYNODE_NOTHROW : _lock(lock) {
+        ReadWriteLockWriteLocker(ReadWriteLock &lock) MLTHREAD_NOTHROW : _lock(lock) {
             _lock.writelock();
         }
         
