@@ -17,7 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign, readonly) NSInteger currentPageNo;
 
 - (BOOL)autoRefreshAtFirstDisplay;
-- (NSString*)keyOfEntryIDForDeduplication;
+- (nullable NSString*)keyOfEntryIDForDeduplication;
 
 - (NSInteger)lazyLoadSection;
 - (NSInteger)exceptTopRowCount;

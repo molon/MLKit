@@ -121,7 +121,7 @@ FOUNDATION_EXPORT NSString * HTTPMethod(MLAPIHelperRequestMethod requestMethod);
 /**
  返回相应数据里表示实体的部分，例如responseObject[@"data"]
  */
-- (id)responseEntryOfResponseObject:(id)responseObject;
+- (nullable id)responseEntryOfResponseObject:(id)responseObject;
 
 /**
  缓存的域，通常情况下是用户的唯一标识，用来区分不同用户的缓存内容，如果返回nil或空，则表示根
@@ -131,7 +131,7 @@ FOUNDATION_EXPORT NSString * HTTPMethod(MLAPIHelperRequestMethod requestMethod);
     [13612341234]zzzzmd5
     [13688888888]zzzzmd5
  */
-- (NSString*)currentCacheDomainName;
+- (nullable NSString*)currentCacheDomainName;
 
 /**
  自定义根URL

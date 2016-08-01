@@ -55,6 +55,7 @@ NSString * const MLAPICommonErrorDescriptionForRequestFailed = @"未知错误";
 }
 
 - (NSString*)currentCacheDomainName {
+    //如果登录之后应该返回用户唯一标识符
     return nil;
 }
 

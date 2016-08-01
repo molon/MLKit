@@ -111,14 +111,16 @@
 
 - (LazyLoadAPIHelper *)lazyLoadHelper {
     [self doesNotRecognizeSelector:_cmd];
-    return nil;
+    //for analyze
+    return [LazyLoadAPIHelper new];
 }
 
 #pragma mark - tableView
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [self doesNotRecognizeSelector:_cmd];
-    return nil;
+    //for analyze
+    return [UITableViewCell new];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -150,12 +152,13 @@
         //deduplication
         if (!_tableView.refreshing&&rows.count>0) {
             NSString *keyOfEntryID = [self keyOfEntryIDForDeduplication];
-            if (keyOfEntryID) {
+            if ([keyOfEntryID isNotBlank]) {
                 //check whether keyOfEntryID exist
                 BOOL exist = [[[rows firstObject] class]yy_containsPropertyKey:keyOfEntryID];
                 NSAssert(exist, @"keyOfEntryID is not exist in entry of `r_rows`");
-                
-                [rows removeNilAndDuplicateValueObjectsForKeyPath:keyOfEntryID andSameValueObjectsWithOtherObjects:_tableView.entries];
+                if (exist) {
+                    [rows removeNilAndDuplicateValueObjectsForKeyPath:keyOfEntryID andSameValueObjectsWithOtherObjects:_tableView.entries];
+                }
             }
         }
         
