@@ -8,7 +8,6 @@ target 'MLKitExample' do
 	project 'MLKitExample.xcodeproj'
 	
 	pod 'MLKit', :path => '../MLKit.podspec'
-    pod 'MLRefreshControl', :path => '~/MLProjects/MLRefreshControl'
-    #	pod 'MLRefreshControl', '~> 0.0.2'
+    pod 'MLRefreshControl', '~> 0.0.3'
 	pod 'MLLayout', '~> 0.2.0'
 end

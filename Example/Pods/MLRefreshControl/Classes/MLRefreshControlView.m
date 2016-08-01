@@ -50,6 +50,7 @@
         
         //first layout, the view's frame be always set self according to scrollView.
         [self setNeedsLayout];
+        [self layoutIfNeeded];
     }
     return self;
 }

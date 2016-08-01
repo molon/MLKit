@@ -26,8 +26,10 @@
     return 44.0f;
 }
 
-- (void)setSelected:(BOOL)selected
+- (void)setSelected:(BOOL)selected animated:(BOOL)animated
 {
+    [super setSelected:selected animated:animated];
+    
     if (selected) {
         if (self.status==MLLazyLoadCellStatusLoadFailed) {
             if (self.clickForRetryBlock) {

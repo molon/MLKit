@@ -68,10 +68,10 @@
 {
     self = [super initWithFrame:frame style:style];
     if (self) {
-        [self commonInit];
-        
         //default lazy load cell
         _lazyLoadCell = [DefaultMLLazyLoadTableViewCell new];
+        
+        [self commonInit];
     }
     return self;
 }
@@ -85,8 +85,6 @@
 {
     self = [super initWithFrame:CGRectZero style:UITableViewStylePlain];
     if (self) {
-        [self commonInit];
-        
         _lazyLoadSection = lazyLoadSection;
         _exceptTopRowCount = exceptTopRowCount;
         
@@ -95,6 +93,8 @@
         }else{
             _lazyLoadCell = [DefaultMLLazyLoadTableViewCell new];
         }
+        
+        [self commonInit];
     }
     return self;
 }
