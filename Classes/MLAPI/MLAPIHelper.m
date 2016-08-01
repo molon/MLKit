@@ -60,7 +60,7 @@ static inline NSDictionary *kResetResponseProtypeDictionary(Class cls) {
     return protypeResponses[clsName];
 }
 
-NSString * HTTPMethod(MLAPIHelperRequestMethod requestMethod) {
+NSString * MLAPIHTTPMethod(MLAPIHelperRequestMethod requestMethod) {
     static NSArray *methodNames;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
@@ -131,7 +131,7 @@ NSString * HTTPMethod(MLAPIHelperRequestMethod requestMethod) {
 
 - (NSURL*)apiURLWithParameters:(NSDictionary*)parameters {
     NSURL *apiURL = [NSURL URLWithString:_apiName relativeToURL:_baseURL];
-    if ([[MLAPIManager defaultManager].httpSessionManager.requestSerializer.HTTPMethodsEncodingParametersInURI containsObject:HTTPMethod(_requestMethod)]) {
+    if ([[MLAPIManager defaultManager].httpSessionManager.requestSerializer.HTTPMethodsEncodingParametersInURI containsObject:MLAPIHTTPMethod(_requestMethod)]) {
         NSString *query = AFQueryStringFromParameters(parameters);
         if (query && query.length > 0) {
             apiURL = [NSURL URLWithString:[[apiURL absoluteString] stringByAppendingFormat:apiURL.query ? @"&%@" : @"?%@", query]];
@@ -236,10 +236,10 @@ NSString * HTTPMethod(MLAPIHelperRequestMethod requestMethod) {
 - (NSString*)description {
     NSDictionary *params = [self allRequestParams];
     if (params.count<=0) {
-        return [NSString stringWithFormat:@"\n%@ -> \n%@:%@\n",[super description],HTTPMethod(_requestMethod),[[self apiURL] absoluteString]];
+        return [NSString stringWithFormat:@"\n%@ -> \n%@:%@\n",[super description],MLAPIHTTPMethod(_requestMethod),[[self apiURL] absoluteString]];
     }
     
-    return [NSString stringWithFormat:@"\n%@ -> \n%@:%@\nParams:%@\n",[super description],HTTPMethod(_requestMethod),[[self apiURL] absoluteString],[self allRequestParams]];
+    return [NSString stringWithFormat:@"\n%@ -> \n%@:%@\nParams:%@\n",[super description],MLAPIHTTPMethod(_requestMethod),[[self apiURL] absoluteString],[self allRequestParams]];
 }
 
 - (void)reset {

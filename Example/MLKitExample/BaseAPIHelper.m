@@ -60,7 +60,8 @@ NSString * const MLAPICommonErrorDescriptionForRequestFailed = @"未知错误";
 }
 
 - (nullable NSURL*)configureBaseURL {
-    return [NSURL URLWithString:@"http://10.17.72.117:8080"];
+    return [NSURL URLWithString:@"http://192.168.100.5:8080"];
+//    return [NSURL URLWithString:@"http://10.17.72.117:8080"];
 //    return [NSURL URLWithString:@"http://localhost:8080"];
 }
 
@@ -72,12 +73,14 @@ NSString * const MLAPICommonErrorDescriptionForRequestFailed = @"未知错误";
         DDLogInfo(@"预加载:%@",self);
     }else if (state==MLAPIHelperStateRequesting) {
         
-        NSURLRequest *request = self.dataTask.currentRequest;
+#warning NSURLRequest is not thread-safe, the source below maybe make `resume` crash. see https://github.com/AFNetworking/AFNetworking/issues/3266
+//        NSURLRequest *request = self.dataTask.currentRequest;
         
-        NSString *params = [[NSString alloc]initWithData:request.HTTPBody encoding:NSUTF8StringEncoding];
+//        NSString *params = [[NSString alloc]initWithData:request.HTTPBody encoding:NSUTF8StringEncoding];
+//
+//        DDLogInfo(@"\nBegin Request: curl -X %@ %@\"%@\" | json_pp",request.HTTPMethod,params.length>0?[NSString stringWithFormat:@"-d \"%@\" ",params]:@"",[request.URL absoluteString]);
         
-        DDLogInfo(@"\n开始请求: curl -X %@ %@%@ | json_pp",request.HTTPMethod,params.length>0?[NSString stringWithFormat:@"-d \"%@\" ",params]:@"",request.URL);
-
+//        DDLogInfo(@"\n开始请求: %@",[request.URL absoluteString]);
     }else if (state==MLAPIHelperStateRequestSucceed) {
         if (self.isRespondWithCache) {
             DDLogInfo(@"直接使用缓存:%@",self);

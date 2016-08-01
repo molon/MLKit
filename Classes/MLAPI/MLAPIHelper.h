@@ -39,7 +39,7 @@ FOUNDATION_EXPORT NSString * const MLAPIHelperStateDidChangeNotificationNamePref
 FOUNDATION_EXPORT NSString * const MLAPIHelperStateDidChangeNotificationAPIHelperKeyForUserInfo;
 
 FOUNDATION_EXPORT NSTimeInterval const MLAPIHelperDefaultTimeoutInterval;
-FOUNDATION_EXPORT NSString * HTTPMethod(MLAPIHelperRequestMethod requestMethod);
+FOUNDATION_EXPORT NSString * MLAPIHTTPMethod(MLAPIHelperRequestMethod requestMethod);
 
 @class MLAPICacheItem;
 @interface MLAPIHelper : NSObject

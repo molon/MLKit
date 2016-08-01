@@ -44,7 +44,7 @@
         [_tableView setRequestingAPIHelperBlock:^MLAPIHelper * _Nonnull(MLLazyLoadTableView * _Nonnull tableView, BOOL refreshing) {
             STRONG_SELF
             LazyLoadAPIHelper *helper = [self lazyLoadHelperWithRefreshing:refreshing];
-            NSAssert(helper, @"`lazyLoadHelper` can not return nil");
+            NSAssert(helper, @"`lazyLoadHelperWithRefreshing` can not return nil");
             if (refreshing) {
                 helper.p_pageNo = 1;
             }else{
