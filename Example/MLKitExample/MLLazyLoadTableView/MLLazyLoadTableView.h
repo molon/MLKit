@@ -6,13 +6,13 @@
 //  Copyright © 2016年 molon. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import <MLAutoRecordFrameTableView.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
 @class MLAPIHelper,MLLazyLoadTableViewCell;
 
-@interface MLLazyLoadTableView : UITableView
+@interface MLLazyLoadTableView : MLAutoRecordFrameTableView
 
 /**
  proxy of delegate
@@ -58,7 +58,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  block for requesting, must return the api helper for requesting
  */
-@property (nonatomic, copy) MLAPIHelper *(^requestBlock)(MLLazyLoadTableView *tableView, BOOL refreshing);
+@property (nonatomic, copy) MLAPIHelper *(^requestingAPIHelperBlock)(MLLazyLoadTableView *tableView, BOOL refreshing);
 
 /**
  block for refreshing failed
@@ -85,17 +85,23 @@ NS_ASSUME_NONNULL_BEGIN
  
  @return instance
  */
-- (instancetype)initWithLazyLoadSection:(NSInteger)lazyLoadSection exceptTopRowCount:(NSInteger)exceptTopRowCount lazyLoadCell:(MLLazyLoadTableViewCell*)lazyLoadCell;
+- (instancetype)initWithLazyLoadSection:(NSInteger)lazyLoadSection exceptTopRowCount:(NSInteger)exceptTopRowCount lazyLoadCell:(MLLazyLoadTableViewCell* _Nullable)lazyLoadCell;
 
 /**
- Call this method after requesting
+ Call this method after requesting succeed
  
  @param entries    entries
- @param success    success
  @param noMore     whether no more
  @param apiHelper  api helper
  */
-- (void)appendEntries:(NSArray*)entries success:(BOOL)success noMore:(BOOL)noMore apiHelper:(MLAPIHelper*)apiHelper;
+- (void)appendEntries:(NSArray*)entries noMore:(BOOL)noMore apiHelper:(MLAPIHelper*)apiHelper;
+
+/**
+ Call this method after requesting failed
+ 
+ @param apiHelper apiHelper
+ */
+- (void)requestFailedWithAPIHelper:(MLAPIHelper*)apiHelper;
 
 /**
  do refresh manually
@@ -124,6 +130,8 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (NSInteger)numberOfRowsInLazyLoadSection;
 
+- (void)setRequestingAPIHelperBlock:(MLAPIHelper * _Nonnull (^ _Nonnull)(MLLazyLoadTableView * _Nonnull tableView, BOOL refreshing))requestingAPIHelperBlock;
+- (void)setRefreshFailedBlock:(void (^ _Nonnull)(MLLazyLoadTableView * _Nonnull tableView, MLAPIHelper * _Nonnull apiHelper))refreshFailedBlock;
 @end
 
 NS_ASSUME_NONNULL_END

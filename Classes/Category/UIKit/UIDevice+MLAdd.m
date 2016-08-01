@@ -17,7 +17,7 @@ SYNTH_DUMMY_CLASS(UIDevice_MLAdd)
 
 @implementation UIDevice (MLAdd)
 
-+ (double)systemVersion {
+- (double)osVersion {
     static double version;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
@@ -27,14 +27,18 @@ SYNTH_DUMMY_CLASS(UIDevice_MLAdd)
 }
 
 - (NSString*)UUID {
-    NSString *serviceName = [NSString stringWithFormat:@"%@.molon.uuid",[[NSBundle mainBundle] bundleIdentifier]?:@""];
-    static NSString * const accountName = @"uuid";
-    
-    NSString *uuid = [SAMKeychain passwordForService:serviceName account:accountName];
-    if (![uuid isNotBlank]) {
-        uuid = [[UIDevice currentDevice].identifierForVendor UUIDString];
-        [SAMKeychain setPassword:uuid forService:serviceName account:accountName];
-    }
+    static NSString *uuid;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        NSString *serviceName = [NSString stringWithFormat:@"%@.molon.uuid",[[NSBundle mainBundle] bundleIdentifier]?:@""];
+        static NSString * const accountName = @"uuid";
+        
+        uuid = [SAMKeychain passwordForService:serviceName account:accountName];
+        if (![uuid isNotBlank]) {
+            uuid = [[UIDevice currentDevice].identifierForVendor UUIDString];
+            [SAMKeychain setPassword:uuid forService:serviceName account:accountName];
+        }
+    });
     return uuid;
 }
 

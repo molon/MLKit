@@ -59,7 +59,8 @@ NSString * const MLAPICommonErrorDescriptionForRequestFailed = @"未知错误";
 }
 
 - (nullable NSURL*)configureBaseURL {
-    return [NSURL URLWithString:@"http://localhost:8080"];
+    return [NSURL URLWithString:@"http://10.17.72.117:8080"];
+//    return [NSURL URLWithString:@"http://localhost:8080"];
 }
 
 #ifdef DEBUG
@@ -83,5 +84,33 @@ NSString * const MLAPICommonErrorDescriptionForRequestFailed = @"未知错误";
     }
 }
 #endif
+
+@end
+
+@implementation UUIDAPIHelper
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+        _p_uuid = [UIDevice currentDevice].UUID;
+    }
+    return self;
+}
+@end
+
+@implementation LazyLoadAPIHelper
+
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+        _p_pageSize = 20;
+    }
+    return self;
+}
+
+- (MLAPIHelperRequestMethod)configureRequestMethod {
+    return MLAPIHelperRequestMethodGET;
+}
 
 @end

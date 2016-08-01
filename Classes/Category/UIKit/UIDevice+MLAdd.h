@@ -21,7 +21,7 @@ NS_ASSUME_NONNULL_BEGIN
 ///=============================================================================
 
 /// Device system version (e.g. 8.1)
-+ (double)systemVersion;
+@property (nonatomic, readonly) double osVersion;
 
 /// UUID
 @property (nonatomic, copy, readonly) NSString *UUID;
@@ -109,7 +109,7 @@ NS_ASSUME_NONNULL_BEGIN
 NS_ASSUME_NONNULL_END
 
 #ifndef kSystemVersion
-#define kSystemVersion [UIDevice systemVersion]
+#define kSystemVersion ([UIDevice currentDevice].osVersion)
 #endif
 
 #ifndef kiOS7Later

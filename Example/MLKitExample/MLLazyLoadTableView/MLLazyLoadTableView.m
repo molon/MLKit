@@ -40,7 +40,6 @@
 
 @implementation MLLazyLoadTableView{
     BOOL _needLazyLoad;
-    BOOL _lazyLoading;
     
     _MLLazyLoadTableViewProxy *_delegateProxy;
     _MLLazyLoadTableViewProxy *_dataSourceProxy;
@@ -68,7 +67,7 @@
 
 - (instancetype)initWithLazyLoadSection:(NSInteger)lazyLoadSection exceptTopRowCount:(NSInteger)exceptTopRowCount
 {
-    return [self initWithLazyLoadSection:lazyLoadSection exceptTopRowCount:exceptTopRowCount lazyLoadCell:[DefaultMLLazyLoadTableViewCell new]];
+    return [self initWithLazyLoadSection:lazyLoadSection exceptTopRowCount:exceptTopRowCount lazyLoadCell:nil];
 }
 
 - (instancetype)initWithLazyLoadSection:(NSInteger)lazyLoadSection exceptTopRowCount:(NSInteger)exceptTopRowCount lazyLoadCell:(MLLazyLoadTableViewCell*)lazyLoadCell
@@ -84,7 +83,7 @@
         if (lazyLoadCell) {
             _lazyLoadCell = lazyLoadCell;
         }else{
-            _lazyLoading = [DefaultMLLazyLoadTableViewCell new];
+            _lazyLoadCell = [DefaultMLLazyLoadTableViewCell new];
         }
         
         WEAK_SELF
@@ -167,7 +166,7 @@
 - (void)setProxyDataSource:(id<UITableViewDataSource>)proxyDataSource
 {
     NS_VALID_UNTIL_END_OF_SCOPE id oldDataSource = self.dataSource;
-  
+    
     if (proxyDataSource == nil) {
         _proxyDataSource = nil;
         _dataSourceProxy = _isDeallocating ? nil : [[_MLLazyLoadTableViewProxy alloc] initWithTarget:nil interceptor:self];
@@ -183,8 +182,8 @@
 - (void)loadDataWithRefresh:(BOOL)refresh
 {
     void (^requestBlock)() = ^{
-        MLAPIHelper *helper = self.requestBlock(self,_refreshing);
-        NSAssert(helper&&[helper isKindOfClass:[MLAPIHelper class]]&&helper.state==MLAPIHelperStateRequesting, @"requestBlock must return MLAPIHelper which has started request");
+        MLAPIHelper *helper = self.requestingAPIHelperBlock(self,_refreshing);
+        NSAssert(helper&&[helper isKindOfClass:[MLAPIHelper class]]&&helper.state==MLAPIHelperStateRequesting, @"requestingAPIHelperBlock must return MLAPIHelper which has started request");
         
         self.requestingAPIHelper = helper;
     };
@@ -223,6 +222,31 @@
 - (NSIndexPath*)indexPathForLazyLoadCell
 {
     return [NSIndexPath indexPathForRow:[self indexForLazyLoadCell] inSection:_lazyLoadSection];
+}
+
+/**
+ Maybe the lazy-loading cell still displays after appending,
+ So we need to check whether requests for next page if not noMore or failed
+ */
+- (void)checkLazyLoadRightNow {
+    if (_needLazyLoad&&_lazyLoadCell.status!=MLLazyLoadCellStatusLoadFailed) {
+        NSArray *visibleIndexPaths = [self indexPathsForVisibleRows];
+        if ([visibleIndexPaths containsObject:[self indexPathForLazyLoadCell]]) {
+            [self loadDataWithRefresh:NO];
+        }
+    }
+}
+
+- (void)doReloadDataWithCompletion:(void (^)())completion
+{
+    [self reloadData];
+    
+    if (completion) {
+        completion();
+    }
+    
+    //end refreshing if using MLRefreshControl
+    [self endRefreshing];
 }
 
 #pragma mark - tableView
@@ -303,7 +327,7 @@
     [self loadDataWithRefresh:YES];
 }
 
-- (void)appendEntries:(NSArray*)entries success:(BOOL)success noMore:(BOOL)noMore apiHelper:(MLAPIHelper*)apiHelper
+- (void)requestFailedWithAPIHelper:(MLAPIHelper*)apiHelper
 {
     //if not the last requesting api helper, just return
     if (_requestingAPIHelper&&![apiHelper isEqual:_requestingAPIHelper]) {
@@ -311,116 +335,102 @@
     }
     self.requestingAPIHelper = nil;
     
-    //Maybe the lazy-loading cell still displays after appending,
-    //So we need to check whether requests for next page if not noMore or failed
-    void (^checkLazyLoadRightNowBlock)() = ^{
-        if (_needLazyLoad&&_lazyLoadCell.status!=MLLazyLoadCellStatusLoadFailed) {
-            NSArray *visibleIndexPaths = [self indexPathsForVisibleRows];
-            if ([visibleIndexPaths containsObject:[self indexPathForLazyLoadCell]]) {
-                [self loadDataWithRefresh:NO];
-            }
+    //end refreshing if using MLRefreshControl
+    [self endRefreshing];
+    
+    if (_refreshing) {
+        //If refresh failed , but the original entries is still exist.
+        //So we must treat with it, check whether need lazy-loading now for it.
+        
+        if (_entries.count>0) {
+            //needLazyLoad can be YES only when _entries.count>0
+            _needLazyLoad = YES;
+        }
+        
+        //refresh failed block
+        if (self.refreshFailedBlock) {
+            self.refreshFailedBlock(self,apiHelper);
+        }
+        
+        //if you call `reset` method in refresh failed block.
+        //the block will do nothing
+        [self checkLazyLoadRightNow];
+    }else{
+        _lazyLoadCell.status = MLLazyLoadCellStatusLoadFailed;
+    }
+    
+    _refreshing = NO;
+}
+
+- (void)appendEntries:(NSArray*)entries noMore:(BOOL)noMore apiHelper:(MLAPIHelper*)apiHelper
+{
+    //if not the last requesting api helper, just return
+    if (_requestingAPIHelper&&![apiHelper isEqual:_requestingAPIHelper]) {
+        return;
+    }
+    self.requestingAPIHelper = nil;
+    
+    _needLazyLoad = !noMore;
+    
+    if (_refreshing&&_entries) {
+        _entries = nil;
+    }
+    
+    void (^completionBlock)() = ^{
+        if (noMore) {
+            _lazyLoadCell.status = MLLazyLoadCellStatusNoMore;
+        }else{
+            [self checkLazyLoadRightNow];
         }
     };
     
-    if (success) {
-        _needLazyLoad = !noMore;
+    if (entries.count>0) {
+        NSMutableArray *indexes = nil;
         
-        if (_refreshing&&_entries) {
-            _entries = nil;
+        if (!_refreshing) {
+            //inserting rows need indexes
+            indexes = [NSMutableArray arrayWithCapacity:entries.count];
+            NSInteger currentRowCount = [self numberOfRowsInLazyLoadSection];
+            for (NSUInteger i=0; i<entries.count; i++) {
+                [indexes addObject:[NSIndexPath indexPathForRow:currentRowCount-1+i inSection:_lazyLoadSection]];
+            }
         }
         
-        void (^completionBlock)() = ^{
-            if (noMore) {
-                _lazyLoadCell.status = MLLazyLoadCellStatusNoMore;
-            }else{
-                checkLazyLoadRightNowBlock();
-            }
-        };
-        
-        if (entries.count>0) {
-            NSMutableArray *indexes = nil;
-            
-            if (!_refreshing) {
-                //inserting rows need indexes
-                indexes = [NSMutableArray arrayWithCapacity:entries.count];
-                NSInteger currentRowCount = [self numberOfRowsInLazyLoadSection];
-                for (NSUInteger i=0; i<entries.count; i++) {
-                    [indexes addObject:[NSIndexPath indexPathForRow:currentRowCount-1+i inSection:_lazyLoadSection]];
-                }
-            }
-            
-            //add to self.entries
-            [self.entries addObjectsFromArray:entries];
-
-            if (_refreshing) {
-                [self doReloadDataWithCompletion:completionBlock];
-            }else{
-                [CATransaction setDisableActions:YES];
-                [self beginUpdates];
-                [self insertRowsAtIndexPaths:indexes withRowAnimation:UITableViewRowAnimationNone];
-                [self endUpdates];
-                [CATransaction setDisableActions:NO];
-                
-                completionBlock();
-            }
-        }else{
-            if (_refreshing) {
-                NSAssert(noMore, @"`entries` is 0 and `noMore` is NO when refreshing. it's strange!!!");
-                
-                [self doReloadDataWithCompletion:^{
-                    if (noMore) {
-                        _lazyLoadCell.status = MLLazyLoadCellStatusEmpty;
-                    }else{
-                        checkLazyLoadRightNowBlock();
-                    }
-                }];
-            }else{
-                //Maybe `entries` is 0 and `noMore` is NO after deduplication，so we just do request again right now in this case
-                //Of course `noMore` can also be YES.
-                completionBlock();
-            }
-        }
-    }else{
-        //end refreshing if using MLRefreshControl
-        [self endRefreshing];
+        //add to self.entries
+        [self.entries addObjectsFromArray:entries];
         
         if (_refreshing) {
-            //If refresh failed , but the original entries is still exist.
-            //So we must treat with it, check whether need lazy-loading now for it.
-            
-            if (_entries.count>0) {
-                //needLazyLoad can be YES only when _entries.count>0
-                _needLazyLoad = YES;
-            }
-            
-            //refresh failed block
-            if (self.refreshFailedBlock) {
-                self.refreshFailedBlock(self,apiHelper);
-            }
-            
-            //if you call `reset` method in refresh failed block.
-            //the block will do nothing
-            checkLazyLoadRightNowBlock();
+            [self doReloadDataWithCompletion:completionBlock];
         }else{
-            _lazyLoadCell.status = MLLazyLoadCellStatusLoadFailed;
+            [CATransaction setDisableActions:YES];
+            [self beginUpdates];
+            [self insertRowsAtIndexPaths:indexes withRowAnimation:UITableViewRowAnimationNone];
+            [self endUpdates];
+            [CATransaction setDisableActions:NO];
+            
+            completionBlock();
+        }
+    }else{
+        if (_refreshing) {
+            NSAssert(noMore, @"`entries` is 0 and `noMore` is NO when refreshing. it's strange!!!");
+            
+            [self doReloadDataWithCompletion:^{
+                if (noMore) {
+                    _lazyLoadCell.status = MLLazyLoadCellStatusEmpty;
+                }else{
+                    [self checkLazyLoadRightNow];
+                }
+            }];
+        }else{
+            //Maybe `entries` is 0 and `noMore` is NO after deduplication，so we just do request again right now in this case
+            //Of course `noMore` can also be YES.
+            completionBlock();
         }
     }
     
     NSAssert(!_needLazyLoad||(_entries.count>0&&_needLazyLoad), @"`_needLazyLoad` can be YES only when _entries.count>0");
     
     _refreshing = NO;
-}
-
-- (void)doReloadDataWithCompletion:(void (^)())completion
-{
-    [self reloadData];
-    
-    if (completion) {
-        completion();
-    }
-    
-    //end refreshing if using MLRefreshControl
-    [self endRefreshing];
 }
 
 @end

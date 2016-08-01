@@ -7,66 +7,13 @@
 //
 
 #import "ViewController.h"
-#import "BaseAPIHelper.h"
+#import "TestAPIHelper.h"
 #import "UIViewController+MLAPI.h"
+#import "ListViewController.h"
 
-@protocol Article
-@end
-@interface Article : NSObject
+@interface ViewController ()
 
-@property (nonatomic, copy) NSString *ID;
-@property (nonatomic, copy) NSString *name;
-@property (nonatomic, strong) NSURL *url;
-@property (nonatomic, assign) NSTimeInterval createTime;
-
-@end
-@implementation Article
-@end
-
-@interface UUIDAPIHelper : BaseAPIHelper
-
-@property (nonatomic, copy) NSString *p_uuid;
-
-@end
-@implementation UUIDAPIHelper
-- (instancetype)init
-{
-    self = [super init];
-    if (self) {
-        _p_uuid = [UIDevice currentDevice].UUID;
-    }
-    return self;
-}
-@end
-
-@interface TestAPIHelper: UUIDAPIHelper
-
-@property (nonatomic, copy) NSString *p_test;
-@property (nonatomic, assign) NSInteger p_test2;
-@property (nonatomic, strong) NSArray<Article *><Article> *r_rows;
-
-@end
-@implementation TestAPIHelper
-
-- (NSString *)configureAPIName {
-    return @"hi_json";
-}
-
-- (NSTimeInterval)cacheLifeTime {
-    return 10.0f;
-}
-
-- (MLAPIHelperRequestMethod)configureRequestMethod {
-    return MLAPIHelperRequestMethodPOST;
-}
-
-@end
-
-@interface ViewController ()<UITableViewDelegate,UITableViewDataSource>
-
-@property (nonatomic, strong) UITableView *tableView;
-
-@property (nonatomic, strong) UIImageView *imageView;
+@property (nonatomic, strong) UIButton *button;
 
 @end
 
@@ -86,27 +33,17 @@
     [self careAboutMLAPIHelperClass:[UUIDAPIHelper class]];
 }
 
-- (UITableView *)tableView
+- (UIButton *)button
 {
-    if (!_tableView) {
-        UITableView *tableView = [[UITableView alloc]init];
-        tableView.delegate = self;
-        tableView.dataSource = self;
+    if (!_button) {
+        UIButton *button = [[UIButton alloc]init];
+        [button setTitle:@"测试" forState:UIControlStateNormal];
+        [button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+        [button addTarget:self action:@selector(test) forControlEvents:UIControlEventTouchUpInside];
         
-        _tableView = tableView;
+        _button = button;
     }
-    return _tableView;
-}
-
-- (UIImageView *)imageView
-{
-    if (!_imageView) {
-        UIImageView *imageView = [[UIImageView alloc]init];
-        imageView.contentMode = UIViewContentModeScaleAspectFill;
-        
-        _imageView = imageView;
-    }
-    return _imageView;
+    return _button;
 }
 
 - (void)viewDidLoad {
@@ -115,51 +52,28 @@
     self.view.backgroundColor = [UIColor whiteColor];
     
     //    [self.view addSubview:self.tableView];
-    [self.view addSubview:self.imageView];
+    [self.view addSubview:self.button];
     
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"测试" style:UIBarButtonItemStylePlain target:self action:@selector(test)];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"List" style:UIBarButtonItemStylePlain target:self action:@selector(gotoList)];
 }
 
 - (void)viewWillLayoutSubviews
 {
     [super viewWillLayoutSubviews];
     
-    self.tableView.frame = self.view.bounds;
-    
-    self.imageView.frame = [self.view centerFrameWithWidth:100 height:100];
+    self.button.frame = [self.view centerFrameWithWidth:100 height:50];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-
-#pragma mark - tableView
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    
+#pragma mark - event
+- (void)gotoList {
+    ListViewController *vc = [ListViewController new];
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    return 100;
-}
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    static NSString *CellIdentifier = @"CellIdentifier";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    if (!cell) {
-        cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
-    }
-    
-    cell.textLabel.text = [NSString stringWithFormat:@"%ld",indexPath.row];
-    
-    return cell;
-}
-
-#pragma mark - right item test
 - (void)test
 {
     TestAPIHelper *helper = [TestAPIHelper new];
