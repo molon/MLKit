@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "003EF49FBCFDFB394CABA20386479606E3C47BE0",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "8A2A1CC3BDE0E8F352B8D6DEFE39D37D7CE81B19" : 0,
+    "003EF49FBCFDFB394CABA20386479606E3C47BE0" : 0
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "445DC6F6-D4F7-4E1D-A686-6B5C79F52C02",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "8A2A1CC3BDE0E8F352B8D6DEFE39D37D7CE81B19" : "MLRefreshControl\/",
+    "003EF49FBCFDFB394CABA20386479606E3C47BE0" : "MLKit\/"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "MLKitExample",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "Example\/MLKitExample.xcworkspace",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/molon\/MLKit.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "003EF49FBCFDFB394CABA20386479606E3C47BE0"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/molon\/MLRefreshControl.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "8A2A1CC3BDE0E8F352B8D6DEFE39D37D7CE81B19"
+    }
+  ]
+}

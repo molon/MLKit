@@ -9,7 +9,7 @@
 #import "ViewController.h"
 #import "TestAPIHelper.h"
 #import "UIViewController+MLAPI.h"
-#import "ListViewController.h"
+#import "ArticleListViewController.h"
 
 @interface ViewController ()
 
@@ -70,7 +70,7 @@
 }
 #pragma mark - event
 - (void)gotoList {
-    ListViewController *vc = [ListViewController new];
+    ArticleListViewController *vc = [ArticleListViewController new];
     [self.navigationController pushViewController:vc animated:YES];
 }
 

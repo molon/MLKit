@@ -8,7 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
-@class MLLazyLoadTableView,MLLazyLoadTableViewCell;
+NS_ASSUME_NONNULL_BEGIN
+
+@class MLLazyLoadTableView,MLLazyLoadTableViewCell,LazyLoadAPIHelper;
 @interface MLLazyLoadViewController : UIViewController<UITableViewDelegate,UITableViewDataSource>
 
 @property (nonatomic, strong, readonly) MLLazyLoadTableView *tableView;
@@ -19,9 +21,12 @@
 
 - (NSInteger)lazyLoadSection;
 - (NSInteger)exceptTopRowCount;
-- (MLLazyLoadTableViewCell*)lazyLoadCell;
+- (nullable MLLazyLoadTableViewCell*)lazyLoadCell;
+- (LazyLoadAPIHelper *)lazyLoadHelper;
 
 - (void)afterRequestSucceed:(MLAPIHelper *)apiHelper  __attribute__((objc_requires_super));
 - (void)afterRequestFailed:(MLAPIHelper *)apiHelper  __attribute__((objc_requires_super));
 
 @end
+
+NS_ASSUME_NONNULL_END

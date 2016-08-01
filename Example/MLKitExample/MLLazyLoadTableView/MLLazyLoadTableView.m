@@ -47,20 +47,31 @@
     BOOL _isDeallocating;
 }
 
+- (void)commonInit {
+    self.scrollsToTop = YES;
+    self.backgroundColor = [UIColor clearColor];
+    
+    WEAK_SELF
+    [_lazyLoadCell setClickForRetryBlock:^{
+        STRONG_SELF
+        [self loadDataWithRefresh:NO];
+    }];
+    
+    _delegateProxy = [[_MLLazyLoadTableViewProxy alloc] initWithTarget:nil interceptor:self];
+    super.delegate = (id<UITableViewDelegate>)_delegateProxy;
+    
+    _dataSourceProxy = [[_MLLazyLoadTableViewProxy alloc] initWithTarget:nil interceptor:self];
+    super.dataSource = (id<UITableViewDataSource>)_dataSourceProxy;
+}
+
 - (instancetype)initWithFrame:(CGRect)frame style:(UITableViewStyle)style
 {
     self = [super initWithFrame:frame style:style];
     if (self) {
-        self.scrollsToTop = YES;
-        self.backgroundColor = [UIColor clearColor];
+        [self commonInit];
         
         //default lazy load cell
         _lazyLoadCell = [DefaultMLLazyLoadTableViewCell new];
-        WEAK_SELF
-        [_lazyLoadCell setClickForRetryBlock:^{
-            STRONG_SELF
-            [self loadDataWithRefresh:NO];
-        }];
     }
     return self;
 }
@@ -74,8 +85,7 @@
 {
     self = [super initWithFrame:CGRectZero style:UITableViewStylePlain];
     if (self) {
-        self.scrollsToTop = YES;
-        self.backgroundColor = [UIColor clearColor];
+        [self commonInit];
         
         _lazyLoadSection = lazyLoadSection;
         _exceptTopRowCount = exceptTopRowCount;
@@ -85,19 +95,13 @@
         }else{
             _lazyLoadCell = [DefaultMLLazyLoadTableViewCell new];
         }
-        
-        WEAK_SELF
-        [_lazyLoadCell setClickForRetryBlock:^{
-            STRONG_SELF
-            [self loadDataWithRefresh:NO];
-        }];
     }
     return self;
 }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder
 {
-    NSLog(@"Warning: MLLazyLoadTableView is not designed to be used with Interface Builder.  Table properties set in IB will be lost.");
+    DDLogWarn(@"Warning: MLLazyLoadTableView is not designed to be used with Interface Builder.  Table properties set in IB will be lost.");
     return [self initWithFrame:CGRectZero style:UITableViewStylePlain];
 }
 
@@ -148,12 +152,10 @@
 
 - (void)setProxyDelegate:(id<UITableViewDelegate>)proxyDelegate
 {
-#warning maybe not need
     NS_VALID_UNTIL_END_OF_SCOPE id oldDelegate = self.delegate;
     
     if (proxyDelegate == nil) {
         _proxyDelegate = nil;
-#warning whether need at init
         _delegateProxy = _isDeallocating ? nil : [[_MLLazyLoadTableViewProxy alloc] initWithTarget:nil interceptor:self];
     } else {
         _proxyDelegate = proxyDelegate;

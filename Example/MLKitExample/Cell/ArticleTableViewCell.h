@@ -8,6 +8,10 @@
 
 #import <MLAutoRecordFrameTableViewCell.h>
 
+@class Article;
+
 @interface ArticleTableViewCell : MLAutoRecordFrameTableViewCell
+
+@property (nonatomic, strong) Article *article;
 
 @end

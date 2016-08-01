@@ -1,5 +1,5 @@
 //
-//  ListViewController.h
+//  ArticleListViewController.h
 //  MLKitExample
 //
 //  Created by molon on 16/8/1.
@@ -8,6 +8,6 @@
 
 #import "MLLazyLoadViewController.h"
 
-@interface ListViewController : MLLazyLoadViewController
+@interface ArticleListViewController : MLLazyLoadViewController
 
 @end

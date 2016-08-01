@@ -11,7 +11,7 @@
 		36408B071D4E42E600E78ACA /* DefaultMLLazyLoadTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 36408B021D4E42E600E78ACA /* DefaultMLLazyLoadTableViewCell.m */; };
 		36408B081D4E42E600E78ACA /* MLLazyLoadTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 36408B041D4E42E600E78ACA /* MLLazyLoadTableView.m */; };
 		36408B091D4E42E600E78ACA /* MLLazyLoadTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 36408B061D4E42E600E78ACA /* MLLazyLoadTableViewCell.m */; };
-		36408B151D4EF77200E78ACA /* ListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 36408B121D4EF77200E78ACA /* ListViewController.m */; };
+		36408B151D4EF77200E78ACA /* ArticleListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 36408B121D4EF77200E78ACA /* ArticleListViewController.m */; };
 		36408B161D4EF77200E78ACA /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 36408B141D4EF77200E78ACA /* ViewController.m */; };
 		36408B191D4EF7C100E78ACA /* UIViewController+MLAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = 36408B181D4EF7C100E78ACA /* UIViewController+MLAPI.m */; };
 		36408B1D1D4EF7EA00E78ACA /* Article.m in Sources */ = {isa = PBXBuildFile; fileRef = 36408B1C1D4EF7EA00E78ACA /* Article.m */; };
@@ -55,8 +55,8 @@
 		36408B041D4E42E600E78ACA /* MLLazyLoadTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MLLazyLoadTableView.m; sourceTree = "<group>"; };
 		36408B051D4E42E600E78ACA /* MLLazyLoadTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MLLazyLoadTableViewCell.h; sourceTree = "<group>"; };
 		36408B061D4E42E600E78ACA /* MLLazyLoadTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MLLazyLoadTableViewCell.m; sourceTree = "<group>"; };
-		36408B111D4EF77200E78ACA /* ListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ListViewController.h; sourceTree = "<group>"; };
-		36408B121D4EF77200E78ACA /* ListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ListViewController.m; sourceTree = "<group>"; };
+		36408B111D4EF77200E78ACA /* ArticleListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ArticleListViewController.h; sourceTree = "<group>"; };
+		36408B121D4EF77200E78ACA /* ArticleListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ArticleListViewController.m; sourceTree = "<group>"; };
 		36408B131D4EF77200E78ACA /* ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		36408B141D4EF77200E78ACA /* ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		36408B171D4EF7C100E78ACA /* UIViewController+MLAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+MLAPI.h"; sourceTree = "<group>"; };
@@ -160,8 +160,8 @@
 			children = (
 				36408B171D4EF7C100E78ACA /* UIViewController+MLAPI.h */,
 				36408B181D4EF7C100E78ACA /* UIViewController+MLAPI.m */,
-				36408B111D4EF77200E78ACA /* ListViewController.h */,
-				36408B121D4EF77200E78ACA /* ListViewController.m */,
+				36408B111D4EF77200E78ACA /* ArticleListViewController.h */,
+				36408B121D4EF77200E78ACA /* ArticleListViewController.m */,
 				36408B131D4EF77200E78ACA /* ViewController.h */,
 				36408B141D4EF77200E78ACA /* ViewController.m */,
 				36408B241D4F0DC300E78ACA /* MLLazyLoadViewController.h */,
@@ -450,7 +450,7 @@
 			files = (
 				36408B231D4F098400E78ACA /* TestLazyLoadAPIHelper.m in Sources */,
 				36408B1D1D4EF7EA00E78ACA /* Article.m in Sources */,
-				36408B151D4EF77200E78ACA /* ListViewController.m in Sources */,
+				36408B151D4EF77200E78ACA /* ArticleListViewController.m in Sources */,
 				36408B091D4E42E600E78ACA /* MLLazyLoadTableViewCell.m in Sources */,
 				36408B081D4E42E600E78ACA /* MLLazyLoadTableView.m in Sources */,
 				36408B161D4EF77200E78ACA /* ViewController.m in Sources */,

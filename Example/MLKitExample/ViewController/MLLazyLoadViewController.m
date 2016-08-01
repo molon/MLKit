@@ -39,6 +39,22 @@
         
         _tableView.contentInsetTop = [self navigationBarBottomY];
         _tableView.contentInsetBottom = [self tabBarOccupiedHeight];
+        
+        WEAK_SELF
+        [_tableView setRequestingAPIHelperBlock:^MLAPIHelper * _Nonnull(MLLazyLoadTableView * _Nonnull tableView, BOOL refreshing) {
+            STRONG_SELF
+            LazyLoadAPIHelper *helper = [self lazyLoadHelper];
+            NSAssert(helper, @"`lazyLoadHelper` can not return nil");
+            if (refreshing) {
+                helper.p_pageNo = 1;
+            }else{
+                helper.p_pageNo = self.currentPageNo+1;
+            }
+            
+            [helper requestWithCallbackObject:self];
+            
+            return helper;
+        }];
     }
     
     [self.view addSubview:_tableView];
@@ -90,6 +106,11 @@
 
 - (NSString*)keyOfEntryIDForDeduplication
 {
+    return nil;
+}
+
+- (LazyLoadAPIHelper *)lazyLoadHelper {
+    [self doesNotRecognizeSelector:_cmd];
     return nil;
 }
 

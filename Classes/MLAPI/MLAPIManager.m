@@ -120,6 +120,13 @@ static inline void mlapi_dispatch_async_on_main_queue(void (^block)()) {
         [request setTimeoutInterval:timeoutInterval];
     }
     
+    if (![method isEqualToString:@"GET"]) {
+        downloadProgress = nil;
+    }
+    if (![method isEqualToString:@"POST"]) {
+        uploadProgress = nil;
+    }
+    
     __block NSURLSessionDataTask *dataTask = nil;
     dataTask = [self dataTaskWithRequest:request
                           uploadProgress:uploadProgress
@@ -231,7 +238,7 @@ static inline void mlapi_dispatch_async_on_main_queue(void (^block)()) {
                 }
             });
         };
-
+        
 #define GOON_CALLBACK(_method_) \
 if (goon&&[callbackObject respondsToSelector:@selector(_method_:)]) { \
 [(id<MLAPICallbackProtocol>)callbackObject _method_:apiHelper]; \
@@ -239,12 +246,12 @@ if (goon&&[callbackObject respondsToSelector:@selector(_method_:)]) { \
         
 #define JUST_RETURN_APIHELPER_CALLBACK(_method_,_block_) \
 { \
-        [apiHelper _method_]; \
-        BOOL goon = YES; \
-        if (_block_) { \
-            goon = _block_(apiHelper); \
-        } \
-        GOON_CALLBACK(_method_) \
+[apiHelper _method_]; \
+BOOL goon = YES; \
+if (_block_) { \
+goon = _block_(apiHelper); \
+} \
+GOON_CALLBACK(_method_) \
 }
         
 #define RETURN_APIHELPER_AND_ERROR_CALLBACK(_method_,_block_) \
@@ -315,7 +322,7 @@ GOON_CALLBACK(_method_) \
                 [self postStateDidChangeNotificationForAPIHelper:apiHelper];
             });
         };
-
+        
         //重置请求
         [apiHelper reset];
         
