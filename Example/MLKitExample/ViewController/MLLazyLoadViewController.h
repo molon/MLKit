@@ -22,7 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSInteger)lazyLoadSection;
 - (NSInteger)exceptTopRowCount;
 - (nullable MLLazyLoadTableViewCell*)lazyLoadCell;
-- (LazyLoadAPIHelper *)lazyLoadHelper;
+- (LazyLoadAPIHelper *)lazyLoadHelperWithRefreshing:(BOOL)refreshing;
 
 - (void)afterRequestSucceed:(MLAPIHelper *)apiHelper  __attribute__((objc_requires_super));
 - (void)afterRequestFailed:(MLAPIHelper *)apiHelper  __attribute__((objc_requires_super));

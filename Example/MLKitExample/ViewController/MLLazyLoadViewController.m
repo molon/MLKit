@@ -43,7 +43,7 @@
         WEAK_SELF
         [_tableView setRequestingAPIHelperBlock:^MLAPIHelper * _Nonnull(MLLazyLoadTableView * _Nonnull tableView, BOOL refreshing) {
             STRONG_SELF
-            LazyLoadAPIHelper *helper = [self lazyLoadHelper];
+            LazyLoadAPIHelper *helper = [self lazyLoadHelperWithRefreshing:refreshing];
             NSAssert(helper, @"`lazyLoadHelper` can not return nil");
             if (refreshing) {
                 helper.p_pageNo = 1;
@@ -109,7 +109,8 @@
     return nil;
 }
 
-- (LazyLoadAPIHelper *)lazyLoadHelper {
+- (LazyLoadAPIHelper *)lazyLoadHelperWithRefreshing:(BOOL)refreshing
+{
     [self doesNotRecognizeSelector:_cmd];
     //for analyze
     return [LazyLoadAPIHelper new];

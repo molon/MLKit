@@ -450,7 +450,7 @@ GOON_CALLBACK(_method_) \
     
     NSString *key = [self cacheKeyWithDomain:[apiHelper currentCacheDomainName] apiURL:[apiHelper apiURL]];
     id cache = [_cache objectForKey:key];
-    NSAssert([cache isKindOfClass:[MLAPICacheItem class]], @"获取的cache异常，非MLAPICacheItem:%@",cache);
+    NSAssert(!cache||[cache isKindOfClass:[MLAPICacheItem class]], @"获取的cache异常，非MLAPICacheItem:%@",cache);
     return [cache isKindOfClass:[MLAPICacheItem class]]?cache:nil;
 }
 
