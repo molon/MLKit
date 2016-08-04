@@ -8,9 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		3621C75B1D2CB60C0012DAED /* avatar.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 3621C75A1D2CB60C0012DAED /* avatar.jpg */; };
-		36408B071D4E42E600E78ACA /* DefaultMLLazyLoadTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 36408B021D4E42E600E78ACA /* DefaultMLLazyLoadTableViewCell.m */; };
-		36408B081D4E42E600E78ACA /* MLLazyLoadTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 36408B041D4E42E600E78ACA /* MLLazyLoadTableView.m */; };
-		36408B091D4E42E600E78ACA /* MLLazyLoadTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 36408B061D4E42E600E78ACA /* MLLazyLoadTableViewCell.m */; };
 		36408B151D4EF77200E78ACA /* ArticleListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 36408B121D4EF77200E78ACA /* ArticleListViewController.m */; };
 		36408B161D4EF77200E78ACA /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 36408B141D4EF77200E78ACA /* ViewController.m */; };
 		36408B191D4EF7C100E78ACA /* UIViewController+MLAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = 36408B181D4EF7C100E78ACA /* UIViewController+MLAPI.m */; };
@@ -49,12 +46,6 @@
 
 /* Begin PBXFileReference section */
 		3621C75A1D2CB60C0012DAED /* avatar.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = avatar.jpg; sourceTree = "<group>"; };
-		36408B011D4E42E600E78ACA /* DefaultMLLazyLoadTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DefaultMLLazyLoadTableViewCell.h; sourceTree = "<group>"; };
-		36408B021D4E42E600E78ACA /* DefaultMLLazyLoadTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DefaultMLLazyLoadTableViewCell.m; sourceTree = "<group>"; };
-		36408B031D4E42E600E78ACA /* MLLazyLoadTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MLLazyLoadTableView.h; sourceTree = "<group>"; };
-		36408B041D4E42E600E78ACA /* MLLazyLoadTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MLLazyLoadTableView.m; sourceTree = "<group>"; };
-		36408B051D4E42E600E78ACA /* MLLazyLoadTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MLLazyLoadTableViewCell.h; sourceTree = "<group>"; };
-		36408B061D4E42E600E78ACA /* MLLazyLoadTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MLLazyLoadTableViewCell.m; sourceTree = "<group>"; };
 		36408B111D4EF77200E78ACA /* ArticleListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ArticleListViewController.h; sourceTree = "<group>"; };
 		36408B121D4EF77200E78ACA /* ArticleListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ArticleListViewController.m; sourceTree = "<group>"; };
 		36408B131D4EF77200E78ACA /* ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
@@ -129,19 +120,6 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		36408B001D4E42E600E78ACA /* MLLazyLoadTableView */ = {
-			isa = PBXGroup;
-			children = (
-				36408B011D4E42E600E78ACA /* DefaultMLLazyLoadTableViewCell.h */,
-				36408B021D4E42E600E78ACA /* DefaultMLLazyLoadTableViewCell.m */,
-				36408B031D4E42E600E78ACA /* MLLazyLoadTableView.h */,
-				36408B041D4E42E600E78ACA /* MLLazyLoadTableView.m */,
-				36408B051D4E42E600E78ACA /* MLLazyLoadTableViewCell.h */,
-				36408B061D4E42E600E78ACA /* MLLazyLoadTableViewCell.m */,
-			);
-			path = MLLazyLoadTableView;
-			sourceTree = "<group>";
-		};
 		36408B0E1D4EF74C00E78ACA /* APIHelper */ = {
 			isa = PBXGroup;
 			children = (
@@ -208,7 +186,6 @@
 				36408B1A1D4EF7DA00E78ACA /* Model */,
 				36408B101D4EF77200E78ACA /* ViewController */,
 				36408B0E1D4EF74C00E78ACA /* APIHelper */,
-				36408B001D4E42E600E78ACA /* MLLazyLoadTableView */,
 				36A374261D2640EE00EDD9A8 /* AppDelegate.h */,
 				36A374271D2640EE00EDD9A8 /* AppDelegate.m */,
 				36A3742C1D2640EE00EDD9A8 /* Main.storyboard */,
@@ -451,11 +428,8 @@
 				36408B231D4F098400E78ACA /* TestLazyLoadAPIHelper.m in Sources */,
 				36408B1D1D4EF7EA00E78ACA /* Article.m in Sources */,
 				36408B151D4EF77200E78ACA /* ArticleListViewController.m in Sources */,
-				36408B091D4E42E600E78ACA /* MLLazyLoadTableViewCell.m in Sources */,
-				36408B081D4E42E600E78ACA /* MLLazyLoadTableView.m in Sources */,
 				36408B161D4EF77200E78ACA /* ViewController.m in Sources */,
 				36A374281D2640EE00EDD9A8 /* AppDelegate.m in Sources */,
-				36408B071D4E42E600E78ACA /* DefaultMLLazyLoadTableViewCell.m in Sources */,
 				36408B191D4EF7C100E78ACA /* UIViewController+MLAPI.m in Sources */,
 				36408B261D4F0DC300E78ACA /* MLLazyLoadViewController.m in Sources */,
 				36A6D3B71D4F172200DB09C9 /* ArticleTableViewCell.m in Sources */,
