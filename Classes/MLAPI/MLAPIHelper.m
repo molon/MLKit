@@ -12,6 +12,7 @@
 #import "MLKitMacro.h"
 #import "MLAPIManager.h"
 #import "MLAPICacheItem.h"
+#import "NSObject+MLAdd.h"
 
 NSTimeInterval const MLAPIHelperDefaultTimeoutInterval = 10.0f;
 
@@ -129,10 +130,24 @@ NSString * MLAPIHTTPMethod(MLAPIHelperRequestMethod requestMethod) {
     return [self apiURLWithParameters:[self allRequestParams]];
 }
 
+#warning this is because AF3.0---- ,so...
+FOUNDATION_EXPORT NSArray * AFQueryStringPairsFromDictionary(NSDictionary *dictionary);
+FOUNDATION_EXPORT NSArray * AFQueryStringPairsFromKeyAndValue(NSString *key, id value);
+
+static inline NSString * TEMP_AFQueryStringFromParameters(NSDictionary *parameters) {
+    NSMutableArray *mutablePairs = [NSMutableArray array];
+    for (id pair in AFQueryStringPairsFromDictionary(parameters)) {
+        NSString *stringValue = [pair performSelectorWithArgs:@selector(URLEncodedStringValue)];
+        [mutablePairs addObject:stringValue];
+    }
+    
+    return [mutablePairs componentsJoinedByString:@"&"];
+}
+
 - (NSURL*)apiURLWithParameters:(NSDictionary*)parameters {
     NSURL *apiURL = [NSURL URLWithString:_apiName relativeToURL:_baseURL];
     if ([[MLAPIManager defaultManager].httpSessionManager.requestSerializer.HTTPMethodsEncodingParametersInURI containsObject:MLAPIHTTPMethod(_requestMethod)]) {
-        NSString *query = AFQueryStringFromParameters(parameters);
+        NSString *query = TEMP_AFQueryStringFromParameters(parameters);
         if (query && query.length > 0) {
             apiURL = [NSURL URLWithString:[[apiURL absoluteString] stringByAppendingFormat:apiURL.query ? @"&%@" : @"?%@", query]];
         }

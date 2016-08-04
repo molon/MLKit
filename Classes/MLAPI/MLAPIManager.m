@@ -75,7 +75,9 @@ static inline void mlapi_dispatch_async_on_main_queue(void (^block)()) {
         [request setTimeoutInterval:timeoutInterval];
     }
     
-    __block NSURLSessionDataTask *task = [self uploadTaskWithStreamedRequest:request progress:uploadProgress completionHandler:^(NSURLResponse * __unused response, id responseObject, NSError *error) {
+    //AFNetworking 3.0-
+#warning In fact, this is not support uploadProgress! But beacuse we must use af2.0+ now,so ....
+    __block NSURLSessionDataTask *task = [self uploadTaskWithStreamedRequest:request progress:nil completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
         if (error) {
             if (failure) {
                 failure(task, error);
@@ -86,6 +88,19 @@ static inline void mlapi_dispatch_async_on_main_queue(void (^block)()) {
             }
         }
     }];
+    
+    //AFNetworking 3.0+
+//    __block NSURLSessionDataTask *task = [self uploadTaskWithStreamedRequest:request progress:uploadProgress completionHandler:^(NSURLResponse * __unused response, id responseObject, NSError *error) {
+//        if (error) {
+//            if (failure) {
+//                failure(task, error);
+//            }
+//        } else {
+//            if (success) {
+//                success(task, responseObject);
+//            }
+//        }
+//    }];
     
     [task resume];
     
@@ -128,20 +143,34 @@ static inline void mlapi_dispatch_async_on_main_queue(void (^block)()) {
     }
     
     __block NSURLSessionDataTask *dataTask = nil;
-    dataTask = [self dataTaskWithRequest:request
-                          uploadProgress:uploadProgress
-                        downloadProgress:downloadProgress
-                       completionHandler:^(NSURLResponse * __unused response, id responseObject, NSError *error) {
-                           if (error) {
-                               if (failure) {
-                                   failure(dataTask, error);
-                               }
-                           } else {
-                               if (success) {
-                                   success(dataTask, responseObject);
-                               }
-                           }
-                       }];
+#warning In fact, this is not support uploadProgress and downloadProgress! But beacuse we must use af2.0+ now,so ....
+    dataTask = [self dataTaskWithRequest:request completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
+        if (error) {
+            if (failure) {
+                failure(dataTask, error);
+            }
+        } else {
+            if (success) {
+                success(dataTask, responseObject);
+            }
+        }
+    }];
+    
+    //AFNetworking 3.0+
+//    dataTask = [self dataTaskWithRequest:request
+//                          uploadProgress:uploadProgress
+//                        downloadProgress:downloadProgress
+//                       completionHandler:^(NSURLResponse * __unused response, id responseObject, NSError *error) {
+//                           if (error) {
+//                               if (failure) {
+//                                   failure(dataTask, error);
+//                               }
+//                           } else {
+//                               if (success) {
+//                                   success(dataTask, responseObject);
+//                               }
+//                           }
+//                       }];
     
     return dataTask;
 }
