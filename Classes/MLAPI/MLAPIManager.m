@@ -419,7 +419,7 @@ GOON_CALLBACK(_method_) \
             } progress:uploadProgressWrapper success:requestSuccessWrapper failure:errorWrapper];
         }else{
             //执行标准的请求方式
-            NSURLSessionDataTask *dataTask = [self.httpSessionManager dataTaskWithHTTPMethod:MLAPIHTTPMethod(apiHelper.requestMethod) URLString:apiHelper.apiName baseURL:apiHelper.baseURL parameters:params timeoutInterval:[apiHelper timeoutInterval] uploadProgress:uploadProgressWrapper downloadProgress:downloadProgressWrapper success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+            NSURLSessionDataTask *dataTask = [self.httpSessionManager dataTaskWithHTTPMethod:MLAPI_HTTPMethod(apiHelper.requestMethod) URLString:apiHelper.apiName baseURL:apiHelper.baseURL parameters:params timeoutInterval:[apiHelper timeoutInterval] uploadProgress:uploadProgressWrapper downloadProgress:downloadProgressWrapper success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
                 if (apiHelper.requestMethod==MLAPIHelperRequestMethodHEAD) {
                     responseObject = nil;
                 }

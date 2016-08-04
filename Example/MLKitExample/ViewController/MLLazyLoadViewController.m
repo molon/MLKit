@@ -178,6 +178,11 @@
 {
     if ([apiHelper isEqual:_tableView.requestingAPIHelper]) {
         [_tableView requestFailedWithAPIHelper:apiHelper];
+    }else if ([apiHelper isKindOfClass:[LazyLoadAPIHelper class]]){
+        if (MLAPI_IsErrorCancelled(apiHelper.responseError)) {
+            DDLogInfo(@"有懒加载请求被取消，一般由于下拉刷新请求开始了，其优先级比较高，这很正常");
+            return;
+        }
     }
     
     [super afterRequestFailed:apiHelper];

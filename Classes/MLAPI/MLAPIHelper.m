@@ -61,13 +61,18 @@ static inline NSDictionary *kResetResponseProtypeDictionary(Class cls) {
     return protypeResponses[clsName];
 }
 
-NSString * MLAPIHTTPMethod(MLAPIHelperRequestMethod requestMethod) {
+NSString * MLAPI_HTTPMethod(MLAPIHelperRequestMethod requestMethod) {
     static NSArray *methodNames;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         methodNames = @[@"GET",@"POST",@"PUT",@"DELETE",@"HEAD",@"PATCH"];
     });
     return methodNames[requestMethod];
+}
+
+BOOL MLAPI_IsErrorCancelled(NSError *error) {
+    return ([error.domain isEqualToString:NSURLErrorDomain]
+            &&error.code==NSURLErrorCancelled);
 }
 
 @interface MLAPIHelper()
@@ -146,7 +151,7 @@ static inline NSString * TEMP_AFQueryStringFromParameters(NSDictionary *paramete
 
 - (NSURL*)apiURLWithParameters:(NSDictionary*)parameters {
     NSURL *apiURL = [NSURL URLWithString:_apiName relativeToURL:_baseURL];
-    if ([[MLAPIManager defaultManager].httpSessionManager.requestSerializer.HTTPMethodsEncodingParametersInURI containsObject:MLAPIHTTPMethod(_requestMethod)]) {
+    if ([[MLAPIManager defaultManager].httpSessionManager.requestSerializer.HTTPMethodsEncodingParametersInURI containsObject:MLAPI_HTTPMethod(_requestMethod)]) {
         NSString *query = TEMP_AFQueryStringFromParameters(parameters);
         if (query && query.length > 0) {
             apiURL = [NSURL URLWithString:[[apiURL absoluteString] stringByAppendingFormat:apiURL.query ? @"&%@" : @"?%@", query]];
@@ -251,10 +256,10 @@ static inline NSString * TEMP_AFQueryStringFromParameters(NSDictionary *paramete
 - (NSString*)description {
     NSDictionary *params = [self allRequestParams];
     if (params.count<=0) {
-        return [NSString stringWithFormat:@"\n%@ -> \n%@:%@\n",[super description],MLAPIHTTPMethod(_requestMethod),[[self apiURL] absoluteString]];
+        return [NSString stringWithFormat:@"\n%@ -> \n%@:%@\n",[super description],MLAPI_HTTPMethod(_requestMethod),[[self apiURL] absoluteString]];
     }
     
-    return [NSString stringWithFormat:@"\n%@ -> \n%@:%@\nParams:%@\n",[super description],MLAPIHTTPMethod(_requestMethod),[[self apiURL] absoluteString],[self allRequestParams]];
+    return [NSString stringWithFormat:@"\n%@ -> \n%@:%@\nParams:%@\n",[super description],MLAPI_HTTPMethod(_requestMethod),[[self apiURL] absoluteString],[self allRequestParams]];
 }
 
 - (void)reset {
