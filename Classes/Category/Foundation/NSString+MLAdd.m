@@ -324,7 +324,7 @@ SYNTH_DUMMY_CLASS(NSString_MLAdd)
     
     CGFloat scale = kScreenScale;
     result.height = ceil(result.height * scale)/scale;
-    result.width = ceil(result.height * scale)/scale;
+    result.width = ceil(result.width * scale)/scale;
     return result;
 }
 

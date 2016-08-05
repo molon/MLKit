@@ -16,13 +16,13 @@ SYNTH_DUMMY_CLASS(UIColor_MLAdd)
 + (UIColor*)colorWithFormat:(NSString*)format
 {
     if ([format hasPrefix:@"{"]||[format hasPrefix:@"["]){
-        return [[self class] colorWithFloatString:format];
+        return [[self class] colorWithFloatStringFormat:format];
     }
     
-    return [[self class] colorWithHexString:format];
+    return [[self class] colorWithHexStringFormat:format];
 }
 
-+ (UIColor*)colorWithFloatString:(NSString*)string
++ (UIColor*)colorWithFloatStringFormat:(NSString*)string
 {
     BOOL isCalced = NO; //是否还需要/255.0,中括号的不需要，大括号的需要
     
@@ -78,7 +78,7 @@ SYNTH_DUMMY_CLASS(UIColor_MLAdd)
 }
 
 
-+ (UIColor *)colorWithHexString:(NSString *)stringToConvert {
++ (UIColor *)colorWithHexStringFormat:(NSString *)stringToConvert {
     NSString *cString = [[stringToConvert stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] uppercaseString];
     
     // String should be 6 or 8 characters

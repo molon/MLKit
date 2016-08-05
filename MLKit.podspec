@@ -24,7 +24,7 @@ s.dependency 'DHSmartScreenshot', '~> 1.3.1'
 s.dependency 'AFNetworking' , '~> 2.6.3' #, '~> 3.1.0'
 s.dependency 'YYCache', '~> 1.0.3'
 s.dependency 'CocoaLumberjack', '~> 2.3.0'
-s.dependency 'MLRefreshControl', '~> 0.0.3'
-s.dependency 'MLLayout', '~> 0.2.1'
+s.dependency 'MLRefreshControl', '~> 0.0.4'
+s.dependency 'MLLayout', '~> 0.2.2'
 
 end
