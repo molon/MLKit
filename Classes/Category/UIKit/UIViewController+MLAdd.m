@@ -31,13 +31,13 @@ SYNTH_DUMMY_CLASS(UIViewController_MLAdd)
     }
     
     if (!self.navigationController) {
-        return [UIViewController statusBarHeight];
+        return [UIApplication sharedApplication].statusBarHidden?0.0f:[UIViewController statusBarHeight];
     }else{
         if (!self.navigationController.navigationBar.translucent) {
             return 0.0f;
         }
     }
-    return [UIViewController statusBarHeight] + (self.navigationController.navigationBarHidden ? 0 : self.navigationController.navigationBar.intrinsicContentSize.height);
+    return ([UIApplication sharedApplication].statusBarHidden?0.0f:[UIViewController statusBarHeight]) + (self.navigationController.navigationBarHidden ? 0 : self.navigationController.navigationBar.intrinsicContentSize.height);
 }
 
 - (CGFloat)tabBarOccupiedHeight {

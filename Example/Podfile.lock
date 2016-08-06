@@ -33,38 +33,35 @@ PODS:
     - AFNetworking (~> 2.6.3)
     - CocoaLumberjack (~> 2.3.0)
     - DHSmartScreenshot (~> 1.3.1)
-    - MLLayout (~> 0.2.1)
+    - MLLayout (~> 0.2.2)
     - MLPersonalModel (~> 11.0.4)
-    - MLRefreshControl (~> 0.0.3)
+    - MLRefreshControl (~> 0.1.0)
     - SAMKeychain (~> 1.5.0)
     - YYCache (~> 1.0.3)
-  - MLLayout (0.2.1)
+  - MLLayout (0.2.2)
   - MLPersonalModel (11.0.4)
-  - MLRefreshControl (0.0.3)
+  - MLRefreshControl (0.1.0)
   - SAMKeychain (1.5.0)
   - YYCache (1.0.3)
 
 DEPENDENCIES:
   - MLKit (from `../MLKit.podspec`)
-  - MLRefreshControl (from `~/MLProjects/MLRefreshControl`)
 
 EXTERNAL SOURCES:
   MLKit:
     :path: ../MLKit.podspec
-  MLRefreshControl:
-    :path: ~/MLProjects/MLRefreshControl
 
 SPEC CHECKSUMS:
   AFNetworking: cb8d14a848e831097108418f5d49217339d4eb60
   CocoaLumberjack: 97fab7ee5f507fe54445cca7ea80f926729cfd15
   DHSmartScreenshot: ee749048bd7126c4826748f98df3a4adc6ad6c78
-  MLKit: 7242c5f1f3d77cef3b76ea04c6c38f44a62ba6ae
-  MLLayout: 6f90f4515bdb29128e43891c4d9585e707dc81f9
+  MLKit: c360df1fe72eb42412bf59c1bb9e1e56a37fa2a5
+  MLLayout: c260fbc7e77f9ac31ac225b63a4ca0db5c0a62d9
   MLPersonalModel: aa34b7c549f1e74995ee88ca95fef36f87427b9d
-  MLRefreshControl: 341f2d5d97d051fc2e51dfe5a5a1749ccded76b9
+  MLRefreshControl: fbb3ea9049031c2b5302de764d3ba6aae222efd0
   SAMKeychain: 1fc9ae02f576365395758b12888c84704eebc423
   YYCache: 282f35b5b0990833d0b7a06d864a87141a021da2
 
-PODFILE CHECKSUM: 5be42273a464530ae9ad5435be41d2e4b9924261
+PODFILE CHECKSUM: 8e76eb85e6012ab4c50461461c708077003b7bdb
 
 COCOAPODS: 1.0.1

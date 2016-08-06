@@ -37,10 +37,14 @@
             tableView;
         });
         
-        _tableView.contentInsetTop = [self navigationBarBottomY];
-        _tableView.contentInsetBottom = [self tabBarOccupiedHeight];
+        [self adjustTableViewContentInset];
         
         WEAK_SELF
+        [_tableView enableRefreshingWithAction:^{
+            STRONG_SELF
+            [self.tableView doRefresh];
+        } style:MLRefreshControlViewStyleFixed originalTopInset:[self navigationBarBottomY] scrollToTopAfterEndRefreshing:YES];
+        
         [_tableView setRequestingAPIHelperBlock:^MLAPIHelper * _Nonnull(MLLazyLoadTableView * _Nonnull tableView, BOOL refreshing) {
             STRONG_SELF
             LazyLoadAPIHelper *helper = [self lazyLoadHelperWithRefreshing:refreshing];
@@ -60,6 +64,17 @@
     [self.view addSubview:_tableView];
 }
 
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    
+    if (!_tableView.lastRefreshTime) {
+        if ([self autoRefreshAtFirstDisplay]) {
+            [_tableView beginRefreshing];
+        }
+    }
+}
+
 - (void)viewWillLayoutSubviews
 {
     [super viewWillLayoutSubviews];
@@ -67,21 +82,10 @@
     _tableView.frame = self.view.bounds;
 }
 
-- (void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
+- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration{
+    [super willAnimateRotationToInterfaceOrientation:toInterfaceOrientation duration:duration];
     
-    if (!_tableView.refreshView) {
-        WEAK_SELF
-        [_tableView enableRefreshingWithAction:^{
-            STRONG_SELF
-            [self.tableView doRefresh];
-        } style:MLRefreshControlViewStyleFixed scrollToTopAfterEndRefreshing:YES];
-        
-        if ([self autoRefreshAtFirstDisplay]) {
-            [_tableView beginRefreshing];
-        }
-    }
+    [self adjustTableViewContentInset];
 }
 
 - (BOOL)autoRefreshAtFirstDisplay
@@ -186,6 +190,12 @@
     }
     
     [super afterRequestFailed:apiHelper];
+}
+
+#pragma mark - helper
+- (void)adjustTableViewContentInset {
+    _tableView.contentInsetBottom = [self tabBarOccupiedHeight];
+    _tableView.refreshView.originalTopInset = [self navigationBarBottomY];
 }
 
 @end

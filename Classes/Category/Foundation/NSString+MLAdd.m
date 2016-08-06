@@ -259,8 +259,8 @@ SYNTH_DUMMY_CLASS(NSString_MLAdd)
 }
 
 - (NSString*)firstLineString {
-    NSArray* words = [self componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]];
-    return [words firstObject];
+    NSArray* lines = [self componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]];
+    return [lines firstObject];
 }
 
 - (BOOL)containsString:(NSString *)string {
