@@ -8,9 +8,9 @@
 
 #import "MLAPIHelper.h"
 
-FOUNDATION_EXPORT NSString * const MLAPICommonErrorDomainForRequestFailed;
-FOUNDATION_EXPORT NSInteger const MLAPICommonErrorCodeForRequestFailed;
-FOUNDATION_EXPORT NSString * const MLAPICommonErrorDescriptionForRequestFailed;
+FOUNDATION_EXPORT NSString * const MLAPICommonRequestFailedErrorDomain;
+FOUNDATION_EXPORT NSInteger const MLAPICommonRequestFailedErrorCode;
+FOUNDATION_EXPORT NSString * const MLAPICommonRequestFailedErrorDescription;
 
 @interface BaseAPIHelper : MLAPIHelper
 

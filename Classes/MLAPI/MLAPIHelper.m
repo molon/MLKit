@@ -75,6 +75,26 @@ BOOL MLAPI_IsErrorCancelled(NSError *error) {
             &&error.code==NSURLErrorCancelled);
 }
 
+#warning this is because AF3.0---- ,so...
+FOUNDATION_EXPORT NSArray * AFQueryStringPairsFromDictionary(NSDictionary *dictionary);
+FOUNDATION_EXPORT NSArray * AFQueryStringPairsFromKeyAndValue(NSString *key, id value);
+
+NSString * MLAPI_AFQueryStringFromParameters(NSDictionary *parameters) {
+    NSMutableArray *mutablePairs = [NSMutableArray array];
+    for (id pair in AFQueryStringPairsFromDictionary(parameters)) {
+        
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wundeclared-selector"
+        NSString *stringValue = [pair performSelectorWithArgs:@selector(URLEncodedStringValue)];
+#pragma clang diagnostic pop
+        
+        [mutablePairs addObject:stringValue];
+    }
+    
+    return [mutablePairs componentsJoinedByString:@"&"];
+}
+
+
 @interface MLAPIHelper()
 
 @property (nonatomic, copy) NSString *apiName;
@@ -135,24 +155,10 @@ BOOL MLAPI_IsErrorCancelled(NSError *error) {
     return [self apiURLWithParameters:[self allRequestParams]];
 }
 
-#warning this is because AF3.0---- ,so...
-FOUNDATION_EXPORT NSArray * AFQueryStringPairsFromDictionary(NSDictionary *dictionary);
-FOUNDATION_EXPORT NSArray * AFQueryStringPairsFromKeyAndValue(NSString *key, id value);
-
-static inline NSString * TEMP_AFQueryStringFromParameters(NSDictionary *parameters) {
-    NSMutableArray *mutablePairs = [NSMutableArray array];
-    for (id pair in AFQueryStringPairsFromDictionary(parameters)) {
-        NSString *stringValue = [pair performSelectorWithArgs:@selector(URLEncodedStringValue)];
-        [mutablePairs addObject:stringValue];
-    }
-    
-    return [mutablePairs componentsJoinedByString:@"&"];
-}
-
 - (NSURL*)apiURLWithParameters:(NSDictionary*)parameters {
     NSURL *apiURL = [NSURL URLWithString:_apiName relativeToURL:_baseURL];
     if ([[MLAPIManager defaultManager].httpSessionManager.requestSerializer.HTTPMethodsEncodingParametersInURI containsObject:MLAPI_HTTPMethod(_requestMethod)]) {
-        NSString *query = TEMP_AFQueryStringFromParameters(parameters);
+        NSString *query = MLAPI_AFQueryStringFromParameters(parameters);
         if (query && query.length > 0) {
             apiURL = [NSURL URLWithString:[[apiURL absoluteString] stringByAppendingFormat:apiURL.query ? @"&%@" : @"?%@", query]];
         }
@@ -318,6 +324,7 @@ static inline NSString * TEMP_AFQueryStringFromParameters(NSDictionary *paramete
 
 - (void)beforeConstructRequestParams{}
 - (void)treatWithConstructedRequestParams:(NSMutableDictionary*)params{}
+- (void)treatWithConstructedRequest:(NSMutableURLRequest*)mutableRequest{}
 - (void)beforeRequest{}
 - (void)afterCachePreloaded{}
 - (void)uploadProgress:(NSProgress *)progress{}

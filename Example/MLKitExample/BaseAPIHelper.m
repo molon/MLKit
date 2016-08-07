@@ -8,9 +8,9 @@
 
 #import "BaseAPIHelper.h"
 
-NSString * const MLAPICommonErrorDomainForRequestFailed = @"com.molon.molonapi.MLAPICommonErrorDomainForRequestFailed";
-NSInteger const MLAPICommonErrorCodeForRequestFailed = -1;
-NSString * const MLAPICommonErrorDescriptionForRequestFailed = @"未知错误";
+NSString * const MLAPICommonRequestFailedErrorDomain = @"com.molon.molonapi.MLAPICommonErrorDomainForRequestFailed";
+NSInteger const MLAPICommonRequestFailedErrorCode = NSURLErrorUnknown;
+NSString * const MLAPICommonRequestFailedErrorDescription = @"未知错误";
 
 @interface MLAPIHelper(Private)
 
@@ -31,12 +31,13 @@ NSString * const MLAPICommonErrorDescriptionForRequestFailed = @"未知错误";
             
             NSDictionary *errorDictionary = responseObject[@"error"];
             if (!errorDictionary) {
-                return [NSError errorWithDomain:MLAPICommonErrorDomainForRequestFailed code:MLAPICommonErrorCodeForRequestFailed userInfo:@{NSLocalizedDescriptionKey:MLAPICommonErrorDescriptionForRequestFailed}];
+                return [NSError errorWithDomain:MLAPICommonRequestFailedErrorDomain code:MLAPICommonRequestFailedErrorCode userInfo:@{NSLocalizedDescriptionKey:MLAPICommonRequestFailedErrorDescription}];
             }
-            NSInteger code = [errorDictionary integerValueForKey:@"code" default:MLAPICommonErrorCodeForRequestFailed];
-            NSString *description = [errorDictionary stringValueForKey:@"message" default:MLAPICommonErrorDescriptionForRequestFailed];
             
-            return [NSError errorWithDomain:MLAPICommonErrorDomainForRequestFailed code:code userInfo:@{NSLocalizedDescriptionKey:description}];
+            NSInteger code = [errorDictionary integerValueForKey:@"code" default:MLAPICommonRequestFailedErrorCode];
+            NSString *description = [errorDictionary stringValueForKey:@"message" default:MLAPICommonRequestFailedErrorDescription];
+            
+            return [NSError errorWithDomain:MLAPICommonRequestFailedErrorDomain code:code userInfo:@{NSLocalizedDescriptionKey:description}];
         }
     }
     //其他的表示成功的statusCode(一般都是2打头的)的内容我们也没必要去关心，直接返回成功了即可
@@ -80,7 +81,14 @@ NSString * const MLAPICommonErrorDescriptionForRequestFailed = @"未知错误";
 //
 //        DDLogInfo(@"\nBegin Request: curl -X %@ %@\"%@\" | json_pp",request.HTTPMethod,params.length>0?[NSString stringWithFormat:@"-d \"%@\" ",params]:@"",[request.URL absoluteString]);
         
-//        DDLogInfo(@"\n开始请求: %@",[request.URL absoluteString]);
+        NSURL *apiURL = [self apiURL];
+        if (apiURL.query) {
+            DDLogInfo(@"\n开始请求: curl -X %@ %@\"%@\" | json_pp",MLAPI_HTTPMethod(self.requestMethod),@"",[apiURL absoluteString]);
+        }else{
+            NSString *query = MLAPI_AFQueryStringFromParameters([self allRequestParams]);
+            DDLogInfo(@"\n开始请求: curl -X %@ %@\"%@\" | json_pp",MLAPI_HTTPMethod(self.requestMethod),[query isNotBlank]?[NSString stringWithFormat:@"-d \"%@\" ",query]:@"",[apiURL absoluteString]);
+        }
+        
     }else if (state==MLAPIHelperStateRequestSucceed) {
         if (self.isRespondWithCache) {
             DDLogInfo(@"直接使用缓存:%@",self);

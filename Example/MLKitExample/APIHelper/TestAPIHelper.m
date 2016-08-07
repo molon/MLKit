@@ -14,10 +14,6 @@
     return @"hi_json";
 }
 
-- (NSTimeInterval)cacheLifeTime {
-    return 10.0f;
-}
-
 - (MLAPIHelperRequestMethod)configureRequestMethod {
     return MLAPIHelperRequestMethodPOST;
 }

@@ -51,13 +51,13 @@ static inline void mlapi_dispatch_async_on_main_queue(void (^block)()) {
 - (NSURLSessionDataTask *)POST:(NSString *)URLString
                        baseURL:(NSURL*)baseURL
                     parameters:(id)parameters
-               timeoutInterval:(NSTimeInterval)timeoutInterval
-     constructingBodyWithBlock:(void (^)(id <AFMultipartFormData> formData))block
+     constructingBodyWithBlock:(void (^)(id <AFMultipartFormData> formData))constructingBodyWithBlock
+  constructingRequestWithBlock:(void (^)(NSMutableURLRequest *request))constructingRequestWithBlock
                       progress:(nullable void (^)(NSProgress * _Nonnull))uploadProgress
                        success:(void (^)(NSURLSessionDataTask *task, id responseObject))success
                        failure:(void (^)(NSURLSessionDataTask *task, NSError *error))failure {
     NSError *serializationError = nil;
-    NSMutableURLRequest *request = [self.requestSerializer multipartFormRequestWithMethod:@"POST" URLString:[[NSURL URLWithString:URLString relativeToURL:baseURL?baseURL:self.baseURL] absoluteString] parameters:parameters constructingBodyWithBlock:block error:&serializationError];
+    NSMutableURLRequest *request = [self.requestSerializer multipartFormRequestWithMethod:@"POST" URLString:[[NSURL URLWithString:URLString relativeToURL:baseURL?baseURL:self.baseURL] absoluteString] parameters:parameters constructingBodyWithBlock:constructingBodyWithBlock error:&serializationError];
     if (serializationError) {
         if (failure) {
 #pragma clang diagnostic push
@@ -70,9 +70,9 @@ static inline void mlapi_dispatch_async_on_main_queue(void (^block)()) {
         
         return nil;
     }
-    
-    if (timeoutInterval>0) {
-        [request setTimeoutInterval:timeoutInterval];
+
+    if (constructingRequestWithBlock) {
+        constructingRequestWithBlock(request);
     }
     
     //AFNetworking 3.0-
@@ -111,7 +111,7 @@ static inline void mlapi_dispatch_async_on_main_queue(void (^block)()) {
                                        URLString:(NSString *)URLString
                                          baseURL:(NSURL*)baseURL
                                       parameters:(id)parameters
-                                 timeoutInterval:(NSTimeInterval)timeoutInterval
+                    constructingRequestWithBlock:(void (^)(NSMutableURLRequest *request))constructingRequestWithBlock
                                   uploadProgress:(nullable void (^)(NSProgress *uploadProgress)) uploadProgress
                                 downloadProgress:(nullable void (^)(NSProgress *downloadProgress)) downloadProgress
                                          success:(void (^)(NSURLSessionDataTask *, id))success
@@ -131,8 +131,8 @@ static inline void mlapi_dispatch_async_on_main_queue(void (^block)()) {
         return nil;
     }
     
-    if (timeoutInterval>0) {
-        [request setTimeoutInterval:timeoutInterval];
+    if (constructingRequestWithBlock) {
+        constructingRequestWithBlock(request);
     }
     
     if (![method isEqualToString:@"GET"]) {
@@ -406,7 +406,7 @@ GOON_CALLBACK(_method_) \
         NSDictionary *files = [apiHelper constructRequestFileParams];
         if (files.count>0) {
             //执行上传行为
-            apiHelper.dataTask = [self.httpSessionManager POST:apiHelper.apiName baseURL:apiHelper.baseURL parameters:params timeoutInterval:[apiHelper timeoutInterval] constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
+            apiHelper.dataTask = [self.httpSessionManager POST:apiHelper.apiName baseURL:apiHelper.baseURL parameters:params constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
                 for (NSString *fileKey in [files allKeys]) {
                     id file = files[fileKey];
                     static NSString * const kUploadMimeType = @"application/octet-stream";
@@ -416,18 +416,31 @@ GOON_CALLBACK(_method_) \
                         [formData appendPartWithFileURL:file name:fileKey fileName:fileKey mimeType:kUploadMimeType error:nil];
                     }
                 }
+            } constructingRequestWithBlock:^(NSMutableURLRequest *request) {
+                NSTimeInterval timeoutInterval = [apiHelper timeoutInterval];
+                if (timeoutInterval>0) {
+                    [request setTimeoutInterval:timeoutInterval];
+                }
+                [apiHelper treatWithConstructedRequest:request];
             } progress:uploadProgressWrapper success:requestSuccessWrapper failure:errorWrapper];
         }else{
             //执行标准的请求方式
-            NSURLSessionDataTask *dataTask = [self.httpSessionManager dataTaskWithHTTPMethod:MLAPI_HTTPMethod(apiHelper.requestMethod) URLString:apiHelper.apiName baseURL:apiHelper.baseURL parameters:params timeoutInterval:[apiHelper timeoutInterval] uploadProgress:uploadProgressWrapper downloadProgress:downloadProgressWrapper success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+            apiHelper.dataTask = [self.httpSessionManager dataTaskWithHTTPMethod:MLAPI_HTTPMethod(apiHelper.requestMethod) URLString:apiHelper.apiName baseURL:apiHelper.baseURL parameters:params
+                constructingRequestWithBlock:^(NSMutableURLRequest *request) {
+                    NSTimeInterval timeoutInterval = [apiHelper timeoutInterval];
+                    if (timeoutInterval>0) {
+                        [request setTimeoutInterval:timeoutInterval];
+                    }
+                    [apiHelper treatWithConstructedRequest:request];
+            } uploadProgress:uploadProgressWrapper downloadProgress:downloadProgressWrapper success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
                 if (apiHelper.requestMethod==MLAPIHelperRequestMethodHEAD) {
                     responseObject = nil;
                 }
                 requestSuccessWrapper(task,responseObject);
             } failure:errorWrapper];
-            [dataTask resume];
-            apiHelper.dataTask = dataTask;
         }
+        
+        [apiHelper.dataTask resume];
         
         //标记请求中
         apiHelper.state = MLAPIHelperStateRequesting;

@@ -43,6 +43,8 @@ FOUNDATION_EXPORT NSString * const MLAPIHelperStateDidChangeNotificationAPIHelpe
 FOUNDATION_EXPORT NSString * MLAPI_HTTPMethod(MLAPIHelperRequestMethod requestMethod);
 FOUNDATION_EXPORT BOOL MLAPI_IsErrorCancelled(NSError *error);
 
+FOUNDATION_EXPORT NSString * MLAPI_AFQueryStringFromParameters(NSDictionary *parameters);
+
 @class MLAPICacheItem;
 @interface MLAPIHelper : NSObject
 
@@ -147,7 +149,7 @@ FOUNDATION_EXPORT BOOL MLAPI_IsErrorCancelled(NSError *error);
 - (NSTimeInterval)timeoutInterval;
 
 /**
- 缓存有效时长，以秒为单位，默认为-1
+ 缓存有效时长，以秒为单位，默认为-1，使用缓存的话请重载这个方法
  */
 - (NSTimeInterval)cacheLifeTime;
 
@@ -160,6 +162,11 @@ FOUNDATION_EXPORT BOOL MLAPI_IsErrorCancelled(NSError *error);
  对最终构造的请求参数做额外处理，每次allRequestParams最终都会调用，请只做请求参数相关内容
  */
 - (void)treatWithConstructedRequestParams:(NSMutableDictionary*)params __attribute__((objc_requires_super));
+
+/**
+ 对构造出来的请求URLRequest进行额外处理，例如重新设置HTTPHeaderField啊等等
+ */
+- (void)treatWithConstructedRequest:(NSMutableURLRequest*)mutableRequest __attribute__((objc_requires_super));
 
 /**
  执行请求之前
