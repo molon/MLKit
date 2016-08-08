@@ -8,7 +8,7 @@
 
 #import "MLLazyLoadViewController.h"
 #import "MLLazyLoadTableView.h"
-#import <MLRefreshControl.h>
+#import <MLRefreshControl/MLRefreshControl.h>
 #import "UIViewController+MLAPI.h"
 #import "BaseAPIHelper.h"
 

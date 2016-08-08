@@ -6,7 +6,7 @@
 //  Copyright © 2016年 molon. All rights reserved.
 //
 
-#import <MLAutoRecordFrameTableView.h>
+#import <MLLayout/MLAutoRecordFrameTableView.h>
 
 NS_ASSUME_NONNULL_BEGIN
 

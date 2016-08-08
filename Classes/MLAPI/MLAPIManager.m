@@ -12,7 +12,7 @@
 #import "NSObject+MLAPI.h"
 #import "NSNotificationCenter+MLAdd.h"
 #import "MLThread.h"
-#import <YYCache.h>
+#import <YYCache/YYCache.h>
 #import "NSString+MLAdd.h"
 #import "MLAPICacheItem.h"
 

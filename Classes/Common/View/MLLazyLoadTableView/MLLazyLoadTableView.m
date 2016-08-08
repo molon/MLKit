@@ -9,7 +9,7 @@
 #import "MLLazyLoadTableView.h"
 #import "DefaultMLLazyLoadTableViewCell.h"
 #import "MLKit.h"
-#import <MLRefreshControl.h>
+#import <MLRefreshControl/MLRefreshControl.h>
 
 @interface _MLLazyLoadTableViewProxy : MLDelegateProxy
 @end

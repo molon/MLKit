@@ -7,7 +7,7 @@
 //
 
 #import "MLAPIHelper.h"
-#import <YYModel.h>
+#import <MLPersonalModel/YYModel.h>
 #import "NSString+MLAdd.h"
 #import "MLKitMacro.h"
 #import "MLAPIManager.h"
@@ -228,9 +228,12 @@ NSString * MLAPI_AFQueryStringFromParameters(NSDictionary *parameters) {
             //NSData是有效的上传数据
             if ([object isKindOfClass:[NSData class]]) {
                 NSData *fileData = object;
-                DDLogError(@"接口%@的%@参数所指向的上传文件数据是空的，请检查", NSStringFromClass([self class]), key);
-                NSAssert(fileData.length>0, @"接口%@的%@参数所指向的上传文件数据是空的，请检查", NSStringFromClass([self class]), key);
-                files[paramKey] = object;
+                if (fileData.length<=0) {
+                    DDLogError(@"接口%@的%@参数所指向的上传文件数据是空的，请检查", NSStringFromClass([self class]), key);
+                    NSAssert(NO, @"接口%@的%@参数所指向的上传文件数据是空的，请检查", NSStringFromClass([self class]), key);
+                    continue;
+                }
+                files[paramKey] = fileData;
             }else{
                 NSURL *filePath = nil;
                 if ([object isKindOfClass:[NSString class]]) {

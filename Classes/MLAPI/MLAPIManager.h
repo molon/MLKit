@@ -6,7 +6,7 @@
 //  Copyright © 2016年 molon. All rights reserved.
 //
 
-#import <AFNetworking.h>
+#import <AFNetworking/AFNetworking.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
