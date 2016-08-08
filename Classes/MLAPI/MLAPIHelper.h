@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <AFURLRequestSerialization.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -152,6 +153,11 @@ FOUNDATION_EXPORT NSString * MLAPI_AFQueryStringFromParameters(NSDictionary *par
  缓存有效时长，以秒为单位，默认为-1，使用缓存的话请重载这个方法
  */
 - (NSTimeInterval)cacheLifeTime;
+
+/**
+ 自定义requestSerializer，否则就使用[MLAPIManager defaultManager].httpSessionManager里的
+ */
+- (AFHTTPRequestSerializer *)requestSerializer;
 
 /**
  构造请求参数之前,每次allRequestParams都会调用,请只做请求参数相关内容

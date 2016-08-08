@@ -51,13 +51,14 @@ static inline void mlapi_dispatch_async_on_main_queue(void (^block)()) {
 - (NSURLSessionDataTask *)POST:(NSString *)URLString
                        baseURL:(NSURL*)baseURL
                     parameters:(id)parameters
+             requestSerializer:(AFHTTPRequestSerializer <AFURLRequestSerialization> *)requestSerializer
      constructingBodyWithBlock:(void (^)(id <AFMultipartFormData> formData))constructingBodyWithBlock
   constructingRequestWithBlock:(void (^)(NSMutableURLRequest *request))constructingRequestWithBlock
                       progress:(nullable void (^)(NSProgress * _Nonnull))uploadProgress
                        success:(void (^)(NSURLSessionDataTask *task, id responseObject))success
                        failure:(void (^)(NSURLSessionDataTask *task, NSError *error))failure {
     NSError *serializationError = nil;
-    NSMutableURLRequest *request = [self.requestSerializer multipartFormRequestWithMethod:@"POST" URLString:[[NSURL URLWithString:URLString relativeToURL:baseURL?baseURL:self.baseURL] absoluteString] parameters:parameters constructingBodyWithBlock:constructingBodyWithBlock error:&serializationError];
+    NSMutableURLRequest *request = [requestSerializer?:self.requestSerializer multipartFormRequestWithMethod:@"POST" URLString:[[NSURL URLWithString:URLString relativeToURL:baseURL?baseURL:self.baseURL] absoluteString] parameters:parameters constructingBodyWithBlock:constructingBodyWithBlock error:&serializationError];
     if (serializationError) {
         if (failure) {
 #pragma clang diagnostic push
@@ -111,13 +112,14 @@ static inline void mlapi_dispatch_async_on_main_queue(void (^block)()) {
                                        URLString:(NSString *)URLString
                                          baseURL:(NSURL*)baseURL
                                       parameters:(id)parameters
+                               requestSerializer:(AFHTTPRequestSerializer <AFURLRequestSerialization> *)requestSerializer
                     constructingRequestWithBlock:(void (^)(NSMutableURLRequest *request))constructingRequestWithBlock
                                   uploadProgress:(nullable void (^)(NSProgress *uploadProgress)) uploadProgress
                                 downloadProgress:(nullable void (^)(NSProgress *downloadProgress)) downloadProgress
                                          success:(void (^)(NSURLSessionDataTask *, id))success
                                          failure:(void (^)(NSURLSessionDataTask *, NSError *))failure {
     NSError *serializationError = nil;
-    NSMutableURLRequest *request = [self.requestSerializer requestWithMethod:method URLString:[[NSURL URLWithString:URLString relativeToURL:baseURL?baseURL:self.baseURL] absoluteString] parameters:parameters error:&serializationError];
+    NSMutableURLRequest *request = [requestSerializer?:self.requestSerializer requestWithMethod:method URLString:[[NSURL URLWithString:URLString relativeToURL:baseURL?baseURL:self.baseURL] absoluteString] parameters:parameters error:&serializationError];
     if (serializationError) {
         if (failure) {
 #pragma clang diagnostic push
@@ -404,9 +406,10 @@ GOON_CALLBACK(_method_) \
         }
         
         NSDictionary *files = [apiHelper constructRequestFileParams];
+        AFHTTPRequestSerializer <AFURLRequestSerialization> *requestSerializer = [apiHelper requestSerializer];
         if (files.count>0) {
             //执行上传行为
-            apiHelper.dataTask = [self.httpSessionManager POST:apiHelper.apiName baseURL:apiHelper.baseURL parameters:params constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
+            apiHelper.dataTask = [self.httpSessionManager POST:apiHelper.apiName baseURL:apiHelper.baseURL parameters:params requestSerializer:requestSerializer constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
                 for (NSString *fileKey in [files allKeys]) {
                     id file = files[fileKey];
                     static NSString * const kUploadMimeType = @"application/octet-stream";
@@ -425,8 +428,7 @@ GOON_CALLBACK(_method_) \
             } progress:uploadProgressWrapper success:requestSuccessWrapper failure:errorWrapper];
         }else{
             //执行标准的请求方式
-            apiHelper.dataTask = [self.httpSessionManager dataTaskWithHTTPMethod:MLAPI_HTTPMethod(apiHelper.requestMethod) URLString:apiHelper.apiName baseURL:apiHelper.baseURL parameters:params
-                constructingRequestWithBlock:^(NSMutableURLRequest *request) {
+            apiHelper.dataTask = [self.httpSessionManager dataTaskWithHTTPMethod:MLAPI_HTTPMethod(apiHelper.requestMethod) URLString:apiHelper.apiName baseURL:apiHelper.baseURL parameters:params requestSerializer:requestSerializer constructingRequestWithBlock:^(NSMutableURLRequest *request) {
                     NSTimeInterval timeoutInterval = [apiHelper timeoutInterval];
                     if (timeoutInterval>0) {
                         [request setTimeoutInterval:timeoutInterval];

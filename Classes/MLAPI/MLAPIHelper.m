@@ -322,6 +322,10 @@ NSString * MLAPI_AFQueryStringFromParameters(NSDictionary *parameters) {
     return -1.0f;
 }
 
+- (AFHTTPRequestSerializer *)requestSerializer {
+    return nil;
+}
+
 - (void)beforeConstructRequestParams{}
 - (void)treatWithConstructedRequestParams:(NSMutableDictionary*)params{}
 - (void)treatWithConstructedRequest:(NSMutableURLRequest*)mutableRequest{}
