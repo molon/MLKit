@@ -11,7 +11,7 @@
 #include <mach/mach.h>
 #import "MLKitMacro.h"
 #import "NSString+MLAdd.h"
-#import <SAMKeychain.h>
+#import <SAMKeychain/SAMKeychain.h>
 
 SYNTH_DUMMY_CLASS(UIDevice_MLAdd)
 
