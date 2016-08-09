@@ -70,11 +70,7 @@ NSString * const MLAPICommonRequestFailedErrorDescription = @"未知错误";
     [super treatWithConstructedRequest:mutableRequest];
     
     //这个回调实际上不应该做这件事，但是只有这里适合做这件事。。。
-    //NSURLRequest is not thread-safe, so we must ensure source below excuted before `resume`. see https://github.com/AFNetworking/AFNetworking/issues/3266
-    
-    NSString *params = [[NSString alloc]initWithData:mutableRequest.HTTPBody encoding:NSUTF8StringEncoding];
-    
-    DDLogInfo(@"\n构造请求: curl -X %@ %@\"%@\" | json_pp",mutableRequest.HTTPMethod,params.length>0?[NSString stringWithFormat:@"-d \"%@\" ",params]:@"",[mutableRequest.URL absoluteString]);
+    DDLogInfo(@"\n\n%@\n",[mutableRequest cURLCommandStringWithDumpHeader:NO jsonPP:YES]);
 }
 
 #ifdef DEBUG

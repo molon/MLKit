@@ -23,6 +23,7 @@
 #import "NSNumber+MLAdd.h"
 #import "NSObject+MLAdd.h"
 #import "NSString+MLAdd.h"
+#import "NSURLRequest+MLAdd.h"
 
 #import "UIActionSheet+MLAdd.h"
 #import "UIAlertView+MLAdd.h"

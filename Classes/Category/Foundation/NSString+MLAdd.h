@@ -62,6 +62,11 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (NSString *)stringByEscapingHTML;
 
+/**
+ Example: `a"b` will be escape to `a\"b`.
+ */
+- (NSString *)stringByEscapingQuotes;
+
 #pragma mark - Regular Expression
 ///=============================================================================
 /// @name Regular Expression

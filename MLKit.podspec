@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
 s.name         = "MLKit"
-s.version      = "0.0.4"
+s.version      = "0.0.5"
 s.summary      = "MLKit"
 
 s.homepage     = 'https://github.com/molon/MLKit'

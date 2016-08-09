@@ -136,6 +136,10 @@ SYNTH_DUMMY_CLASS(NSString_MLAdd)
     return result;
 }
 
+- (NSString *)stringByEscapingQuotes {
+    return [self stringByReplacingOccurrencesOfString:@"\"" withString:@"\\\""];
+}
+
 - (BOOL)matchesRegex:(NSString *)regex options:(NSRegularExpressionOptions)options {
     NSRegularExpression *pattern = [NSRegularExpression regularExpressionWithPattern:regex options:options error:NULL];
     if (!pattern) return NO;

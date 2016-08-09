@@ -138,20 +138,6 @@ NSValue *value = objc_getAssociatedObject(self, @selector(_setter_:)); \
 return cValue; \
 }
 
-#pragma mark - 忽略警告相关
-/**
- 忽略未定义的SEL警告 BEGIN
- */
-#define IGNORE_UNDECLARED_SEL_WARNING_BEGIN \
-#pragma clang diagnostic push \
-#pragma clang diagnostic ignored "-Wundeclared-selector"
-
-/**
- 忽略未定义的SEL警告 END
- */
-#define IGNORE_UNDECLARED_SEL_WARNING_END \
-#pragma clang diagnostic pop
-
 #pragma mark - 性能测试相关
 /**
  测试某段代码执行花费的时间，返回的毫秒值

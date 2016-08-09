@@ -29,7 +29,7 @@ PODS:
   - CocoaLumberjack/Extensions (2.3.0):
     - CocoaLumberjack/Default
   - DHSmartScreenshot (1.3.1)
-  - MLKit (0.0.3):
+  - MLKit (0.0.4):
     - AFNetworking (~> 2.6.3)
     - CocoaLumberjack (~> 2.3.0)
     - DHSmartScreenshot (~> 1.3.1)
@@ -55,7 +55,7 @@ SPEC CHECKSUMS:
   AFNetworking: cb8d14a848e831097108418f5d49217339d4eb60
   CocoaLumberjack: 97fab7ee5f507fe54445cca7ea80f926729cfd15
   DHSmartScreenshot: ee749048bd7126c4826748f98df3a4adc6ad6c78
-  MLKit: 34af0a77bf767d53dbc23aad16ffe74914b80202
+  MLKit: 407917663cd15b8c2a9a98960301ae80025c5559
   MLLayout: c260fbc7e77f9ac31ac225b63a4ca0db5c0a62d9
   MLPersonalModel: aa34b7c549f1e74995ee88ca95fef36f87427b9d
   MLRefreshControl: fbb3ea9049031c2b5302de764d3ba6aae222efd0
