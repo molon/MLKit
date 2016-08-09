@@ -37,7 +37,7 @@
 
 @end
 
-@implementation MLLazyLoadTableView{
+@implementation MLLazyLoadTableView {
     BOOL _needLazyLoad;
     
     _MLLazyLoadTableViewProxy *_delegateProxy;
@@ -63,8 +63,7 @@
     super.dataSource = (id<UITableViewDataSource>)_dataSourceProxy;
 }
 
-- (instancetype)initWithFrame:(CGRect)frame style:(UITableViewStyle)style
-{
+- (instancetype)initWithFrame:(CGRect)frame style:(UITableViewStyle)style {
     self = [super initWithFrame:frame style:style];
     if (self) {
         //default lazy load cell
@@ -75,13 +74,11 @@
     return self;
 }
 
-- (instancetype)initWithLazyLoadSection:(NSInteger)lazyLoadSection exceptTopRowCount:(NSInteger)exceptTopRowCount
-{
+- (instancetype)initWithLazyLoadSection:(NSInteger)lazyLoadSection exceptTopRowCount:(NSInteger)exceptTopRowCount {
     return [self initWithLazyLoadSection:lazyLoadSection exceptTopRowCount:exceptTopRowCount lazyLoadCell:nil];
 }
 
-- (instancetype)initWithLazyLoadSection:(NSInteger)lazyLoadSection exceptTopRowCount:(NSInteger)exceptTopRowCount lazyLoadCell:(MLLazyLoadTableViewCell*)lazyLoadCell
-{
+- (instancetype)initWithLazyLoadSection:(NSInteger)lazyLoadSection exceptTopRowCount:(NSInteger)exceptTopRowCount lazyLoadCell:(MLLazyLoadTableViewCell*)lazyLoadCell {
     self = [super initWithFrame:CGRectZero style:UITableViewStylePlain];
     if (self) {
         _lazyLoadSection = lazyLoadSection;
@@ -98,22 +95,19 @@
     return self;
 }
 
-- (instancetype)initWithCoder:(NSCoder *)aDecoder
-{
+- (instancetype)initWithCoder:(NSCoder *)aDecoder {
     DDLogWarn(@"Warning: MLLazyLoadTableView is not designed to be used with Interface Builder.  Table properties set in IB will be lost.");
     return [self initWithFrame:CGRectZero style:UITableViewStylePlain];
 }
 
-- (void)dealloc
-{
+- (void)dealloc {
     _isDeallocating = YES;
     self.proxyDataSource = nil;
     self.proxyDelegate = nil;
 }
 
 #pragma mark - MLDelegateProxyInterceptor
-- (void)proxyTargetHasDeallocated:(MLDelegateProxy *)proxy
-{
+- (void)proxyTargetHasDeallocated:(MLDelegateProxy *)proxy {
     if (proxy == _delegateProxy) {
         self.proxyDelegate = nil;
     } else if (proxy == _dataSourceProxy) {
@@ -122,8 +116,7 @@
 }
 
 #pragma mark - getter
-- (NSMutableArray *)entries
-{
+- (NSMutableArray *)entries {
     if (!_entries) {
         _entries = [NSMutableArray new];
     }
@@ -139,18 +132,15 @@
     _requestingAPIHelper = requestingAPIHelper;
 }
 
-- (void)setDataSource:(id<UITableViewDataSource>)dataSource
-{
+- (void)setDataSource:(id<UITableViewDataSource>)dataSource {
     NSAssert(dataSource == nil, @"MLLazyLoadTableView uses proxyDataSource, not UITableView's dataSource property.");
 }
 
-- (void)setDelegate:(id<UITableViewDelegate>)delegate
-{
+- (void)setDelegate:(id<UITableViewDelegate>)delegate {
     NSAssert(delegate == nil, @"MLLazyLoadTableView uses proxyDelegate, not UITableView's delegate property.");
 }
 
-- (void)setProxyDelegate:(id<UITableViewDelegate>)proxyDelegate
-{
+- (void)setProxyDelegate:(id<UITableViewDelegate>)proxyDelegate {
     NS_VALID_UNTIL_END_OF_SCOPE id oldDelegate = self.delegate;
     
     if (proxyDelegate == nil) {
@@ -164,8 +154,7 @@
     super.delegate = (id<UITableViewDelegate>)_delegateProxy;
 }
 
-- (void)setProxyDataSource:(id<UITableViewDataSource>)proxyDataSource
-{
+- (void)setProxyDataSource:(id<UITableViewDataSource>)proxyDataSource {
     NS_VALID_UNTIL_END_OF_SCOPE id oldDataSource = self.dataSource;
     
     if (proxyDataSource == nil) {
@@ -180,8 +169,7 @@
 }
 
 #pragma mark - helper
-- (void)loadDataWithRefresh:(BOOL)refresh
-{
+- (void)loadDataWithRefresh:(BOOL)refresh {
     void (^requestBlock)() = ^{
         MLAPIHelper *helper = self.requestingAPIHelperBlock(self,_refreshing);
         NSAssert(helper&&[helper isKindOfClass:[MLAPIHelper class]]&&helper.state==MLAPIHelperStateRequesting, @"requestingAPIHelperBlock must return MLAPIHelper which has started request");
@@ -210,18 +198,15 @@
     }
 }
 
-- (NSInteger)numberOfRowsInLazyLoadSection
-{
+- (NSInteger)numberOfRowsInLazyLoadSection {
     return _entries.count+_exceptTopRowCount+1;
 }
 
-- (NSInteger)indexForLazyLoadCell
-{
+- (NSInteger)indexForLazyLoadCell {
     return [self numberOfRowsInLazyLoadSection]-1;
 }
 
-- (NSIndexPath*)indexPathForLazyLoadCell
-{
+- (NSIndexPath*)indexPathForLazyLoadCell {
     return [NSIndexPath indexPathForRow:[self indexForLazyLoadCell] inSection:_lazyLoadSection];
 }
 
@@ -238,8 +223,7 @@
     }
 }
 
-- (void)doReloadDataWithCompletion:(void (^)())completion
-{
+- (void)doReloadDataWithCompletion:(void (^)())completion {
     [self reloadData];
     
     if (completion) {
@@ -251,8 +235,7 @@
 }
 
 #pragma mark - tableView
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.section==_lazyLoadSection&&indexPath.row==[self indexForLazyLoadCell]) {
         return _lazyLoadCell;
     }
@@ -260,8 +243,7 @@
     return [_proxyDataSource tableView:tableView cellForRowAtIndexPath:indexPath];
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.section==_lazyLoadSection&&indexPath.row==[self indexForLazyLoadCell]) {
         return [_lazyLoadCell preferredHeightWithMaxWidth:self.frame.size.width];
     }
@@ -273,8 +255,7 @@
     return [_proxyDelegate tableView:tableView heightForRowAtIndexPath:indexPath];
 }
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.section==_lazyLoadSection&&indexPath.row==[self indexForLazyLoadCell]) {
         [tableView deselectRowAtIndexPath:indexPath animated:YES];
         return;
@@ -285,8 +266,7 @@
     }
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if (section==_lazyLoadSection) {
         return [self numberOfRowsInLazyLoadSection];
     }
@@ -294,8 +274,7 @@
     return [_proxyDataSource tableView:tableView numberOfRowsInSection:section];
 }
 
-- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
-{
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.section==_lazyLoadSection&&indexPath.row==[self indexForLazyLoadCell]) {
         if (!_needLazyLoad) {
             return;
@@ -310,8 +289,7 @@
 }
 
 #pragma mark - outcall
-- (void)reset
-{
+- (void)reset {
     //end refreshing if using MLRefreshControl
     [self endRefreshing];
     
@@ -323,13 +301,11 @@
     [self doReloadDataWithCompletion:nil];
 }
 
-- (void)doRefresh
-{
+- (void)doRefresh {
     [self loadDataWithRefresh:YES];
 }
 
-- (void)requestFailedWithAPIHelper:(MLAPIHelper*)apiHelper
-{
+- (void)requestFailedWithAPIHelper:(MLAPIHelper*)apiHelper {
     //if not the last requesting api helper, just return
     if (_requestingAPIHelper&&![apiHelper isEqual:_requestingAPIHelper]) {
         return;
@@ -363,8 +339,7 @@
     _refreshing = NO;
 }
 
-- (void)appendEntries:(NSArray*)entries noMore:(BOOL)noMore apiHelper:(MLAPIHelper*)apiHelper
-{
+- (void)appendEntries:(NSArray*)entries noMore:(BOOL)noMore apiHelper:(MLAPIHelper*)apiHelper {
     //if not the last requesting api helper, just return
     if (_requestingAPIHelper&&![apiHelper isEqual:_requestingAPIHelper]) {
         return;

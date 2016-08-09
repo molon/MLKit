@@ -21,8 +21,7 @@
 
 @implementation MLLazyLoadViewController
 
-- (void)viewDidLoad
-{
+- (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.view.backgroundColor = [UIColor whiteColor];
@@ -64,8 +63,7 @@
     [self.view addSubview:_tableView];
 }
 
-- (void)viewDidAppear:(BOOL)animated
-{
+- (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     
     if (!_tableView.lastRefreshTime) {
@@ -75,78 +73,66 @@
     }
 }
 
-- (void)viewWillLayoutSubviews
-{
+- (void)viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
     
     _tableView.frame = self.view.bounds;
 }
 
-- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration{
+- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
     [super willAnimateRotationToInterfaceOrientation:toInterfaceOrientation duration:duration];
     
     [self adjustTableViewContentInset];
 }
 
-- (BOOL)autoRefreshAtFirstDisplay
-{
+- (BOOL)autoRefreshAtFirstDisplay {
     return YES;
 }
 
-- (NSInteger)lazyLoadSection
-{
+- (NSInteger)lazyLoadSection {
     return 0;
 }
 
-- (NSInteger)exceptTopRowCount
-{
+- (NSInteger)exceptTopRowCount {
     return 0;
 }
 
-- (MLLazyLoadTableViewCell*)lazyLoadCell
-{
+- (MLLazyLoadTableViewCell*)lazyLoadCell {
     return nil;
 }
 
-- (NSString*)keyOfEntryIDForDeduplication
-{
+- (NSString*)keyOfEntryIDForDeduplication {
     return nil;
 }
 
-- (LazyLoadAPIHelper *)lazyLoadHelperWithRefreshing:(BOOL)refreshing
-{
+- (LazyLoadAPIHelper *)lazyLoadHelperWithRefreshing:(BOOL)refreshing {
     [self doesNotRecognizeSelector:_cmd];
     //for analyze
     return [LazyLoadAPIHelper new];
 }
 
 #pragma mark - tableView
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     [self doesNotRecognizeSelector:_cmd];
     //for analyze
     return [UITableViewCell new];
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     [self doesNotRecognizeSelector:_cmd];
     return 0;
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     return 44.0f;
 }
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 #pragma mark - request
-- (void)afterRequestSucceed:(MLAPIHelper *)apiHelper
-{
+- (void)afterRequestSucceed:(MLAPIHelper *)apiHelper {
     if ([apiHelper isEqual:_tableView.requestingAPIHelper]) {
         LazyLoadAPIHelper *helper = (LazyLoadAPIHelper*)apiHelper;
         
@@ -178,8 +164,7 @@
     }
 }
 
-- (void)afterRequestFailed:(MLAPIHelper *)apiHelper
-{
+- (void)afterRequestFailed:(MLAPIHelper *)apiHelper {
     if ([apiHelper isEqual:_tableView.requestingAPIHelper]) {
         [_tableView requestFailedWithAPIHelper:apiHelper];
     }else if ([apiHelper isKindOfClass:[LazyLoadAPIHelper class]]){

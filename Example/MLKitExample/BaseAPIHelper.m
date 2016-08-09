@@ -61,9 +61,20 @@ NSString * const MLAPICommonRequestFailedErrorDescription = @"未知错误";
 }
 
 - (nullable NSURL*)configureBaseURL {
-    return [NSURL URLWithString:@"http://192.168.100.5:8080"];
-//    return [NSURL URLWithString:@"http://10.17.72.134:8080"];
-//    return [NSURL URLWithString:@"http://localhost:8080"];
+//    return [NSURL URLWithString:@"http://192.168.100.5:8080"];
+//    return [NSURL URLWithString:@"http://10.17.72.108:8080"];
+    return [NSURL URLWithString:@"http://localhost:8080"];
+}
+
+- (void)treatWithConstructedRequest:(NSMutableURLRequest *)mutableRequest {
+    [super treatWithConstructedRequest:mutableRequest];
+    
+    //这个回调实际上不应该做这件事，但是只有这里适合做这件事。。。
+    //NSURLRequest is not thread-safe, so we must ensure source below excuted before `resume`. see https://github.com/AFNetworking/AFNetworking/issues/3266
+    
+    NSString *params = [[NSString alloc]initWithData:mutableRequest.HTTPBody encoding:NSUTF8StringEncoding];
+    
+    DDLogInfo(@"\n构造请求: curl -X %@ %@\"%@\" | json_pp",mutableRequest.HTTPMethod,params.length>0?[NSString stringWithFormat:@"-d \"%@\" ",params]:@"",[mutableRequest.URL absoluteString]);
 }
 
 #ifdef DEBUG
@@ -73,21 +84,6 @@ NSString * const MLAPICommonRequestFailedErrorDescription = @"未知错误";
     if (state==MLAPIHelperStateCachePreloaded) {
         DDLogInfo(@"预加载:%@",self);
     }else if (state==MLAPIHelperStateRequesting) {
-        
-#warning NSURLRequest is not thread-safe, the source below maybe make `resume` crash. see https://github.com/AFNetworking/AFNetworking/issues/3266
-//        NSURLRequest *request = self.dataTask.currentRequest;
-        
-//        NSString *params = [[NSString alloc]initWithData:request.HTTPBody encoding:NSUTF8StringEncoding];
-//
-//        DDLogInfo(@"\nBegin Request: curl -X %@ %@\"%@\" | json_pp",request.HTTPMethod,params.length>0?[NSString stringWithFormat:@"-d \"%@\" ",params]:@"",[request.URL absoluteString]);
-        
-        NSURL *apiURL = [self apiURL];
-        if (apiURL.query) {
-            DDLogInfo(@"\n开始请求: curl -X %@ %@\"%@\" | json_pp",MLAPI_HTTPMethod(self.requestMethod),@"",[apiURL absoluteString]);
-        }else{
-            NSString *query = MLAPI_AFQueryStringFromParameters([self allRequestParams]);
-            DDLogInfo(@"\n开始请求: curl -X %@ %@\"%@\" | json_pp",MLAPI_HTTPMethod(self.requestMethod),[query isNotBlank]?[NSString stringWithFormat:@"-d \"%@\" ",query]:@"",[apiURL absoluteString]);
-        }
         
     }else if (state==MLAPIHelperStateRequestSucceed) {
         if (self.isRespondWithCache) {
