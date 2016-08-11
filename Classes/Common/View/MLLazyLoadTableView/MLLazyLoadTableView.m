@@ -11,6 +11,12 @@
 #import "MLKit.h"
 #import <MLRefreshControl/MLRefreshControl.h>
 
+@interface UIScrollView(MLRefreshControlViewPrivateForLazyLoad)
+
+@property (nonatomic, strong) NSDate *lastRefreshTime;
+
+@end
+
 @interface _MLLazyLoadTableViewProxy : MLDelegateProxy
 @end
 @implementation _MLLazyLoadTableViewProxy
@@ -187,6 +193,8 @@
         }
         
         requestBlock();
+        
+        self.lastRefreshTime = [NSDate date];
     }else{
         //if no last api helper, do request else do nothing
         if (!_requestingAPIHelper) {
@@ -232,6 +240,104 @@
     
     //end refreshing if using MLRefreshControl
     [self endRefreshing];
+}
+
+- (void)deleteRowsInLazyLoadSectionWithEntryID:(NSString*)entryID keyOfEntryID:(NSString*)keyOfEntryID rowAnimation:(UITableViewRowAnimation)animation {
+    NSParameterAssert(keyOfEntryID);
+    
+    NSMutableArray *indexPaths = [NSMutableArray array];
+    NSIndexSet *indexes = [_entries indexesOfObjectsPassingTest:^BOOL(id  _Nonnull entry, NSUInteger idx, BOOL * _Nonnull stop) {
+        NSAssert([[entry class]yy_containsPropertyKey:keyOfEntryID], @"keyOfEntryID is not exist in entry");
+        
+        id value = nil;
+        @try {
+            value = [entry valueForKeyPath:keyOfEntryID];
+        } @catch (NSException *exception) {
+            DDLogError(@"%@",exception);
+        }
+        
+        if (!value && !entry) {
+            DDLogWarn(@"Entry:%@\nvalue for keyOfEntryID(%@) is nil",entry,keyOfEntryID);
+            [indexPaths addObject:[NSIndexPath indexPathForRow:idx inSection:_lazyLoadSection]];
+            return YES;
+        }
+        
+        if ([value isEqual:entryID]) {
+            [indexPaths addObject:[NSIndexPath indexPathForRow:idx inSection:_lazyLoadSection]];
+            return YES;
+        }
+        
+        return NO;
+    }];
+    
+    if (indexes.count>0) {
+        [_entries removeObjectsAtIndexes:indexes];
+        [self deleteRowsAtIndexPaths:indexPaths withRowAnimation:animation];
+    }
+}
+
+- (void)deleteRowsInLazyLoadSectionWithEntry:(id)entry withRowAnimation:(UITableViewRowAnimation)animation {
+    NSParameterAssert(entry);
+    
+    NSMutableArray *indexPaths = [NSMutableArray array];
+    NSIndexSet *indexes = [_entries indexesOfObjectsPassingTest:^BOOL(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if ([entry isEqual:obj]) {
+            [indexPaths addObject:[NSIndexPath indexPathForRow:idx inSection:_lazyLoadSection]];
+            return YES;
+        }
+        return NO;
+    }];
+    
+    if (indexes.count>0) {
+        [_entries removeObjectsAtIndexes:indexes];
+        [self deleteRowsAtIndexPaths:indexPaths withRowAnimation:animation];
+    }
+}
+
+
+- (void)reloadRowsInLazyLoadSectionWithEntryID:(id)entryID keyOfEntryID:(NSString*)keyOfEntryID rowAnimation:(UITableViewRowAnimation)animation {
+    NSParameterAssert(keyOfEntryID);
+    
+    NSMutableArray *indexPaths = [NSMutableArray array];
+    [_entries enumerateObjectsUsingBlock:^(id  _Nonnull entry, NSUInteger idx, BOOL * _Nonnull stop) {
+        NSAssert([[entry class]yy_containsPropertyKey:keyOfEntryID], @"keyOfEntryID is not exist in entry");
+        
+        id value = nil;
+        @try {
+            value = [entry valueForKeyPath:keyOfEntryID];
+        } @catch (NSException *exception) {
+            DDLogError(@"%@",exception);
+        }
+        
+        if (!value && !entry) {
+            DDLogWarn(@"Entry:%@\nvalue for keyOfEntryID(%@) is nil",entry,keyOfEntryID);
+            [indexPaths addObject:[NSIndexPath indexPathForRow:idx inSection:_lazyLoadSection]];
+            return;
+        }
+        
+        if ([value isEqual:entryID]) {
+            [indexPaths addObject:[NSIndexPath indexPathForRow:idx inSection:_lazyLoadSection]];
+        }
+    }];
+    
+    if (indexPaths.count>0) {
+        [self reloadRowsAtIndexPaths:indexPaths withRowAnimation:animation];
+    }
+}
+
+- (void)reloadRowsInLazyLoadSectionWithEntry:(id)entry withRowAnimation:(UITableViewRowAnimation)animation {
+    NSParameterAssert(entry);
+    
+    NSMutableArray *indexPaths = [NSMutableArray array];
+    [_entries enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if ([entry isEqual:obj]) {
+            [indexPaths addObject:[NSIndexPath indexPathForRow:idx inSection:_lazyLoadSection]];
+        }
+    }];
+    
+    if (indexPaths.count>0) {
+        [self reloadRowsAtIndexPaths:indexPaths withRowAnimation:animation];
+    }
 }
 
 #pragma mark - tableView
@@ -330,7 +436,7 @@
         }
         
         //if you call `reset` method in refresh failed block.
-        //the block will do nothing
+        //the method will do nothing
         [self checkLazyLoadRightNow];
     }else{
         _lazyLoadCell.status = MLLazyLoadCellStatusLoadFailed;

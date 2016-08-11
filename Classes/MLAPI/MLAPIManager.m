@@ -36,6 +36,7 @@ static inline void mlapi_dispatch_async_on_main_queue(void (^block)()) {
 @property (nonatomic, weak) id callbackObject;
 @property (nonatomic, strong) NSURLSessionDataTask *dataTask;
 @property (nonatomic, assign) BOOL isRespondWithCache;
+@property (nonatomic, assign) BOOL isCurrentPreloaded;
 
 - (void)reset;
 - (NSMutableDictionary*)constructRequestParams;
@@ -394,6 +395,7 @@ GOON_CALLBACK(_method_) \
                     }
                     if (preload) {
                         [apiHelper handleResponseEntry:cacheItem.responseEntry];
+                        apiHelper.isCurrentPreloaded = YES;
                         apiHelper.state = MLAPIHelperStateCachePreloaded;
                         
                         JUST_RETURN_APIHELPER_CALLBACK(afterCachePreloaded,cachePreloadBlock)

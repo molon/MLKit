@@ -14,7 +14,6 @@
 		36408B1D1D4EF7EA00E78ACA /* Article.m in Sources */ = {isa = PBXBuildFile; fileRef = 36408B1C1D4EF7EA00E78ACA /* Article.m */; };
 		36408B201D4EF81400E78ACA /* TestAPIHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 36408B1F1D4EF81400E78ACA /* TestAPIHelper.m */; };
 		36408B231D4F098400E78ACA /* TestLazyLoadAPIHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 36408B221D4F098400E78ACA /* TestLazyLoadAPIHelper.m */; };
-		36408B261D4F0DC300E78ACA /* MLLazyLoadViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 36408B251D4F0DC300E78ACA /* MLLazyLoadViewController.m */; };
 		36A374251D2640EE00EDD9A8 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 36A374241D2640EE00EDD9A8 /* main.m */; };
 		36A374281D2640EE00EDD9A8 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 36A374271D2640EE00EDD9A8 /* AppDelegate.m */; };
 		36A3742E1D2640EE00EDD9A8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 36A3742C1D2640EE00EDD9A8 /* Main.storyboard */; };
@@ -23,7 +22,9 @@
 		36A3743E1D2640EE00EDD9A8 /* MLKitExampleTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 36A3743D1D2640EE00EDD9A8 /* MLKitExampleTests.m */; };
 		36A374491D2640EE00EDD9A8 /* MLKitExampleUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 36A374481D2640EE00EDD9A8 /* MLKitExampleUITests.m */; };
 		36A6D3B71D4F172200DB09C9 /* ArticleTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 36A6D3B61D4F172200DB09C9 /* ArticleTableViewCell.m */; };
+		36BBF37D1D5CF5E500B0B6FC /* ObserveFirstRequestLazyLoadViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 36BBF37C1D5CF5E500B0B6FC /* ObserveFirstRequestLazyLoadViewController.m */; };
 		36D198231D45C19300434111 /* BaseAPIHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 36D198221D45C19300434111 /* BaseAPIHelper.m */; };
+		36F441041D5A37D200FA6803 /* MLLazyLoadViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 36F441031D5A37D200FA6803 /* MLLazyLoadViewController.m */; };
 		CAE999C913054DC0B4B38585 /* libPods-MLKitExample.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 38812E9F8774D01922777819 /* libPods-MLKitExample.a */; };
 /* End PBXBuildFile section */
 
@@ -58,8 +59,6 @@
 		36408B1F1D4EF81400E78ACA /* TestAPIHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestAPIHelper.m; sourceTree = "<group>"; };
 		36408B211D4F098400E78ACA /* TestLazyLoadAPIHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestLazyLoadAPIHelper.h; sourceTree = "<group>"; };
 		36408B221D4F098400E78ACA /* TestLazyLoadAPIHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestLazyLoadAPIHelper.m; sourceTree = "<group>"; };
-		36408B241D4F0DC300E78ACA /* MLLazyLoadViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MLLazyLoadViewController.h; sourceTree = "<group>"; };
-		36408B251D4F0DC300E78ACA /* MLLazyLoadViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MLLazyLoadViewController.m; sourceTree = "<group>"; };
 		36A374201D2640EE00EDD9A8 /* MLKitExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MLKitExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		36A374241D2640EE00EDD9A8 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		36A374261D2640EE00EDD9A8 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -77,9 +76,13 @@
 		36A374B31D26418C00EDD9A8 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		36A6D3B51D4F172200DB09C9 /* ArticleTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ArticleTableViewCell.h; sourceTree = "<group>"; };
 		36A6D3B61D4F172200DB09C9 /* ArticleTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ArticleTableViewCell.m; sourceTree = "<group>"; };
+		36BBF37B1D5CF5E500B0B6FC /* ObserveFirstRequestLazyLoadViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObserveFirstRequestLazyLoadViewController.h; sourceTree = "<group>"; };
+		36BBF37C1D5CF5E500B0B6FC /* ObserveFirstRequestLazyLoadViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObserveFirstRequestLazyLoadViewController.m; sourceTree = "<group>"; };
 		36D198211D45C19300434111 /* BaseAPIHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BaseAPIHelper.h; path = ../BaseAPIHelper.h; sourceTree = "<group>"; };
 		36D198221D45C19300434111 /* BaseAPIHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BaseAPIHelper.m; path = ../BaseAPIHelper.m; sourceTree = "<group>"; };
 		36D198271D4A203B00434111 /* MLKitExample-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MLKitExample-Prefix.pch"; sourceTree = "<group>"; };
+		36F441021D5A37D200FA6803 /* MLLazyLoadViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MLLazyLoadViewController.h; sourceTree = "<group>"; };
+		36F441031D5A37D200FA6803 /* MLLazyLoadViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MLLazyLoadViewController.m; sourceTree = "<group>"; };
 		38812E9F8774D01922777819 /* libPods-MLKitExample.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MLKitExample.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		61D923B3C968C74D3EAEBDB1 /* Pods-MLKitExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MLKitExample.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MLKitExample/Pods-MLKitExample.debug.xcconfig"; sourceTree = "<group>"; };
 		818823A8142480E0EB451DBB /* Pods-MLKitExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MLKitExample.release.xcconfig"; path = "Pods/Target Support Files/Pods-MLKitExample/Pods-MLKitExample.release.xcconfig"; sourceTree = "<group>"; };
@@ -136,14 +139,13 @@
 		36408B101D4EF77200E78ACA /* ViewController */ = {
 			isa = PBXGroup;
 			children = (
+				36F441011D5A37D200FA6803 /* Base */,
 				36408B171D4EF7C100E78ACA /* UIViewController+MLAPI.h */,
 				36408B181D4EF7C100E78ACA /* UIViewController+MLAPI.m */,
 				36408B111D4EF77200E78ACA /* ArticleListViewController.h */,
 				36408B121D4EF77200E78ACA /* ArticleListViewController.m */,
 				36408B131D4EF77200E78ACA /* ViewController.h */,
 				36408B141D4EF77200E78ACA /* ViewController.m */,
-				36408B241D4F0DC300E78ACA /* MLLazyLoadViewController.h */,
-				36408B251D4F0DC300E78ACA /* MLLazyLoadViewController.m */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -232,6 +234,17 @@
 				36A6D3B61D4F172200DB09C9 /* ArticleTableViewCell.m */,
 			);
 			path = Cell;
+			sourceTree = "<group>";
+		};
+		36F441011D5A37D200FA6803 /* Base */ = {
+			isa = PBXGroup;
+			children = (
+				36F441021D5A37D200FA6803 /* MLLazyLoadViewController.h */,
+				36F441031D5A37D200FA6803 /* MLLazyLoadViewController.m */,
+				36BBF37B1D5CF5E500B0B6FC /* ObserveFirstRequestLazyLoadViewController.h */,
+				36BBF37C1D5CF5E500B0B6FC /* ObserveFirstRequestLazyLoadViewController.m */,
+			);
+			path = Base;
 			sourceTree = "<group>";
 		};
 		FFA05AED6D8CA2D65FFFDC3D /* Pods */ = {
@@ -430,8 +443,9 @@
 				36408B151D4EF77200E78ACA /* ArticleListViewController.m in Sources */,
 				36408B161D4EF77200E78ACA /* ViewController.m in Sources */,
 				36A374281D2640EE00EDD9A8 /* AppDelegate.m in Sources */,
+				36F441041D5A37D200FA6803 /* MLLazyLoadViewController.m in Sources */,
 				36408B191D4EF7C100E78ACA /* UIViewController+MLAPI.m in Sources */,
-				36408B261D4F0DC300E78ACA /* MLLazyLoadViewController.m in Sources */,
+				36BBF37D1D5CF5E500B0B6FC /* ObserveFirstRequestLazyLoadViewController.m in Sources */,
 				36A6D3B71D4F172200DB09C9 /* ArticleTableViewCell.m in Sources */,
 				36D198231D45C19300434111 /* BaseAPIHelper.m in Sources */,
 				36A374251D2640EE00EDD9A8 /* main.m in Sources */,

@@ -61,9 +61,9 @@ NSString * const MLAPICommonRequestFailedErrorDescription = @"未知错误";
 }
 
 - (nullable NSURL*)configureBaseURL {
-//    return [NSURL URLWithString:@"http://192.168.100.5:8080"];
+    return [NSURL URLWithString:@"http://192.168.100.5:8080"];
 //    return [NSURL URLWithString:@"http://10.17.72.108:8080"];
-    return [NSURL URLWithString:@"http://localhost:8080"];
+//    return [NSURL URLWithString:@"http://localhost:8080"];
 }
 
 - (void)treatWithConstructedRequest:(NSMutableURLRequest *)mutableRequest {

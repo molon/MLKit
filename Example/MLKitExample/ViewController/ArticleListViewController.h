@@ -6,8 +6,8 @@
 //  Copyright © 2016年 molon. All rights reserved.
 //
 
-#import "MLLazyLoadViewController.h"
+#import "ObserveFirstRequestLazyLoadViewController.h"
 
-@interface ArticleListViewController : MLLazyLoadViewController
+@interface ArticleListViewController : ObserveFirstRequestLazyLoadViewController
 
 @end

@@ -138,6 +138,16 @@ NSValue *value = objc_getAssociatedObject(self, @selector(_setter_:)); \
 return cValue; \
 }
 
+#pragma mark - 便利方法
+static inline UIImage *imageOfMLKitBundle(NSString *imageName,NSString *extension) {
+    NSBundle *bundle = [NSBundle bundleForClass:NSClassFromString(@"MLKit")];
+    NSString *bundlePath = [bundle pathForResource:@"MLKit" ofType:@"bundle"];
+    extension = [extension hasPrefix:@"."]?[extension substringFromIndex:1]:extension;
+    return [[UIImage alloc]initWithContentsOfFile:[bundlePath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.%@",imageName,extension]]];
+}
+
+#define MLKIT_BUNDLE_PNG_IMAGE(o) imageOfMLKitBundle((o),@"png")
+
 #pragma mark - 性能测试相关
 /**
  测试某段代码执行花费的时间，返回的毫秒值

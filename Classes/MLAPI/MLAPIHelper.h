@@ -101,6 +101,11 @@ FOUNDATION_EXPORT NSString * MLAPI_AFQueryStringFromParameters(NSDictionary *par
 @property (nonatomic, assign, readonly) BOOL isRespondWithCache;
 
 /**
+ 当前是否处于预加载状态下
+ */
+@property (nonatomic, assign, readonly) BOOL isCurrentPreloaded;
+
+/**
  当前的回调对象
  */
 @property (nonatomic, weak, readonly, nullable) id callbackObject;

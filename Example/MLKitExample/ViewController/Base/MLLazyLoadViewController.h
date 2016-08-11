@@ -16,7 +16,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong, readonly) MLLazyLoadTableView *tableView;
 @property (nonatomic, assign, readonly) NSInteger currentPageNo;
 
-- (BOOL)autoRefreshAtFirstDisplay;
+#pragma mark - config
+- (BOOL)autoRefreshAtFirstDidAppear;
 - (nullable NSString*)keyOfEntryIDForDeduplication;
 
 - (NSInteger)lazyLoadSection;
@@ -24,6 +25,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (nullable MLLazyLoadTableViewCell*)lazyLoadCell;
 - (LazyLoadAPIHelper *)lazyLoadHelperWithRefreshing:(BOOL)refreshing;
 
+#pragma mark - for override
 - (void)afterRequestSucceed:(MLAPIHelper *)apiHelper  __attribute__((objc_requires_super));
 - (void)afterRequestFailed:(MLAPIHelper *)apiHelper  __attribute__((objc_requires_super));
 

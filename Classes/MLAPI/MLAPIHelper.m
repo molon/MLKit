@@ -198,6 +198,7 @@ NSString * MLAPI_AFQueryStringFromParameters(NSDictionary *parameters) {
 @property (nonatomic, strong) id responseEntry;
 @property (nonatomic, strong) NSError *responseError;
 @property (nonatomic, assign) BOOL isRespondWithCache;
+@property (nonatomic, assign) BOOL isCurrentPreloaded;
 @property (nonatomic, weak) id callbackObject;
 
 @property (nonatomic, strong) NSURLSessionDataTask *dataTask;
@@ -221,6 +222,9 @@ NSString * MLAPI_AFQueryStringFromParameters(NSDictionary *parameters) {
         NSAssert([_apiName isNotBlank], @"接口%@的apiName不可为空",NSStringFromClass([self class]));
         
         _requestMethod = [self configureRequestMethod];
+        
+        //if subclass override setState: , the setting is useful.
+        self.state = MLAPIHelperStateInit;
     }
     return self;
 }
@@ -365,6 +369,7 @@ NSString * MLAPI_AFQueryStringFromParameters(NSDictionary *parameters) {
 }
 
 - (void)reset {
+    _isCurrentPreloaded = NO;
     _isRespondWithCache = NO;
     _responseEntry = nil;
     _responseError = nil;

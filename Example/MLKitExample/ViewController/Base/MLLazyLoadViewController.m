@@ -42,7 +42,7 @@
         [_tableView enableRefreshingWithAction:^{
             STRONG_SELF
             [self.tableView doRefresh];
-        } style:MLRefreshControlViewStyleFixed originalTopInset:[self navigationBarBottomY] scrollToTopAfterEndRefreshing:YES];
+        } style:MLRefreshControlViewStyleFixed originalTopInset:[self navigationBarBottomY] scrollToTopAfterEndRefreshing:NO];
         
         [_tableView setRequestingAPIHelperBlock:^MLAPIHelper * _Nonnull(MLLazyLoadTableView * _Nonnull tableView, BOOL refreshing) {
             STRONG_SELF
@@ -67,7 +67,7 @@
     [super viewDidAppear:animated];
     
     if (!_tableView.lastRefreshTime) {
-        if ([self autoRefreshAtFirstDisplay]) {
+        if ([self autoRefreshAtFirstDidAppear]) {
             [_tableView beginRefreshing];
         }
     }
@@ -85,7 +85,7 @@
     [self adjustTableViewContentInset];
 }
 
-- (BOOL)autoRefreshAtFirstDisplay {
+- (BOOL)autoRefreshAtFirstDidAppear {
     return YES;
 }
 
@@ -158,7 +158,7 @@
         }else{
             self.currentPageNo++;
         }
-        
+#warning 先懒加载两次，然后下拉刷新，立即拉到底部，等下拉刷新完毕，自动执行懒加载这时 懒加载似乎第一次总是会返回空或者是被去重成空需要测试
         //append to list
         [_tableView appendEntries:rows noMore:noMore apiHelper:helper];
     }

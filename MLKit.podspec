@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
 s.name         = "MLKit"
-s.version      = "0.0.5"
+s.version      = "0.0.6"
 s.summary      = "MLKit"
 
 s.homepage     = 'https://github.com/molon/MLKit'
@@ -16,6 +16,7 @@ s.requires_arc  = true
 s.platform     = :ios, '7.0'
 s.public_header_files = 'Classes/**/*.h'
 s.source_files  = 'Classes/**/*.{h,m}'
+s.resource = "Classes/**/*.{bundle}"
 s.libraries = 'z'
 
 s.dependency 'MLPersonalModel', '~> 11.0.4'
