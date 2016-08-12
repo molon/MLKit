@@ -10,6 +10,7 @@
 #import "TestAPIHelper.h"
 #import "UIViewController+MLAPI.h"
 #import "ArticleListViewController.h"
+#import "ExampleUserDefaults.h"
 
 @interface ViewController ()
 

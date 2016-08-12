@@ -210,6 +210,8 @@ NSString * MLAPI_AFQueryStringFromParameters(NSDictionary *parameters) {
 - (instancetype)init {
     self = [super init];
     if (self) {
+        [self yy_resetAllPropertyValues];
+        
         NSURL *baseURL = [self configureBaseURL];
         // Ensure terminal slash for baseURL path, so that NSURL +URLWithString:relativeToURL: works as expected
         if ([[baseURL path] length] > 0 && ![[baseURL absoluteString] hasSuffix:@"/"]) {
@@ -477,6 +479,9 @@ NSString * MLAPI_AFQueryStringFromParameters(NSDictionary *parameters) {
     [self yy_modelSetWithJSON:response];
 }
 
++ (NSDictionary *)modelCustomPropertyDefaultValueMapper {
+    return @{};
+}
 #pragma mark - 请求方法
 - (void)requestWithBefore:(nullable BOOL (^)(MLAPIHelper *apiHelper))beforeBlock
            uploadProgress:(nullable BOOL (^)(MLAPIHelper *apiHelper, NSProgress *uploadProgress))uploadProgressBlock

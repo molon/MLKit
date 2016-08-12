@@ -25,6 +25,7 @@
 		36BBF37D1D5CF5E500B0B6FC /* ObserveFirstRequestLazyLoadViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 36BBF37C1D5CF5E500B0B6FC /* ObserveFirstRequestLazyLoadViewController.m */; };
 		36D198231D45C19300434111 /* BaseAPIHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 36D198221D45C19300434111 /* BaseAPIHelper.m */; };
 		36F441041D5A37D200FA6803 /* MLLazyLoadViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 36F441031D5A37D200FA6803 /* MLLazyLoadViewController.m */; };
+		36F7BA271D5DCD6F003EB0AE /* ExampleUserDefaults.m in Sources */ = {isa = PBXBuildFile; fileRef = 36F7BA261D5DCD6F003EB0AE /* ExampleUserDefaults.m */; };
 		CAE999C913054DC0B4B38585 /* libPods-MLKitExample.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 38812E9F8774D01922777819 /* libPods-MLKitExample.a */; };
 /* End PBXBuildFile section */
 
@@ -83,6 +84,8 @@
 		36D198271D4A203B00434111 /* MLKitExample-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MLKitExample-Prefix.pch"; sourceTree = "<group>"; };
 		36F441021D5A37D200FA6803 /* MLLazyLoadViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MLLazyLoadViewController.h; sourceTree = "<group>"; };
 		36F441031D5A37D200FA6803 /* MLLazyLoadViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MLLazyLoadViewController.m; sourceTree = "<group>"; };
+		36F7BA251D5DCD6F003EB0AE /* ExampleUserDefaults.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExampleUserDefaults.h; sourceTree = "<group>"; };
+		36F7BA261D5DCD6F003EB0AE /* ExampleUserDefaults.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ExampleUserDefaults.m; sourceTree = "<group>"; };
 		38812E9F8774D01922777819 /* libPods-MLKitExample.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MLKitExample.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		61D923B3C968C74D3EAEBDB1 /* Pods-MLKitExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MLKitExample.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MLKitExample/Pods-MLKitExample.debug.xcconfig"; sourceTree = "<group>"; };
 		818823A8142480E0EB451DBB /* Pods-MLKitExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MLKitExample.release.xcconfig"; path = "Pods/Target Support Files/Pods-MLKitExample/Pods-MLKitExample.release.xcconfig"; sourceTree = "<group>"; };
@@ -184,6 +187,7 @@
 		36A374221D2640EE00EDD9A8 /* MLKitExample */ = {
 			isa = PBXGroup;
 			children = (
+				36F7BA241D5DCD61003EB0AE /* Manager */,
 				36A6D3B41D4F16E900DB09C9 /* Cell */,
 				36408B1A1D4EF7DA00E78ACA /* Model */,
 				36408B101D4EF77200E78ACA /* ViewController */,
@@ -245,6 +249,15 @@
 				36BBF37C1D5CF5E500B0B6FC /* ObserveFirstRequestLazyLoadViewController.m */,
 			);
 			path = Base;
+			sourceTree = "<group>";
+		};
+		36F7BA241D5DCD61003EB0AE /* Manager */ = {
+			isa = PBXGroup;
+			children = (
+				36F7BA251D5DCD6F003EB0AE /* ExampleUserDefaults.h */,
+				36F7BA261D5DCD6F003EB0AE /* ExampleUserDefaults.m */,
+			);
+			path = Manager;
 			sourceTree = "<group>";
 		};
 		FFA05AED6D8CA2D65FFFDC3D /* Pods */ = {
@@ -326,6 +339,7 @@
 				TargetAttributes = {
 					36A3741F1D2640EE00EDD9A8 = {
 						CreatedOnToolsVersion = 7.3.1;
+						DevelopmentTeam = PDL85JB6BQ;
 					};
 					36A374381D2640EE00EDD9A8 = {
 						CreatedOnToolsVersion = 7.3.1;
@@ -446,6 +460,7 @@
 				36F441041D5A37D200FA6803 /* MLLazyLoadViewController.m in Sources */,
 				36408B191D4EF7C100E78ACA /* UIViewController+MLAPI.m in Sources */,
 				36BBF37D1D5CF5E500B0B6FC /* ObserveFirstRequestLazyLoadViewController.m in Sources */,
+				36F7BA271D5DCD6F003EB0AE /* ExampleUserDefaults.m in Sources */,
 				36A6D3B71D4F172200DB09C9 /* ArticleTableViewCell.m in Sources */,
 				36D198231D45C19300434111 /* BaseAPIHelper.m in Sources */,
 				36A374251D2640EE00EDD9A8 /* main.m in Sources */,
@@ -593,12 +608,15 @@
 			baseConfigurationReference = 61D923B3C968C74D3EAEBDB1 /* Pods-MLKitExample.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PREFIX_HEADER = "MLKitExample/MLKitExample-prefix.pch";
 				INFOPLIST_FILE = MLKitExample/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.molon.MLKitExample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Debug;
 		};
@@ -607,12 +625,15 @@
 			baseConfigurationReference = 818823A8142480E0EB451DBB /* Pods-MLKitExample.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PREFIX_HEADER = "MLKitExample/MLKitExample-prefix.pch";
 				INFOPLIST_FILE = MLKitExample/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.molon.MLKitExample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Release;
 		};

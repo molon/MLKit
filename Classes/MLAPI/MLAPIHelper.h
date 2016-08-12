@@ -229,7 +229,10 @@ FOUNDATION_EXPORT NSString * MLAPI_AFQueryStringFromParameters(NSDictionary *par
  */
 - (void)handleResponseError:(NSError*)responseError __attribute__((objc_requires_super));
 
-
+/**
+ 设置特殊默认值的地方，一般是对结果相关有特殊默认值的时候，才需要考虑这个方法，实际上是MLPersonalModel里的特性
+ */
++ (NSDictionary *)modelCustomPropertyDefaultValueMapper __attribute__((objc_requires_super));
 #pragma mark - outcall
 /**
  返回是否处于请求完成状态，可能是成功，失败，错误。
