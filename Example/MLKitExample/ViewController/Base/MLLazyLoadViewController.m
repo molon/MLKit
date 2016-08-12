@@ -17,9 +17,31 @@
 @property (nonatomic, strong) MLLazyLoadTableView *tableView;
 @property (nonatomic, assign) NSInteger currentPageNo;
 
+@property (nonatomic, copy) NSString *keyOfEntryIDForDeduplication;
+@property (nonatomic, strong) UIView *backgroundViewIfEmptyList;
+
 @end
 
 @implementation MLLazyLoadViewController
+
+- (instancetype)init {
+    self = [super init];
+    if (self) {
+        [self setup];
+    }
+    return self;
+}
+
+- (void)awakeFromNib {
+    [super awakeFromNib];
+    
+    [self setup];
+}
+
+- (void)setup {
+    self.backgroundViewIfEmptyList = [self configureBackgroundViewIfEmptyList];
+    self.keyOfEntryIDForDeduplication = [self configureKeyOfEntryIDForDeduplication];
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -29,7 +51,7 @@
     
     if (!_tableView) {
         _tableView = ({
-            MLLazyLoadTableView *tableView = [[MLLazyLoadTableView alloc]initWithLazyLoadSection:[self lazyLoadSection] exceptTopRowCount:[self exceptTopRowCount] lazyLoadCell:[self lazyLoadCell]];
+            MLLazyLoadTableView *tableView = [[MLLazyLoadTableView alloc]initWithLazyLoadSection:[self configureLazyLoadSection] exceptTopRowCount:[self configureExceptTopRowCount] lazyLoadCell:[self configureLazyLoadCell]];
             tableView.tableFooterView = [[UIView alloc]initWithFrame:CGRectZero];
             tableView.proxyDataSource = self;
             tableView.proxyDelegate = self;
@@ -56,6 +78,9 @@
             
             [helper requestWithCallbackObject:self];
             
+            //hide backgroundViewIfEmptyList
+            tableView.backgroundView = nil;
+            
             return helper;
         }];
     }
@@ -67,7 +92,7 @@
     [super viewDidAppear:animated];
     
     if (!_tableView.lastRefreshTime) {
-        if ([self autoRefreshAtFirstDidAppear]) {
+        if ([self autoRefreshWhenFirstDidAppear]) {
             [_tableView beginRefreshing];
         }
     }
@@ -85,23 +110,23 @@
     [self adjustTableViewContentInset];
 }
 
-- (BOOL)autoRefreshAtFirstDidAppear {
+- (BOOL)autoRefreshWhenFirstDidAppear {
     return YES;
 }
 
-- (NSInteger)lazyLoadSection {
-    return 0;
-}
-
-- (NSInteger)exceptTopRowCount {
-    return 0;
-}
-
-- (MLLazyLoadTableViewCell*)lazyLoadCell {
+- (nullable NSString*)configureKeyOfEntryIDForDeduplication {
     return nil;
 }
 
-- (NSString*)keyOfEntryIDForDeduplication {
+- (NSInteger)configureLazyLoadSection {
+    return 0;
+}
+
+- (NSInteger)configureExceptTopRowCount {
+    return 0;
+}
+
+- (nullable MLLazyLoadTableViewCell*)configureLazyLoadCell {
     return nil;
 }
 
@@ -109,6 +134,10 @@
     [self doesNotRecognizeSelector:_cmd];
     //for analyze
     return [LazyLoadAPIHelper new];
+}
+
+- (UIView*)configureBackgroundViewIfEmptyList {
+    return nil;
 }
 
 #pragma mark - tableView
@@ -142,19 +171,20 @@
         
         //deduplication
         if (!_tableView.refreshing&&rows.count>0) {
-            NSString *keyOfEntryID = [self keyOfEntryIDForDeduplication];
-            if ([keyOfEntryID isNotBlank]) {
+            if ([_keyOfEntryIDForDeduplication isNotBlank]) {
                 //check whether keyOfEntryID exist
-                BOOL exist = [[[rows firstObject] class]yy_containsPropertyKey:keyOfEntryID];
-                NSAssert(exist, @"keyOfEntryID is not exist in entry of `r_rows`");
+                BOOL exist = [[[rows firstObject] class]yy_containsPropertyKey:_keyOfEntryIDForDeduplication];
+                NSAssert(exist, @"_keyOfEntryIDForDeduplication is not exist in entry of `r_rows`");
                 if (exist) {
-                    [rows removeNilAndDuplicateValueObjectsForKeyPath:keyOfEntryID andSameValueObjectsWithOtherObjects:_tableView.entries];
+                    [rows removeNilAndDuplicateValueObjectsForKeyPath:_keyOfEntryIDForDeduplication andSameValueObjectsWithOtherObjects:_tableView.entries];
                 }
             }
         }
         
         if (_tableView.refreshing) {
             self.currentPageNo = 1;
+            
+            _tableView.backgroundView = (rows.count<=0)?_backgroundViewIfEmptyList:nil;
         }else{
             self.currentPageNo++;
         }
@@ -180,6 +210,34 @@
 - (void)adjustTableViewContentInset {
     _tableView.contentInsetBottom = [self tabBarOccupiedHeight];
     _tableView.refreshView.originalTopInset = [self navigationBarBottomY];
+}
+
+
+#pragma mark - operations
+- (void)deleteRowsInLazyLoadSectionWithEntryID:(nullable NSString*)entryID rowAnimation:(UITableViewRowAnimation)animation {
+    NSAssert(_keyOfEntryIDForDeduplication, @"_keyOfEntryIDForDeduplication must be provided if using `deleteRowsInLazyLoadSectionWithEntryID:rowAnimation:`");
+    [_tableView deleteRowsInLazyLoadSectionWithEntryID:entryID keyOfEntryID:_keyOfEntryIDForDeduplication rowAnimation:animation];
+    
+    if (_tableView.entries.count<=0) {
+        _tableView.backgroundView = _backgroundViewIfEmptyList;
+    }
+}
+
+- (void)deleteRowsInLazyLoadSectionWithEntry:(id)entry withRowAnimation:(UITableViewRowAnimation)animation {
+    [_tableView deleteRowsInLazyLoadSectionWithEntry:entry withRowAnimation:animation];
+    
+    if (_tableView.entries.count<=0) {
+        _tableView.backgroundView = _backgroundViewIfEmptyList;
+    }
+}
+
+- (void)reloadRowsInLazyLoadSectionWithEntryID:(nullable NSString*)entryID rowAnimation:(UITableViewRowAnimation)animation {
+    NSAssert(_keyOfEntryIDForDeduplication, @"_keyOfEntryIDForDeduplication must be provided if using `deleteRowsInLazyLoadSectionWithEntryID:rowAnimation:`");
+    [_tableView reloadRowsInLazyLoadSectionWithEntryID:entryID keyOfEntryID:_keyOfEntryIDForDeduplication rowAnimation:animation];
+}
+
+- (void)reloadRowsInLazyLoadSectionWithEntry:(id)entry withRowAnimation:(UITableViewRowAnimation)animation {
+    [_tableView reloadRowsInLazyLoadSectionWithEntry:entry withRowAnimation:animation];
 }
 
 @end

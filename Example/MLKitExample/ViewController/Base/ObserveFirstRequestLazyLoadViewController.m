@@ -54,13 +54,16 @@
         self.observerView.observingAPIHelper =  self->_hasRequested?nil:helper;//(!refreshing||tableView.lastRefreshTime)?nil:helper;
         self->_hasRequested = YES;
         
+        //hide backgroundViewIfEmptyList
+        tableView.backgroundView = nil;
+        
         return helper;
     }];
     
     [self.view addSubview:_observerView];
 }
 
-- (BOOL)autoRefreshAtFirstDidAppear {
+- (BOOL)autoRefreshWhenFirstDidAppear {
     return NO;
 }
 

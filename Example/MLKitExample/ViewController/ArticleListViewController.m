@@ -12,6 +12,49 @@
 #import "TestLazyLoadAPIHelper.h"
 #import "ArticleTableViewCell.h"
 
+@interface LazyLoadEmptyView : UIView
+
+@end
+
+@implementation LazyLoadEmptyView {
+    UILabel *_contentLabel;
+    MLLayout *_layout;
+}
+
+- (id)initWithFrame:(CGRect)frame
+{
+    self = [super initWithFrame:frame];
+    if (self) {
+        // Initialization code
+        self.backgroundColor = [UIColor clearColor];
+        
+        _contentLabel = ({
+            UILabel *label = [UILabel new];
+            label.text = @"暂无内容";
+            label.font = [UIFont systemFontOfSize:15.0f];
+            [self addSubview:label];
+            label;
+        });
+        
+        _layout = [MLLayout layoutWithView:nil block:^(MLLayout * _Nonnull l) {
+            l.justifyContent = MLLayoutJustifyContentCenter;
+            l.alignItems = MLLayoutAlignmentCenter;
+            l.sublayouts = @[
+                             [MLLayout layoutWithView:_contentLabel block:nil],
+                             ];
+        }];
+    }
+    return self;
+}
+
+#pragma mark - layout
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    
+    [_layout dirtyAllRelatedLayoutsAndLayoutViewsWithFrame:self.bounds];
+}
+
+@end
 @interface ArticleListViewController ()
 
 @end
@@ -28,13 +71,17 @@ DEALLOC_SELF_DLOG
     [self.tableView registerClass:[ArticleTableViewCell class] forCellReuseIdentifier:[ArticleTableViewCell cellReuseIdentifier]];
 }
 
-- (NSString*)keyOfEntryIDForDeduplication {
+- (NSString*)configureKeyOfEntryIDForDeduplication {
     return @"ID";
 }
 
 - (LazyLoadAPIHelper *)lazyLoadHelperWithRefreshing:(BOOL)refreshing {
     TestLazyLoadAPIHelper *helper = [TestLazyLoadAPIHelper new];
     return helper;
+}
+
+- (UIView*)configureBackgroundViewIfEmptyList {
+    return [LazyLoadEmptyView new];
 }
 
 #pragma mark - tableView
