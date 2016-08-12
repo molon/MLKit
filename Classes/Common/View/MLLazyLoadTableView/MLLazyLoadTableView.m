@@ -198,6 +198,7 @@
     }else{
         //if no last api helper, do request else do nothing
         if (!_requestingAPIHelper) {
+            _refreshing = NO;
             
             requestBlock();
             

@@ -158,7 +158,6 @@
         }else{
             self.currentPageNo++;
         }
-#warning 先懒加载两次，然后下拉刷新，立即拉到底部，等下拉刷新完毕，自动执行懒加载这时 懒加载似乎第一次总是会返回空或者是被去重成空需要测试
         //append to list
         [_tableView appendEntries:rows noMore:noMore apiHelper:helper];
     }
