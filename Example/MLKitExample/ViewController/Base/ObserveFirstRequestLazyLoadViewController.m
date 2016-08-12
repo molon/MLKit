@@ -31,7 +31,8 @@
             WEAK_SELF
             [observerView setDidClickRetryButtonBlock:^(DefaultMLAPIObserverView *v) {
                 STRONG_SELF
-                [v.observingAPIHelper requestWithCallbackObject:self];
+                [self.tableView doRefresh];
+                v.observingAPIHelper =  self.tableView.requestingAPIHelper;
             }];
             observerView;
         });

@@ -419,10 +419,10 @@
     }
     self.requestingAPIHelper = nil;
     
-    //end refreshing if using MLRefreshControl
-    [self endRefreshing];
-    
     if (_refreshing) {
+        //end refreshing if using MLRefreshControl
+        [self endRefreshing];
+        
         //If refresh failed , but the original entries is still exist.
         //So we must treat with it, check whether need lazy-loading now for it.
         
