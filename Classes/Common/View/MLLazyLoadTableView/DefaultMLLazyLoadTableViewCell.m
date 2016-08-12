@@ -8,10 +8,14 @@
 
 #import "DefaultMLLazyLoadTableViewCell.h"
 
-@implementation DefaultMLLazyLoadTableViewCell{
-    UILabel *_tipsLabel;
-    UIActivityIndicatorView *_indicator;
-}
+@interface DefaultMLLazyLoadTableViewCell()
+
+@property (nonatomic, strong) UILabel *tipsLabel;
+@property (nonatomic, strong) UIActivityIndicatorView *indicator;
+
+@end
+
+@implementation DefaultMLLazyLoadTableViewCell
 
 - (instancetype)init
 {

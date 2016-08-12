@@ -7,16 +7,18 @@
 //
 
 #import "ArticleListViewController.h"
-#import "MLLazyLoadTableView.h"
+#import <MLLazyLoadTableView.h>
 #import <MLRefreshControl.h>
+#import <DefaultMLLazyLoadTableViewCell.h>
+
 #import "TestLazyLoadAPIHelper.h"
 #import "ArticleTableViewCell.h"
 
-@interface LazyLoadEmptyView : UIView
+@interface ExampleLazyLoadEmptyTipsView : UIView
 
 @end
 
-@implementation LazyLoadEmptyView {
+@implementation ExampleLazyLoadEmptyTipsView {
     UILabel *_contentLabel;
     MLLayout *_layout;
 }
@@ -55,6 +57,28 @@
 }
 
 @end
+
+@interface ExampleLazyLoadTableViewCell : DefaultMLLazyLoadTableViewCell
+
+@end
+
+@implementation ExampleLazyLoadTableViewCell
+
+#pragma mark - setter
+- (void)setStatus:(MLLazyLoadCellStatus)status
+{
+    [super setStatus:status];
+    
+    //We use ExampleLazyLoadEmptyTipsView to indicate empty. so just set @"" here.
+    if (status == MLLazyLoadCellStatusEmpty) {
+        self.tipsLabel.text = @"";
+    }
+    
+    [self setNeedsLayout];
+}
+
+@end
+
 @interface ArticleListViewController ()
 
 @end
@@ -81,7 +105,11 @@ DEALLOC_SELF_DLOG
 }
 
 - (UIView*)configureBackgroundViewIfEmptyList {
-    return [LazyLoadEmptyView new];
+    return [ExampleLazyLoadEmptyTipsView new];
+}
+
+- (MLLazyLoadTableViewCell*)configureLazyLoadCell {
+    return [ExampleLazyLoadTableViewCell new];
 }
 
 #pragma mark - tableView
