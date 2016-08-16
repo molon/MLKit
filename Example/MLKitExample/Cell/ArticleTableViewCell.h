@@ -6,11 +6,11 @@
 //  Copyright © 2016年 molon. All rights reserved.
 //
 
-#import <MLAutoRecordFrameTableViewCell.h>
+#import "BaseTableViewCell.h"
 
 @class Article;
 
-@interface ArticleTableViewCell : MLAutoRecordFrameTableViewCell
+@interface ArticleTableViewCell : BaseTableViewCell
 
 @property (nonatomic, strong) Article *article;
 

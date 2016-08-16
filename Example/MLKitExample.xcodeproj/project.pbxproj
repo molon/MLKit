@@ -14,6 +14,7 @@
 		36408B1D1D4EF7EA00E78ACA /* Article.m in Sources */ = {isa = PBXBuildFile; fileRef = 36408B1C1D4EF7EA00E78ACA /* Article.m */; };
 		36408B201D4EF81400E78ACA /* TestAPIHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 36408B1F1D4EF81400E78ACA /* TestAPIHelper.m */; };
 		36408B231D4F098400E78ACA /* TestLazyLoadAPIHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 36408B221D4F098400E78ACA /* TestLazyLoadAPIHelper.m */; };
+		36920B821D638FC200517070 /* BaseTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 36920B811D638FC200517070 /* BaseTableViewCell.m */; };
 		36A374251D2640EE00EDD9A8 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 36A374241D2640EE00EDD9A8 /* main.m */; };
 		36A374281D2640EE00EDD9A8 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 36A374271D2640EE00EDD9A8 /* AppDelegate.m */; };
 		36A3742E1D2640EE00EDD9A8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 36A3742C1D2640EE00EDD9A8 /* Main.storyboard */; };
@@ -60,6 +61,8 @@
 		36408B1F1D4EF81400E78ACA /* TestAPIHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestAPIHelper.m; sourceTree = "<group>"; };
 		36408B211D4F098400E78ACA /* TestLazyLoadAPIHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestLazyLoadAPIHelper.h; sourceTree = "<group>"; };
 		36408B221D4F098400E78ACA /* TestLazyLoadAPIHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestLazyLoadAPIHelper.m; sourceTree = "<group>"; };
+		36920B801D638FC200517070 /* BaseTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseTableViewCell.h; sourceTree = "<group>"; };
+		36920B811D638FC200517070 /* BaseTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseTableViewCell.m; sourceTree = "<group>"; };
 		36A374201D2640EE00EDD9A8 /* MLKitExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MLKitExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		36A374241D2640EE00EDD9A8 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		36A374261D2640EE00EDD9A8 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -162,6 +165,15 @@
 			path = Model;
 			sourceTree = "<group>";
 		};
+		36920B7F1D638F9A00517070 /* Base */ = {
+			isa = PBXGroup;
+			children = (
+				36920B801D638FC200517070 /* BaseTableViewCell.h */,
+				36920B811D638FC200517070 /* BaseTableViewCell.m */,
+			);
+			path = Base;
+			sourceTree = "<group>";
+		};
 		36A374171D2640EE00EDD9A8 = {
 			isa = PBXGroup;
 			children = (
@@ -234,6 +246,7 @@
 		36A6D3B41D4F16E900DB09C9 /* Cell */ = {
 			isa = PBXGroup;
 			children = (
+				36920B7F1D638F9A00517070 /* Base */,
 				36A6D3B51D4F172200DB09C9 /* ArticleTableViewCell.h */,
 				36A6D3B61D4F172200DB09C9 /* ArticleTableViewCell.m */,
 			);
@@ -464,6 +477,7 @@
 				36A6D3B71D4F172200DB09C9 /* ArticleTableViewCell.m in Sources */,
 				36D198231D45C19300434111 /* BaseAPIHelper.m in Sources */,
 				36A374251D2640EE00EDD9A8 /* main.m in Sources */,
+				36920B821D638FC200517070 /* BaseTableViewCell.m in Sources */,
 				36408B201D4EF81400E78ACA /* TestAPIHelper.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
