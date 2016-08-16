@@ -9,7 +9,7 @@
 #import "MLUserDefaults.h"
 #import <MLPersonalModel/YYModel.h>
 
-NSString * const PrefixKeyOfMLUserDefaults = @"com.molon.";
+NSString * const PrefixKeyOfMLUserDefaults = @"com.molon.MLUserDefaults.";
 
 @interface MLUserDefaults()
 
@@ -19,14 +19,14 @@ NSString * const PrefixKeyOfMLUserDefaults = @"com.molon.";
 
 @implementation MLUserDefaults
 
-+ (instancetype)sharedInstance {
-    static MLUserDefaults *_sharedInstance = nil;
++ (instancetype)defaults {
+    static MLUserDefaults *_defaults = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         NSAssert([self class]!=[MLUserDefaults class], @"You must use subclass of MLUserDefaults!!");
-        _sharedInstance = [[[self class] alloc]init];
+        _defaults = [[[self class] alloc]init];
     });
-    return _sharedInstance;
+    return _defaults;
 }
 
 - (void)afterFirstSetValuesFromStandardUserDefaults {
@@ -127,12 +127,10 @@ NSString * const PrefixKeyOfMLUserDefaults = @"com.molon.";
     if (!object || object == (id)kCFNull) {
         [def removeObjectForKey:archiveKey];
     }else{
-#warning 非NS的自定义的NSCoding对象会如何，需要测试
-        if ([object conformsToProtocol:@protocol(NSCoding)]) {
+        id archiveObject = [object yy_modelToJSONObject];
+        if (!archiveObject) {
             [def setObject:object forKey:archiveKey];
         }else{
-            id archiveObject = [object yy_modelToJSONObject];
-            NSAssert(archiveObject, @"%@ of %@ cant convert to a object which conforms NSCoding",key,NSStringFromClass([self class]));
             [def setObject:archiveObject forKey:archiveKey];
         }
     }

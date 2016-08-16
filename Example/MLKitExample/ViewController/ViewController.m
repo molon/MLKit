@@ -77,6 +77,12 @@
 
 - (void)test
 {
+    DDLogInfo(@"%@",[ExampleUserDefaults defaults].username);
+    [ExampleUserDefaults defaults].username = @"jinjin";
+    
+    DDLogInfo(@"%@",[ExampleUserDefaults defaults].article);
+    DDLogInfo(@"%@",[ExampleUserDefaults defaults].articles);
+    
     TestAPIHelper *helper = [TestAPIHelper new];
     helper.p_test = @"testParam";
     helper.p_test2 = 100;
@@ -93,6 +99,8 @@
         DDLogInfo(@"请求结束咯:%@",helper);
     } success:^(MLAPIHelper * _Nonnull apiHelper) {
         DDLogInfo(@"请求成功咯:%@",helper.r_rows);
+        [ExampleUserDefaults defaults].articles = helper.r_rows;
+        [ExampleUserDefaults defaults].article = [helper.r_rows firstObject];
     } failure:^(MLAPIHelper * _Nonnull apiHelper, NSError * _Nonnull error) {
         DDLogInfo(@"请求失败咯:%@",helper.responseError.localizedDescription);
     } error:^(MLAPIHelper * _Nonnull apiHelper, NSError * _Nonnull error) {

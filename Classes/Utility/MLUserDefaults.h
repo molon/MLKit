@@ -12,10 +12,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface MLUserDefaults : NSObject
 
-+ (instancetype)sharedInstance;
+/**
+ singleton
+ */
++ (instancetype)defaults;
 
 /**
- *  disable auto synchronize temporarily
+ disable auto synchronize temporarily
  */
 @property (nonatomic, assign) BOOL disableSynchronize;
 
