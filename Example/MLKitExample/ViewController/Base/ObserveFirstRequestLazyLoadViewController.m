@@ -13,7 +13,7 @@
 
 @interface ObserveFirstRequestLazyLoadViewController()
 
-@property (nonatomic, strong) DefaultMLAPIObserverView *observerView;
+@property (nonatomic, strong) DefaultMLAPIObserverView *apiObserverView;
 
 @end
 
@@ -24,19 +24,17 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    if (!_observerView) {
-        _observerView = ({
-            DefaultMLAPIObserverView *observerView = [DefaultMLAPIObserverView new];
-            observerView.backgroundColor = [UIColor whiteColor];
-            WEAK_SELF
-            [observerView setDidClickRetryButtonBlock:^(DefaultMLAPIObserverView *v) {
-                STRONG_SELF
-                [self.tableView doRefresh];
-                v.observingAPIHelper =  self.tableView.requestingAPIHelper;
-            }];
-            observerView;
-        });
-    }
+    _apiObserverView = ({
+        DefaultMLAPIObserverView *apiObserverView = [DefaultMLAPIObserverView new];
+        apiObserverView.backgroundColor = [UIColor whiteColor];
+        WEAK_SELF
+        [apiObserverView setDidClickRetryButtonBlock:^(DefaultMLAPIObserverView *v) {
+            STRONG_SELF
+            [self.tableView doRefresh];
+            v.observingAPIHelper =  self.tableView.requestingAPIHelper;
+        }];
+        apiObserverView;
+    });
     
     WEAK_SELF
     [self.tableView setRequestingAPIHelperBlock:^MLAPIHelper * _Nonnull(MLLazyLoadTableView * _Nonnull tableView, BOOL refreshing) {
@@ -51,7 +49,7 @@
         
         [helper requestWithCallbackObject:self];
         
-        self.observerView.observingAPIHelper =  self->_hasRequested?nil:helper;//(!refreshing||tableView.lastRefreshTime)?nil:helper;
+        self.apiObserverView.observingAPIHelper =  self->_hasRequested?nil:helper;//(!refreshing||tableView.lastRefreshTime)?nil:helper;
         self->_hasRequested = YES;
         
         //hide backgroundViewIfEmptyList
@@ -60,7 +58,7 @@
         return helper;
     }];
     
-    [self.view addSubview:_observerView];
+    [self.view addSubview:_apiObserverView];
 }
 
 - (BOOL)autoRefreshWhenFirstDidAppear {
@@ -79,12 +77,12 @@
 - (void)viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
     
-    _observerView.frame = self.view.bounds;
+    _apiObserverView.frame = self.view.bounds;
 }
 
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
     
-    [self.view bringSubviewToFront:_observerView];
+    [self.view bringSubviewToFront:_apiObserverView];
 }
 @end

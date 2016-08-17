@@ -18,6 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - config
 - (BOOL)autoRefreshWhenFirstDidAppear;
+- (BOOL)autoEnableMLRefreshControl;
 
 - (nullable NSString*)configureKeyOfEntryIDForDeduplication;
 - (NSInteger)configureLazyLoadSection;

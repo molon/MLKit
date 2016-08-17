@@ -49,41 +49,41 @@
     self.view.backgroundColor = [UIColor whiteColor];
     self.automaticallyAdjustsScrollViewInsets = NO;
     
-    if (!_tableView) {
-        _tableView = ({
-            MLLazyLoadTableView *tableView = [[MLLazyLoadTableView alloc]initWithLazyLoadSection:[self configureLazyLoadSection] exceptTopRowCount:[self configureExceptTopRowCount] lazyLoadCell:[self configureLazyLoadCell]];
-            tableView.tableFooterView = [[UIView alloc]initWithFrame:CGRectZero];
-            tableView.proxyDataSource = self;
-            tableView.proxyDelegate = self;
-            tableView;
-        });
-        
-        [self adjustTableViewContentInset];
-        
-        WEAK_SELF
+    _tableView = ({
+        MLLazyLoadTableView *tableView = [[MLLazyLoadTableView alloc]initWithLazyLoadSection:[self configureLazyLoadSection] exceptTopRowCount:[self configureExceptTopRowCount] lazyLoadCell:[self configureLazyLoadCell]];
+        tableView.tableFooterView = [[UIView alloc]initWithFrame:CGRectZero];
+        tableView.proxyDataSource = self;
+        tableView.proxyDelegate = self;
+        tableView;
+    });
+    
+    [self adjustTableViewContentInset];
+    
+    WEAK_SELF
+    if ([self autoEnableMLRefreshControl]) {
         [_tableView enableRefreshingWithAction:^{
             STRONG_SELF
             [self.tableView doRefresh];
         } style:MLRefreshControlViewStyleFixed originalTopInset:[self navigationBarBottomY] scrollToTopAfterEndRefreshing:NO];
-        
-        [_tableView setRequestingAPIHelperBlock:^MLAPIHelper * _Nonnull(MLLazyLoadTableView * _Nonnull tableView, BOOL refreshing) {
-            STRONG_SELF
-            LazyLoadAPIHelper *helper = [self lazyLoadHelperWithRefreshing:refreshing];
-            NSAssert(helper, @"`lazyLoadHelperWithRefreshing` can not return nil");
-            if (refreshing) {
-                helper.p_pageNo = 1;
-            }else{
-                helper.p_pageNo = self.currentPageNo+1;
-            }
-            
-            [helper requestWithCallbackObject:self];
-            
-            //hide backgroundViewIfEmptyList
-            tableView.backgroundView = nil;
-            
-            return helper;
-        }];
     }
+    
+    [_tableView setRequestingAPIHelperBlock:^MLAPIHelper * _Nonnull(MLLazyLoadTableView * _Nonnull tableView, BOOL refreshing) {
+        STRONG_SELF
+        LazyLoadAPIHelper *helper = [self lazyLoadHelperWithRefreshing:refreshing];
+        NSAssert(helper, @"`lazyLoadHelperWithRefreshing` can not return nil");
+        if (refreshing) {
+            helper.p_pageNo = 1;
+        }else{
+            helper.p_pageNo = self.currentPageNo+1;
+        }
+        
+        [helper requestWithCallbackObject:self];
+        
+        //hide backgroundViewIfEmptyList
+        tableView.backgroundView = nil;
+        
+        return helper;
+    }];
     
     [self.view addSubview:_tableView];
 }
@@ -93,7 +93,11 @@
     
     if (!_tableView.lastRefreshTime) {
         if ([self autoRefreshWhenFirstDidAppear]) {
-            [_tableView beginRefreshing];
+            if (_tableView.refreshView) {
+                [_tableView beginRefreshing];
+            }else{
+                [_tableView doRefresh];
+            }
         }
     }
 }
@@ -108,6 +112,10 @@
     [super willAnimateRotationToInterfaceOrientation:toInterfaceOrientation duration:duration];
     
     [self adjustTableViewContentInset];
+}
+
+- (BOOL)autoEnableMLRefreshControl {
+    return YES;
 }
 
 - (BOOL)autoRefreshWhenFirstDidAppear {
@@ -209,7 +217,13 @@
 #pragma mark - helper
 - (void)adjustTableViewContentInset {
     _tableView.contentInsetBottom = [self tabBarOccupiedHeight];
-    _tableView.refreshView.originalTopInset = [self navigationBarBottomY];
+    
+    CGFloat topInset = [self navigationBarBottomY];
+    if (_tableView.refreshView) {
+        _tableView.refreshView.originalTopInset = topInset;
+    }else{
+        _tableView.contentInsetTop = topInset;
+    }
 }
 
 
