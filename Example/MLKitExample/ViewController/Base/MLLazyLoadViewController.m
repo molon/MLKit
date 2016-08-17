@@ -57,8 +57,6 @@
         tableView;
     });
     
-    [self adjustTableViewContentInset];
-    
     WEAK_SELF
     if ([self autoEnableMLRefreshControl]) {
         [_tableView enableRefreshingWithAction:^{
@@ -86,6 +84,8 @@
     }];
     
     [self.view addSubview:_tableView];
+    
+    [self adjustTableViewContentInset];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
