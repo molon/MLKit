@@ -152,6 +152,20 @@
 }
 
 #pragma mark - request
+- (void)beforeRequest:(MLAPIHelper *)apiHelper {
+    if ([apiHelper isMemberOfClass:[LazyLoadAPIHelper class]]) {
+        return;
+    }
+    [super beforeRequest:apiHelper];
+}
+
+- (void)afterRequestCompleted:(MLAPIHelper *)apiHelper {
+    if ([apiHelper isMemberOfClass:[LazyLoadAPIHelper class]]) {
+        return;
+    }
+    [super afterRequestCompleted:apiHelper];
+}
+
 - (void)afterRequestSucceed:(MLAPIHelper *)apiHelper {
     if ([apiHelper isEqual:self.tableView.requestingAPIHelper]) {
         LazyLoadAPIHelper *helper = (LazyLoadAPIHelper*)apiHelper;
