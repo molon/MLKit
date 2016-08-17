@@ -95,6 +95,10 @@ DEALLOC_SELF_DLOG
     [self.tableView registerClass:[ArticleTableViewCell class] forCellReuseIdentifier:[ArticleTableViewCell cellReuseIdentifier]];
 }
 
+- (BOOL)autoObserveFirstRequest {
+    return YES;
+}
+
 - (NSString*)configureKeyOfEntryIDForDeduplication {
     return @"ID";
 }

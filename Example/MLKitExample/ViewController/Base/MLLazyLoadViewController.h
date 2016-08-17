@@ -6,12 +6,13 @@
 //  Copyright © 2016年 molon. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "MLListViewController.h"
+#import "MLLazyLoadTableView.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class MLLazyLoadTableView,MLLazyLoadTableViewCell,LazyLoadAPIHelper;
-@interface MLLazyLoadViewController : UIViewController<UITableViewDelegate,UITableViewDataSource>
+@class MLLazyLoadTableViewCell,LazyLoadAPIHelper;
+@interface MLLazyLoadViewController : MLListViewController
 
 @property (nonatomic, strong, readonly) MLLazyLoadTableView *tableView;
 @property (nonatomic, assign, readonly) NSInteger currentPageNo;
@@ -19,6 +20,7 @@ NS_ASSUME_NONNULL_BEGIN
 #pragma mark - config
 - (BOOL)autoRefreshWhenFirstDidAppear;
 - (BOOL)autoEnableMLRefreshControl;
+- (BOOL)autoObserveFirstRequest;
 
 - (nullable NSString*)configureKeyOfEntryIDForDeduplication;
 - (NSInteger)configureLazyLoadSection;
