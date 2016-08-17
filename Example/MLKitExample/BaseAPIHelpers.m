@@ -1,12 +1,12 @@
 //
-//  BaseAPIHelper.m
+//  BaseAPIHelpers.m
 //  MLKitExample
 //
 //  Created by molon on 16/7/25.
 //  Copyright © 2016年 molon. All rights reserved.
 //
 
-#import "BaseAPIHelper.h"
+#import "BaseAPIHelpers.h"
 
 NSString * const MLAPICommonRequestFailedErrorDomain = @"com.molon.molonapi.MLAPICommonErrorDomainForRequestFailed";
 NSInteger const MLAPICommonRequestFailedErrorCode = NSURLErrorUnknown;

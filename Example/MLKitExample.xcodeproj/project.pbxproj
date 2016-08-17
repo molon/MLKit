@@ -24,7 +24,7 @@
 		36A3743E1D2640EE00EDD9A8 /* MLKitExampleTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 36A3743D1D2640EE00EDD9A8 /* MLKitExampleTests.m */; };
 		36A374491D2640EE00EDD9A8 /* MLKitExampleUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 36A374481D2640EE00EDD9A8 /* MLKitExampleUITests.m */; };
 		36A6D3B71D4F172200DB09C9 /* ArticleTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 36A6D3B61D4F172200DB09C9 /* ArticleTableViewCell.m */; };
-		36D198231D45C19300434111 /* BaseAPIHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 36D198221D45C19300434111 /* BaseAPIHelper.m */; };
+		36D198231D45C19300434111 /* BaseAPIHelpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 36D198221D45C19300434111 /* BaseAPIHelpers.m */; };
 		36F441041D5A37D200FA6803 /* MLLazyLoadViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 36F441031D5A37D200FA6803 /* MLLazyLoadViewController.m */; };
 		36F7BA271D5DCD6F003EB0AE /* ExampleUserDefaults.m in Sources */ = {isa = PBXBuildFile; fileRef = 36F7BA261D5DCD6F003EB0AE /* ExampleUserDefaults.m */; };
 		CAE999C913054DC0B4B38585 /* libPods-MLKitExample.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 38812E9F8774D01922777819 /* libPods-MLKitExample.a */; };
@@ -82,8 +82,8 @@
 		36A374B31D26418C00EDD9A8 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		36A6D3B51D4F172200DB09C9 /* ArticleTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ArticleTableViewCell.h; sourceTree = "<group>"; };
 		36A6D3B61D4F172200DB09C9 /* ArticleTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ArticleTableViewCell.m; sourceTree = "<group>"; };
-		36D198211D45C19300434111 /* BaseAPIHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BaseAPIHelper.h; path = ../BaseAPIHelper.h; sourceTree = "<group>"; };
-		36D198221D45C19300434111 /* BaseAPIHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BaseAPIHelper.m; path = ../BaseAPIHelper.m; sourceTree = "<group>"; };
+		36D198211D45C19300434111 /* BaseAPIHelpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BaseAPIHelpers.h; path = ../BaseAPIHelpers.h; sourceTree = "<group>"; };
+		36D198221D45C19300434111 /* BaseAPIHelpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BaseAPIHelpers.m; path = ../BaseAPIHelpers.m; sourceTree = "<group>"; };
 		36D198271D4A203B00434111 /* MLKitExample-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MLKitExample-Prefix.pch"; sourceTree = "<group>"; };
 		36F441021D5A37D200FA6803 /* MLLazyLoadViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MLLazyLoadViewController.h; sourceTree = "<group>"; };
 		36F441031D5A37D200FA6803 /* MLLazyLoadViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MLLazyLoadViewController.m; sourceTree = "<group>"; };
@@ -132,8 +132,8 @@
 		36408B0E1D4EF74C00E78ACA /* APIHelper */ = {
 			isa = PBXGroup;
 			children = (
-				36D198211D45C19300434111 /* BaseAPIHelper.h */,
-				36D198221D45C19300434111 /* BaseAPIHelper.m */,
+				36D198211D45C19300434111 /* BaseAPIHelpers.h */,
+				36D198221D45C19300434111 /* BaseAPIHelpers.m */,
 				36408B1E1D4EF81400E78ACA /* TestAPIHelper.h */,
 				36408B1F1D4EF81400E78ACA /* TestAPIHelper.m */,
 				36408B211D4F098400E78ACA /* TestLazyLoadAPIHelper.h */,
@@ -475,7 +475,7 @@
 				36408B191D4EF7C100E78ACA /* UIViewController+MLAPI.m in Sources */,
 				36F7BA271D5DCD6F003EB0AE /* ExampleUserDefaults.m in Sources */,
 				36A6D3B71D4F172200DB09C9 /* ArticleTableViewCell.m in Sources */,
-				36D198231D45C19300434111 /* BaseAPIHelper.m in Sources */,
+				36D198231D45C19300434111 /* BaseAPIHelpers.m in Sources */,
 				36A374251D2640EE00EDD9A8 /* main.m in Sources */,
 				36920B821D638FC200517070 /* BaseTableViewCell.m in Sources */,
 				36408B201D4EF81400E78ACA /* TestAPIHelper.m in Sources */,

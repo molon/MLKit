@@ -10,7 +10,7 @@
 #import "MLLazyLoadTableView.h"
 #import <MLRefreshControl/MLRefreshControl.h>
 #import "UIViewController+MLAPI.h"
-#import "BaseAPIHelper.h"
+#import "BaseAPIHelpers.h"
 
 @interface MLListViewController(Private)
 

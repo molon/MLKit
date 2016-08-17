@@ -6,7 +6,7 @@
 //  Copyright © 2016年 molon. All rights reserved.
 //
 
-#import "BaseAPIHelper.h"
+#import "BaseAPIHelpers.h"
 #import "Article.h"
 
 @interface TestLazyLoadAPIHelper : LazyLoadAPIHelper
