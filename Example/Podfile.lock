@@ -29,7 +29,8 @@ PODS:
   - CocoaLumberjack/Extensions (2.3.0):
     - CocoaLumberjack/Default
   - DHSmartScreenshot (1.3.1)
-  - MLKit (0.0.7):
+  - MBProgressHUD (1.0.0)
+  - MLKit (0.0.8):
     - AFNetworking (~> 2.6.3)
     - CocoaLumberjack (~> 2.3.0)
     - DHSmartScreenshot (~> 1.3.1)
@@ -45,6 +46,7 @@ PODS:
   - YYCache (1.0.3)
 
 DEPENDENCIES:
+  - MBProgressHUD (~> 1.0.0)
   - MLKit (from `../MLKit.podspec`)
 
 EXTERNAL SOURCES:
@@ -55,13 +57,14 @@ SPEC CHECKSUMS:
   AFNetworking: cb8d14a848e831097108418f5d49217339d4eb60
   CocoaLumberjack: 97fab7ee5f507fe54445cca7ea80f926729cfd15
   DHSmartScreenshot: ee749048bd7126c4826748f98df3a4adc6ad6c78
-  MLKit: 0f2a0f3c08c1ddd86d5755c2b01dacea66c7a7d5
+  MBProgressHUD: 4890f671c94e8a0f3cf959aa731e9de2f036d71a
+  MLKit: c0be304b8a02cf2d5812de3ae2a635679f498dda
   MLLayout: 1f71fb07184a999b1d5a9f10cd10ad8ef784f9db
   MLPersonalModel: aa34b7c549f1e74995ee88ca95fef36f87427b9d
   MLRefreshControl: fbb3ea9049031c2b5302de764d3ba6aae222efd0
   SAMKeychain: 1fc9ae02f576365395758b12888c84704eebc423
   YYCache: 282f35b5b0990833d0b7a06d864a87141a021da2
 
-PODFILE CHECKSUM: 8e76eb85e6012ab4c50461461c708077003b7bdb
+PODFILE CHECKSUM: b7733d558063b7e1a52da7c70f779d30e4411f2e
 
 COCOAPODS: 1.0.1

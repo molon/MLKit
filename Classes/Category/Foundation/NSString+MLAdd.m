@@ -224,8 +224,8 @@ SYNTH_DUMMY_CLASS(NSString_MLAdd)
 
 - (BOOL)isPureInteger {
     NSScanner *scan = [NSScanner scannerWithString:self];
-    int val;
-    return [scan scanInt:&val] && [scan isAtEnd];
+    unsigned long long val;
+    return [scan scanUnsignedLongLong:&val] && [scan isAtEnd];
 }
 
 - (BOOL)isPureDecimal{

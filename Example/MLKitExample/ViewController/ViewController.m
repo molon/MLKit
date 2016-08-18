@@ -11,6 +11,7 @@
 #import "UIViewController+MLAPI.h"
 #import "ArticleListViewController.h"
 #import "ExampleUserDefaults.h"
+#import "MLProgressHUD.h"
 
 @interface ViewController ()
 
@@ -89,23 +90,23 @@
 //    helper.cacheType = MLAPIHelperCacheTypeReturnCacheThenAlwaysRequest;
     
     //只用callbackObject的例子
-    //        [helper requestWithCallbackObject:self];
+        [helper requestWithCallbackObject:self];
     
-    [helper requestWithBefore:^(MLAPIHelper * _Nonnull apiHelper) {
-        DDLogInfo(@"请求之前咯:%@",helper);
-    } uploadProgress:nil downloadProgress:nil cachePreload:^(MLAPIHelper * _Nonnull apiHelper) {
-        DDLogInfo(@"预加载咯: %@",helper.r_rows);
-    } complete:^(MLAPIHelper * _Nonnull apiHelper) {
-        DDLogInfo(@"请求结束咯:%@",helper);
-    } success:^(MLAPIHelper * _Nonnull apiHelper) {
-        DDLogInfo(@"请求成功咯:%@",helper.r_rows);
-        [ExampleUserDefaults defaults].articles = helper.r_rows;
-        [ExampleUserDefaults defaults].article = [helper.r_rows firstObject];
-    } failure:^(MLAPIHelper * _Nonnull apiHelper, NSError * _Nonnull error) {
-        DDLogInfo(@"请求失败咯:%@",helper.responseError.localizedDescription);
-    } error:^(MLAPIHelper * _Nonnull apiHelper, NSError * _Nonnull error) {
-        DDLogInfo(@"请求错误咯:%@",helper.responseError.localizedDescription);
-    }];
+//    [helper requestWithBefore:^(MLAPIHelper * _Nonnull apiHelper) {
+//        DDLogInfo(@"请求之前咯:%@",helper);
+//    } uploadProgress:nil downloadProgress:nil cachePreload:^(MLAPIHelper * _Nonnull apiHelper) {
+//        DDLogInfo(@"预加载咯: %@",helper.r_rows);
+//    } complete:^(MLAPIHelper * _Nonnull apiHelper) {
+//        DDLogInfo(@"请求结束咯:%@",helper);
+//    } success:^(MLAPIHelper * _Nonnull apiHelper) {
+//        DDLogInfo(@"请求成功咯:%@",helper.r_rows);
+//        [ExampleUserDefaults defaults].articles = helper.r_rows;
+//        [ExampleUserDefaults defaults].article = [helper.r_rows firstObject];
+//    } failure:^(MLAPIHelper * _Nonnull apiHelper, NSError * _Nonnull error) {
+//        DDLogInfo(@"请求失败咯:%@",helper.responseError.localizedDescription);
+//    } error:^(MLAPIHelper * _Nonnull apiHelper, NSError * _Nonnull error) {
+//        DDLogInfo(@"请求错误咯:%@",helper.responseError.localizedDescription);
+//    }];
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
@@ -127,15 +128,17 @@
     if ([apiHelper isMemberOfClass:[TestAPIHelper class]]) {
         TestAPIHelper *helper = (TestAPIHelper*)apiHelper;
         DDLogInfo(@"请求成功回调 %@",helper.r_rows);
+        
+        [MLProgressHUD showOnView:kAppDelegate.window message:nil detailMessage:@"请求成功" customView:nil userInteractionEnabled:NO yOffset:-50.0f hideDelay:1.5f];
     }
 }
 
 - (void)afterRequestFailed:(MLAPIHelper *)apiHelper {
     if ([apiHelper isMemberOfClass:[TestAPIHelper class]]) {
         DDLogError(@"请求失败回调 %@",apiHelper.responseError.localizedDescription);
-    }else{
-        [super afterRequestFailed:apiHelper];
     }
+    
+    [super afterRequestFailed:apiHelper];
 }
 
 - (void)afterRequestSucceedForCaredAboutAPIHelper:(MLAPIHelper*)apiHelper {

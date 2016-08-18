@@ -21,4 +21,9 @@
  */
 @property (nonatomic, assign) MLAPIHelperState state;
 
+/**
+ retry block
+ */
+@property (nonatomic, copy) void (^retryBlock)(MLAPIObserverView *view);
+
 @end

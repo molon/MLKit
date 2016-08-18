@@ -15,7 +15,7 @@
 }
 
 - (MLAPIHelperRequestMethod)configureRequestMethod {
-    return MLAPIHelperRequestMethodPOST;
+    return MLAPIHelperRequestMethodGET;
 }
 
 @end

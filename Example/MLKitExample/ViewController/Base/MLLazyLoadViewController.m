@@ -11,6 +11,7 @@
 #import <MLRefreshControl/MLRefreshControl.h>
 #import "UIViewController+MLAPI.h"
 #import "BaseAPIHelpers.h"
+#import "MLProgressHUD.h"
 
 @interface MLListViewController(Private)
 
@@ -87,10 +88,17 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    WEAK_SELF
+    if ([self autoObserveFirstRequest]) {
+        [self.apiObserverView setRetryBlock:^(MLAPIObserverView *v) {
+            STRONG_SELF
+            [self.tableView doRefresh];
+            v.observingAPIHelper =  self.tableView.requestingAPIHelper;
+        }];
+    }
     
     //MLRefreshControl
     if ([self autoEnableMLRefreshControl]) {
-        WEAK_SELF
         [self.tableView enableRefreshingWithAction:^{
             STRONG_SELF
             [self.tableView doRefresh];
@@ -153,14 +161,18 @@
 
 #pragma mark - request
 - (void)beforeRequest:(MLAPIHelper *)apiHelper {
-    if ([apiHelper isMemberOfClass:[LazyLoadAPIHelper class]]) {
+    if ([apiHelper isKindOfClass:[LazyLoadAPIHelper class]]) {
+        #warning unok
+        [MLProgressHUD showIndeterminateHUDOnView:self.tableView message:nil detailMessage:nil yOffset:0];
         return;
     }
     [super beforeRequest:apiHelper];
 }
 
 - (void)afterRequestCompleted:(MLAPIHelper *)apiHelper {
-    if ([apiHelper isMemberOfClass:[LazyLoadAPIHelper class]]) {
+    if ([apiHelper isKindOfClass:[LazyLoadAPIHelper class]]) {
+        #warning unok
+//        [MLProgressHUD hideIndeterminateHUDsOnView:self.tableView];
         return;
     }
     [super afterRequestCompleted:apiHelper];

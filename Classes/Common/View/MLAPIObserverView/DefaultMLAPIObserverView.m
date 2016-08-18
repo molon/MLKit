@@ -76,8 +76,8 @@
 #pragma mark - event
 - (void)clickRetry
 {
-    if (self.didClickRetryButtonBlock) {
-        self.didClickRetryButtonBlock(self);
+    if (self.retryBlock) {
+        self.retryBlock(self);
     }
 }
 

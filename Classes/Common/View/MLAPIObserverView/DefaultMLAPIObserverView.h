@@ -15,9 +15,4 @@
  */
 @property (nonatomic, assign) BOOL penetrable;
 
-/**
- *  block should excuting after click retry button
- */
-@property (nonatomic, copy) void (^didClickRetryButtonBlock)(DefaultMLAPIObserverView *view);
-
 @end

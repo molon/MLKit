@@ -67,4 +67,7 @@ SYNTH_DYNAMIC_PROPERTY_OBJECT(tappedCallback, setTappedCallback:, COPY_NONATOMIC
     [self ____hookSetDelegate:delegate];
 }
 
++ (void)showWithTitle:(NSString*)title message:(NSString*)message cancelButtonTitle:(NSString *)cancelButtonTitle {
+    [[[UIAlertView alloc]initWithTitle:title message:message delegate:nil cancelButtonTitle:cancelButtonTitle otherButtonTitles: nil]show];
+}
 @end

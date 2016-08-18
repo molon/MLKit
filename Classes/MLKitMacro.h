@@ -139,14 +139,14 @@ return cValue; \
 }
 
 #pragma mark - 便利方法
-static inline UIImage *imageOfMLKitBundle(NSString *imageName,NSString *extension) {
+static inline UIImage *ImageOfMLKitBundle(NSString *imageName,NSString *extension) {
     NSBundle *bundle = [NSBundle bundleForClass:NSClassFromString(@"MLKit")];
     NSString *bundlePath = [bundle pathForResource:@"MLKit" ofType:@"bundle"];
     extension = [extension hasPrefix:@"."]?[extension substringFromIndex:1]:extension;
     return [[UIImage alloc]initWithContentsOfFile:[bundlePath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.%@",imageName,extension]]];
 }
 
-#define MLKIT_BUNDLE_PNG_IMAGE(o) imageOfMLKitBundle((o),@"png")
+#define MLKIT_BUNDLE_PNG_IMAGE(o) ImageOfMLKitBundle((o),@"png")
 
 #pragma mark - 性能测试相关
 /**
