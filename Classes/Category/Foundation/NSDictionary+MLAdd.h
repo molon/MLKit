@@ -110,7 +110,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (nullable NSNumber *)numberValueForKey:(NSString *)key default:(nullable NSNumber *)def;
 - (nullable NSString *)stringValueForKey:(NSString *)key default:(nullable NSString *)def;
-- (nullable NSURL *)URLValueForKey:(NSString *)key default:(NSURL *)def;
+- (nullable NSURL *)URLValueForKey:(NSString *)key default:(nullable NSURL *)def;
 
 @end
 
