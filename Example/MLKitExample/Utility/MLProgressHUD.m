@@ -23,7 +23,7 @@
         [self.superview removeObserver:self forKeyPath:@"contentOffset" context:nil];
         
         if ([self.superview isKindOfClass:[UIScrollView class]]) {
-            ((UIScrollView*)self.superview).scrollEnabled = YES;
+            ((UIScrollView*)self.superview).userInteractionEnabled = YES;
         }
     }
 }
@@ -36,10 +36,7 @@
         [self.superview addObserver:self forKeyPath:@"contentOffset" options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionInitial context:nil];
         
         if ([self.superview isKindOfClass:[UIScrollView class]]) {
-#warning this is not enough 这里不太好
-            NSAssert(((UIScrollView*)self.superview).scrollEnabled,@"hud cant be added on a scrollView which scrollEnabled is no");
-            
-            ((UIScrollView*)self.superview).scrollEnabled = !self.userInteractionEnabled;
+            self.superview.userInteractionEnabled = !self.userInteractionEnabled;
         }
     }
 }
@@ -48,14 +45,17 @@
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
     if ([@"contentOffset" isEqualToString:keyPath]) {
         UIScrollView *scrollView = (UIScrollView*)self.superview;
-        
-        CGPoint contentOffset = scrollView.contentOffset;
-        //make hud center
-        self.center = CGPointMake(contentOffset.x-scrollView.contentInset.left+scrollView.frame.size.width/2, contentOffset.y-scrollView.contentInset.top+scrollView.frame.size.height/2);
+        self.frame = scrollView.bounds;
     }else{
         [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
     }
     
+}
+
+#pragma mark - fix bug of MBProgressHUD `updateForCurrentOrientationAnimated:`
+- (void)setBounds:(CGRect)bounds {
+    bounds.origin = CGPointZero;
+    [super setBounds:bounds];
 }
 
 #pragma mark - set
@@ -63,7 +63,7 @@
     [super setUserInteractionEnabled:userInteractionEnabled];
     
     if ([self.superview isKindOfClass:[UIScrollView class]]) {
-        ((UIScrollView*)self.superview).scrollEnabled = !userInteractionEnabled;
+        ((UIScrollView*)self.superview).userInteractionEnabled = !userInteractionEnabled;
     }
 }
 
@@ -110,13 +110,16 @@
         return nil;
     }
     
-    MLProgressHUD *hud = [[self class] showHUDAddedTo:view animated:YES];
+    MBProgressHUD *hud = [[self class]HUDForView:view];
+    if (hud&&hud.mode == MBProgressHUDModeIndeterminate) {
+        NSAssert([hud isKindOfClass:[MLProgressHUD class]], @"Please only use MLProgressHUD!");
+        return (MLProgressHUD*)hud;
+    }
+    
+    hud = [[self class] showHUDAddedTo:view animated:YES];
     hud.contentColor = [UIColor whiteColor];
     hud.bezelView.backgroundColor = [UIColor colorWithWhite:0.000 alpha:0.696];
     hud.mode = MBProgressHUDModeIndeterminate;
-#warning unok
-//    hud.userInteractionEnabled = NO;
-//    hud.backgroundColor = [UIColor colorWithRed:1.000 green:1.000 blue:0.000 alpha:0.219];
     
     CGPoint offset = hud.offset;
     offset.y = yOffset;
@@ -129,7 +132,7 @@
         hud.detailsLabel.text = detailMessage;
     }
     
-    return hud;
+    return (MLProgressHUD*)hud;
 }
 
 + (NSInteger)hideIndeterminateHUDsOnView:(UIView*)view {

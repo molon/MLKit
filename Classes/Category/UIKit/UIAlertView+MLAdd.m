@@ -15,20 +15,20 @@ SYNTH_DUMMY_CLASS(UIAlertView_MLAdd)
 
 @interface UIAlertView()
 
-@property (nonatomic, copy) void(^tappedCallback)(UIAlertView *alertView,NSInteger buttonIndex,BOOL canceled);
+@property (nonatomic, copy) void(^clickedCallback)(UIAlertView *alertView,NSInteger buttonIndex,BOOL canceled);
 
 @end
 
 @implementation UIAlertView (MLAdd)
 
 SYNTH_DYNAMIC_PROPERTY_OBJECT(userInfo, setUserInfo:, RETAIN_NONATOMIC, id)
-SYNTH_DYNAMIC_PROPERTY_OBJECT(tappedCallback, setTappedCallback:, COPY_NONATOMIC, void (^)(UIAlertView *, NSInteger, BOOL))
+SYNTH_DYNAMIC_PROPERTY_OBJECT(clickedCallback, setClickedCallback:, COPY_NONATOMIC, void (^)(UIAlertView *, NSInteger, BOOL))
 
-+ (instancetype)alertViewWithTitle:(NSString*)title message:(NSString*)message tappedCallback:(void(^)(UIAlertView *alertView,NSInteger buttonIndex,BOOL canceled))tappedCallback cancelButtonTitle:(nullable NSString *)cancelButtonTitle otherButtonTitles:(nullable NSString *)otherButtonTitles, ... NS_REQUIRES_NIL_TERMINATION {
++ (instancetype)alertViewWithTitle:(NSString*)title message:(NSString*)message clickedCallback:(void(^)(UIAlertView *alertView,NSInteger buttonIndex,BOOL canceled))clickedCallback cancelButtonTitle:(nullable NSString *)cancelButtonTitle otherButtonTitles:(nullable NSString *)otherButtonTitles, ... NS_REQUIRES_NIL_TERMINATION {
     
     UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:title message:message delegate:nil cancelButtonTitle:cancelButtonTitle otherButtonTitles:nil];
     alertView.delegate = alertView;
-    alertView.tappedCallback = tappedCallback;
+    alertView.clickedCallback = clickedCallback;
     
     if (otherButtonTitles) {
         [alertView addButtonWithTitle:otherButtonTitles];
@@ -49,8 +49,8 @@ SYNTH_DYNAMIC_PROPERTY_OBJECT(tappedCallback, setTappedCallback:, COPY_NONATOMIC
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
     BOOL canceled = (buttonIndex == [alertView cancelButtonIndex]);
-    if (self.tappedCallback) {
-        self.tappedCallback(self,buttonIndex,canceled);
+    if (self.clickedCallback) {
+        self.clickedCallback(self,buttonIndex,canceled);
     }
 }
 
@@ -62,7 +62,7 @@ SYNTH_DYNAMIC_PROPERTY_OBJECT(tappedCallback, setTappedCallback:, COPY_NONATOMIC
 }
 
 - (void)____hookSetDelegate:(id)delegate {
-    NSAssert(!self.tappedCallback, @"If using tappedCallback, please dont assign delegate to UIAlertView yourself");
+    NSAssert(!self.clickedCallback, @"If using clickedCallback, please dont assign delegate to UIAlertView yourself");
     
     [self ____hookSetDelegate:delegate];
 }

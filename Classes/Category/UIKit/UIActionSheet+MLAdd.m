@@ -15,20 +15,20 @@ SYNTH_DUMMY_CLASS(UIActionSheet_MLAdd)
 
 @interface UIActionSheet()
 
-@property (nonatomic, copy) void(^tappedCallback)(UIActionSheet *actionSheet,NSInteger buttonIndex,BOOL cancel,BOOL destructive);
+@property (nonatomic, copy) void(^clickedCallback)(UIActionSheet *actionSheet,NSInteger buttonIndex,BOOL cancel,BOOL destructive);
 
 @end
 
 @implementation UIActionSheet (MLAdd)
 
 SYNTH_DYNAMIC_PROPERTY_OBJECT(userInfo, setUserInfo:, RETAIN_NONATOMIC, id)
-SYNTH_DYNAMIC_PROPERTY_OBJECT(tappedCallback, setTappedCallback:, COPY_NONATOMIC, void (^)(UIActionSheet *, NSInteger, BOOL, BOOL))
+SYNTH_DYNAMIC_PROPERTY_OBJECT(clickedCallback, setClickedCallback:, COPY_NONATOMIC, void (^)(UIActionSheet *, NSInteger, BOOL, BOOL))
 
-+ (instancetype)actionSheetWithTitle:(nullable NSString *)title tappedCallback:(void(^)(UIActionSheet *actionSheet,NSInteger buttonIndex,BOOL cancel,BOOL destructive))tappedCallback cancelButtonTitle:(nullable NSString *)cancelButtonTitle destructiveButtonTitle:(nullable NSString *)destructiveButtonTitle otherButtonTitles:(nullable NSString *)otherButtonTitles, ... NS_REQUIRES_NIL_TERMINATION {
++ (instancetype)actionSheetWithTitle:(nullable NSString *)title clickedCallback:(void(^)(UIActionSheet *actionSheet,NSInteger buttonIndex,BOOL cancel,BOOL destructive))clickedCallback cancelButtonTitle:(nullable NSString *)cancelButtonTitle destructiveButtonTitle:(nullable NSString *)destructiveButtonTitle otherButtonTitles:(nullable NSString *)otherButtonTitles, ... NS_REQUIRES_NIL_TERMINATION {
     
     UIActionSheet *actionSheet = [[UIActionSheet alloc]initWithTitle:title delegate:nil cancelButtonTitle:cancelButtonTitle destructiveButtonTitle:destructiveButtonTitle otherButtonTitles:nil];
     actionSheet.delegate = (id<UIActionSheetDelegate>)actionSheet;
-    actionSheet.tappedCallback = tappedCallback;
+    actionSheet.clickedCallback = clickedCallback;
     
     if (otherButtonTitles) {
         [actionSheet addButtonWithTitle:otherButtonTitles];
@@ -55,17 +55,17 @@ SYNTH_DYNAMIC_PROPERTY_OBJECT(tappedCallback, setTappedCallback:, COPY_NONATOMIC
 }
 
 - (void)____hookSetDelegate:(id)delegate {
-    NSAssert(!self.tappedCallback, @"If using tappedCallback, please dont assign delegate to UIActionSheet yourself");
+    NSAssert(!self.clickedCallback, @"If using clickedCallback, please dont assign delegate to UIActionSheet yourself");
     
     [self ____hookSetDelegate:delegate];
 }
 
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
-    if (self.tappedCallback) {
+    if (self.clickedCallback) {
         BOOL cancel = [actionSheet cancelButtonIndex]==buttonIndex;
         BOOL destructive = [actionSheet destructiveButtonIndex]==buttonIndex;
         
-        self.tappedCallback(self,buttonIndex,cancel,destructive);
+        self.clickedCallback(self,buttonIndex,cancel,destructive);
     }
 }
 

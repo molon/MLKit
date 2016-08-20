@@ -22,7 +22,12 @@ NS_ASSUME_NONNULL_BEGIN
  @discussion This param is conflict with `target` and `action` property.
  Set this will set `target` and `action` property to some internal objects.
  */
-@property (nullable, nonatomic, copy) void (^actionBlock)(id);
+@property (nullable, nonatomic, copy) void (^actionBlock)(UIBarButtonItem *barButtonItem);
+
+- (instancetype)initWithImage:(nullable UIImage *)image style:(UIBarButtonItemStyle)style actionBlock:(nullable void (^)(UIBarButtonItem *barButtonItem))actionBlock;
+- (instancetype)initWithImage:(nullable UIImage *)image landscapeImagePhone:(nullable UIImage *)landscapeImagePhone style:(UIBarButtonItemStyle)style actionBlock:(nullable void (^)(UIBarButtonItem *barButtonItem))actionBlock NS_AVAILABLE_IOS(5_0);
+- (instancetype)initWithTitle:(nullable NSString *)title style:(UIBarButtonItemStyle)style actionBlock:(nullable void (^)(UIBarButtonItem *barButtonItem))actionBlock;
+- (instancetype)initWithBarButtonSystemItem:(UIBarButtonSystemItem)systemItem actionBlock:(nullable void (^)(UIBarButtonItem *barButtonItem))actionBlock;
 
 @end
 

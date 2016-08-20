@@ -21,17 +21,17 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, strong) id userInfo;
 
 /**
- Returns alertView with tappedCallback conveniently
+ Returns alertView with clickedCallback conveniently
  
  @param title             title
  @param message           message
- @param tappedCallback     tappedCallback
+ @param clickedCallback   clickedCallback
  @param cancelButtonTitle cancelButtonTitle
  @param otherButtonTitles otherButtonTitles
  
  @return alertView
  */
-+ (instancetype)alertViewWithTitle:(NSString*)title message:(NSString*)message tappedCallback:(void(^)(UIAlertView *alertView,NSInteger buttonIndex,BOOL canceled))tappedCallback cancelButtonTitle:(nullable NSString *)cancelButtonTitle otherButtonTitles:(nullable NSString *)otherButtonTitles, ... NS_REQUIRES_NIL_TERMINATION;
++ (instancetype)alertViewWithTitle:(NSString*)title message:(NSString*)message clickedCallback:(void(^)(UIAlertView *alertView,NSInteger buttonIndex,BOOL canceled))clickedCallback cancelButtonTitle:(nullable NSString *)cancelButtonTitle otherButtonTitles:(nullable NSString *)otherButtonTitles, ... NS_REQUIRES_NIL_TERMINATION;
 
 /**
  Just show message

@@ -15,7 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface MLLazyLoadViewController : MLListViewController
 
 @property (nonatomic, strong, readonly) MLLazyLoadTableView *tableView;
-@property (nonatomic, assign, readonly) NSInteger currentPageNo;
+@property (nonatomic, assign) NSInteger currentPageNo;
 
 #pragma mark - config
 - (BOOL)autoRefreshWhenFirstDidAppear;

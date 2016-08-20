@@ -21,17 +21,17 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, strong) id userInfo;
 
 /**
- Returns actionSheet with tappedCallback conveniently
+ Returns actionSheet with clickedCallback conveniently
  
  @param title             title
- @param tappedCallback     tappedCallback
+ @param clickedCallback   clickedCallback
  @param cancelButtonTitle cancelButtonTitle
  @param destructiveButtonTitle destructiveButtonTitle
  @param otherButtonTitles otherButtonTitles
  
  @return actionSheet
  */
-+ (instancetype)actionSheetWithTitle:(nullable NSString *)title tappedCallback:(void(^)(UIActionSheet *actionSheet,NSInteger buttonIndex,BOOL cancel,BOOL destructive))tappedCallback cancelButtonTitle:(nullable NSString *)cancelButtonTitle destructiveButtonTitle:(nullable NSString *)destructiveButtonTitle otherButtonTitles:(nullable NSString *)otherButtonTitles, ... NS_REQUIRES_NIL_TERMINATION ;
++ (instancetype)actionSheetWithTitle:(nullable NSString *)title clickedCallback:(void(^)(UIActionSheet *actionSheet,NSInteger buttonIndex,BOOL cancel,BOOL destructive))clickedCallback cancelButtonTitle:(nullable NSString *)cancelButtonTitle destructiveButtonTitle:(nullable NSString *)destructiveButtonTitle otherButtonTitles:(nullable NSString *)otherButtonTitles, ... NS_REQUIRES_NIL_TERMINATION ;
 
 @end
 

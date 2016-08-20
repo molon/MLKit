@@ -13,6 +13,7 @@
 
 #import "TestLazyLoadAPIHelper.h"
 #import "ArticleTableViewCell.h"
+#import "MLProgressHUD.h"
 
 @interface ExampleLazyLoadEmptyTipsView : UIView
 
@@ -93,10 +94,27 @@ DEALLOC_SELF_DLOG
     self.title = NSStringFromClass([self class]);
     
     [self.tableView registerClass:[ArticleTableViewCell class] forCellReuseIdentifier:[ArticleTableViewCell cellReuseIdentifier]];
+    
+    //如果第一页有缓存，我们从缓存里先直接把数据拿出来显示
+    //这里只是个演示特殊的拿缓存使用的例子罢了，不用太关心
+    TestLazyLoadAPIHelper *helper = [TestLazyLoadAPIHelper new];
+    helper.p_pageNo = 1;
+    MLAPICacheItem *cache = [helper cache];
+    if (cache) {
+        [helper handleResponseEntry:cache.responseEntry];
+        
+        //append to list
+        self.currentPageNo = 1;
+        [self.tableView appendEntries:helper.r_rows noMore:NO apiHelper:helper];
+    }
+}
+
+- (BOOL)autoRefreshWhenFirstDidAppear {
+    return YES;
 }
 
 - (BOOL)autoObserveFirstRequest {
-    return YES;
+    return NO;
 }
 
 - (NSString*)configureKeyOfEntryIDForDeduplication {

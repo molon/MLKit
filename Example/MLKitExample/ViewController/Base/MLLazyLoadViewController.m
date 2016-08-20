@@ -21,8 +21,6 @@
 
 @interface MLLazyLoadViewController ()
 
-@property (nonatomic, assign) NSInteger currentPageNo;
-
 @property (nonatomic, copy) NSString *keyOfEntryIDForDeduplication;
 @property (nonatomic, strong) UIView *backgroundViewIfEmptyList;
 
@@ -162,8 +160,6 @@
 #pragma mark - request
 - (void)beforeRequest:(MLAPIHelper *)apiHelper {
     if ([apiHelper isKindOfClass:[LazyLoadAPIHelper class]]) {
-        #warning unok
-        [MLProgressHUD showIndeterminateHUDOnView:self.tableView message:nil detailMessage:nil yOffset:0];
         return;
     }
     [super beforeRequest:apiHelper];
@@ -171,8 +167,6 @@
 
 - (void)afterRequestCompleted:(MLAPIHelper *)apiHelper {
     if ([apiHelper isKindOfClass:[LazyLoadAPIHelper class]]) {
-        #warning unok
-//        [MLProgressHUD hideIndeterminateHUDsOnView:self.tableView];
         return;
     }
     [super afterRequestCompleted:apiHelper];

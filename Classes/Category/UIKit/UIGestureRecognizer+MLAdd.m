@@ -42,13 +42,13 @@ static const int block_key;
 
 @implementation UIGestureRecognizer (MLAdd)
 
-- (instancetype)initWithActionBlock:(void (^)(id sender))block {
+- (instancetype)initWithActionBlock:(void (^)(UIGestureRecognizer *gesture))block {
     self = [self init];
     [self addActionBlock:block];
     return self;
 }
 
-- (void)addActionBlock:(void (^)(id sender))block {
+- (void)addActionBlock:(void (^)(UIGestureRecognizer *gesture))block {
     _MLUIGestureRecognizerBlockTarget *target = [[_MLUIGestureRecognizerBlockTarget alloc] initWithBlock:block];
     [self addTarget:target action:@selector(invoke:)];
     NSMutableArray *targets = [self ____allUIGestureRecognizerBlockTargets];
