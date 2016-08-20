@@ -16,7 +16,6 @@
 		36408B231D4F098400E78ACA /* TestLazyLoadAPIHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 36408B221D4F098400E78ACA /* TestLazyLoadAPIHelper.m */; };
 		3678E5481D64ADED006E9302 /* MLListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3678E5471D64ADED006E9302 /* MLListViewController.m */; };
 		36920B821D638FC200517070 /* BaseTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 36920B811D638FC200517070 /* BaseTableViewCell.m */; };
-		369D9F1B1D662E5100A8D00C /* MLProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 369D9F1A1D662E5100A8D00C /* MLProgressHUD.m */; };
 		36A374251D2640EE00EDD9A8 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 36A374241D2640EE00EDD9A8 /* main.m */; };
 		36A374281D2640EE00EDD9A8 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 36A374271D2640EE00EDD9A8 /* AppDelegate.m */; };
 		36A3742E1D2640EE00EDD9A8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 36A3742C1D2640EE00EDD9A8 /* Main.storyboard */; };
@@ -66,8 +65,6 @@
 		3678E5471D64ADED006E9302 /* MLListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MLListViewController.m; sourceTree = "<group>"; };
 		36920B801D638FC200517070 /* BaseTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseTableViewCell.h; sourceTree = "<group>"; };
 		36920B811D638FC200517070 /* BaseTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseTableViewCell.m; sourceTree = "<group>"; };
-		369D9F191D662E5100A8D00C /* MLProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MLProgressHUD.h; sourceTree = "<group>"; };
-		369D9F1A1D662E5100A8D00C /* MLProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MLProgressHUD.m; sourceTree = "<group>"; };
 		36A374201D2640EE00EDD9A8 /* MLKitExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MLKitExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		36A374241D2640EE00EDD9A8 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		36A374261D2640EE00EDD9A8 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -177,15 +174,6 @@
 			path = Base;
 			sourceTree = "<group>";
 		};
-		369D9F181D662E5100A8D00C /* Utility */ = {
-			isa = PBXGroup;
-			children = (
-				369D9F191D662E5100A8D00C /* MLProgressHUD.h */,
-				369D9F1A1D662E5100A8D00C /* MLProgressHUD.m */,
-			);
-			path = Utility;
-			sourceTree = "<group>";
-		};
 		36A374171D2640EE00EDD9A8 = {
 			isa = PBXGroup;
 			children = (
@@ -211,7 +199,6 @@
 		36A374221D2640EE00EDD9A8 /* MLKitExample */ = {
 			isa = PBXGroup;
 			children = (
-				369D9F181D662E5100A8D00C /* Utility */,
 				36F7BA241D5DCD61003EB0AE /* Manager */,
 				36A6D3B41D4F16E900DB09C9 /* Cell */,
 				36408B1A1D4EF7DA00E78ACA /* Model */,
@@ -490,7 +477,6 @@
 				36A6D3B71D4F172200DB09C9 /* ArticleTableViewCell.m in Sources */,
 				36D198231D45C19300434111 /* BaseAPIHelpers.m in Sources */,
 				36A374251D2640EE00EDD9A8 /* main.m in Sources */,
-				369D9F1B1D662E5100A8D00C /* MLProgressHUD.m in Sources */,
 				36920B821D638FC200517070 /* BaseTableViewCell.m in Sources */,
 				36408B201D4EF81400E78ACA /* TestAPIHelper.m in Sources */,
 			);

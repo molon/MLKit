@@ -62,3 +62,7 @@
 //Common
 #import "MLAPIObserverView.h"
 #import "DefaultMLAPIObserverView.h"
+
+#import "MLLazyLoadTableView.h"
+#import "MLLazyLoadTableViewCell.h"
+#import "DefaultMLLazyLoadTableViewCell.h"

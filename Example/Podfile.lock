@@ -41,13 +41,15 @@ PODS:
     - YYCache (~> 1.0.3)
   - MLLayout (0.2.4)
   - MLPersonalModel (11.0.4)
+  - MLProgressHUD (1.0.0):
+    - MBProgressHUD (= 1.0.0)
   - MLRefreshControl (0.1.0)
   - SAMKeychain (1.5.0)
   - YYCache (1.0.3)
 
 DEPENDENCIES:
-  - MBProgressHUD (~> 1.0.0)
   - MLKit (from `../MLKit.podspec`)
+  - MLProgressHUD (~> 1.0.0)
 
 EXTERNAL SOURCES:
   MLKit:
@@ -61,10 +63,11 @@ SPEC CHECKSUMS:
   MLKit: c0be304b8a02cf2d5812de3ae2a635679f498dda
   MLLayout: 1f71fb07184a999b1d5a9f10cd10ad8ef784f9db
   MLPersonalModel: aa34b7c549f1e74995ee88ca95fef36f87427b9d
+  MLProgressHUD: ee6ebc7b1dcee3fbc69c1e1b780f4ced69d82089
   MLRefreshControl: fbb3ea9049031c2b5302de764d3ba6aae222efd0
   SAMKeychain: 1fc9ae02f576365395758b12888c84704eebc423
   YYCache: 282f35b5b0990833d0b7a06d864a87141a021da2
 
-PODFILE CHECKSUM: b7733d558063b7e1a52da7c70f779d30e4411f2e
+PODFILE CHECKSUM: 6c31e3bfe1b0ae3e6073698f5915ae9013aa19ec
 
 COCOAPODS: 1.0.1

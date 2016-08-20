@@ -53,7 +53,7 @@
     
     NSString *text;
     if (status == MLLazyLoadCellStatusLoading) {
-        text = @" ";
+        text = @"";
         [_indicator startAnimating];
     }else{
         [_indicator stopAnimating];
@@ -69,7 +69,7 @@
     }
     
     _tipsLabel.attributedText = [[NSAttributedString alloc] initWithString:text?:@""
-                                                                attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:16.0f],
+                                                                attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:14.0f],
                                                                              NSForegroundColorAttributeName:[UIColor darkGrayColor]}];
     [self setNeedsLayout];
 }

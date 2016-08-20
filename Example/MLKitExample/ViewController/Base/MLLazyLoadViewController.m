@@ -11,7 +11,6 @@
 #import <MLRefreshControl/MLRefreshControl.h>
 #import "UIViewController+MLAPI.h"
 #import "BaseAPIHelpers.h"
-#import "MLProgressHUD.h"
 
 @interface MLListViewController(Private)
 

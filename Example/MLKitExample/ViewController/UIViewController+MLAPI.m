@@ -7,7 +7,7 @@
 //
 
 #import "UIViewController+MLAPI.h"
-#import "MLProgressHUD.h"
+#import <MLProgressHUD.h>
 
 @implementation UIViewController (MLAPI)
 //都写上是为了防止某VC不注意调用super的某些方法而其并不存在

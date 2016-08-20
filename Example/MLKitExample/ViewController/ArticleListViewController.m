@@ -13,7 +13,6 @@
 
 #import "TestLazyLoadAPIHelper.h"
 #import "ArticleTableViewCell.h"
-#import "MLProgressHUD.h"
 
 @interface ExampleLazyLoadEmptyTipsView : UIView
 
