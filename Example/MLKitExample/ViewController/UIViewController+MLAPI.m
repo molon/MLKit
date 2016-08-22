@@ -16,16 +16,12 @@
 - (void)downloadProgress:(NSProgress *)progress forAPIHelper:(MLAPIHelper *)apiHelper{}
 - (void)afterRequestSucceed:(MLAPIHelper *)apiHelper{}
 
-- (void)beforeRequest:(MLAPIHelper *)apiHelper{
-    [MLProgressHUD showIndeterminateHUDOnView:self.view message:nil detailMessage:nil yOffset:0];
-}
+- (void)beforeRequest:(MLAPIHelper *)apiHelper{}
 
-- (void)afterRequestCompleted:(MLAPIHelper *)apiHelper{
-    [MLProgressHUD hideIndeterminateHUDsOnView:self.view];
-}
+- (void)afterRequestCompleted:(MLAPIHelper *)apiHelper{}
 
 - (void)afterRequestFailed:(MLAPIHelper *)apiHelper {
-    [MLProgressHUD showOnView:kAppDelegate.window message:nil detailMessage:apiHelper.responseError.localizedDescription customView:nil userInteractionEnabled:NO yOffset:-50.0f hideDelay:1.5f];
+    [MLProgressHUD showOnView:kAppDelegate.window message:nil detailMessage:apiHelper.responseError.localizedDescription customView:nil userInteractionEnabled:NO yOffset:-20.0f hideDelay:1.5f];
 }
 
 - (void)afterRequestError:(MLAPIHelper *)apiHelper {

@@ -60,6 +60,7 @@
         [_tableView removeFromSuperview];
     }
     
+    _tableView.backgroundColor = self.view.backgroundColor;
     [self.view addSubview:_tableView];
     [self.view addSubview:_apiObserverView];
     

@@ -15,24 +15,6 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @interface UICollectionViewCell (MLAdd)
 
-///=============================================================================
-/// @name Nib
-///=============================================================================
-
-/**
- Return UINib with nib name([self class])
- 
- @return nib
- */
-+ (UINib *)nib;
-
-/**
- Return instancetype with nib name([self class])
- 
- @return instancetype
- */
-+ (instancetype)instanceFromNib;
-
 //=============================================================================
 /// @name Other
 ///=============================================================================

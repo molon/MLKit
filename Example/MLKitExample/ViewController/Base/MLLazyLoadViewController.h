@@ -27,7 +27,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSInteger)configureExceptTopRowCount;
 - (nullable MLLazyLoadTableViewCell*)configureLazyLoadCell;
 
-- (UIView*)configureBackgroundViewIfEmptyList;
+- (nullable UIView*)configureBackgroundViewIfEmptyList;
 
 - (LazyLoadAPIHelper *)lazyLoadHelperWithRefreshing:(BOOL)refreshing;
 

@@ -13,17 +13,6 @@ SYNTH_DUMMY_CLASS(UITableViewCell_MLAdd)
 
 @implementation UITableViewCell (MLAdd)
 
-+ (UINib *)nib
-{
-    return [UINib nibWithNibName:NSStringFromClass([self class]) bundle:[NSBundle mainBundle]];
-}
-
-+ (instancetype)instanceFromNib
-{
-    return [[[NSBundle mainBundle]loadNibNamed:NSStringFromClass([self class]) owner:nil options:nil]lastObject];
-}
-
-
 + (CGFloat)heightForObject:(id)object maxWidth:(CGFloat)maxWidth
 {
     return 44.0f;

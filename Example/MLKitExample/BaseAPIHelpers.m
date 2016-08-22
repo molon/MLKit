@@ -9,8 +9,9 @@
 #import "BaseAPIHelpers.h"
 
 NSString * const MLAPICommonRequestFailedErrorDomain = @"com.molon.molonapi.MLAPICommonErrorDomainForRequestFailed";
-NSInteger const MLAPICommonRequestFailedErrorCode = NSURLErrorUnknown;
-NSString * const MLAPICommonRequestFailedErrorDescription = @"未知错误";
+
+NSInteger const MLAPICommonRequestFailedUnknownErrorCode = NSURLErrorUnknown;
+NSString * const MLAPICommonRequestFailedUnknownErrorDescription = @"未知错误";
 
 @interface MLAPIHelper(Private)
 
@@ -31,11 +32,11 @@ NSString * const MLAPICommonRequestFailedErrorDescription = @"未知错误";
             
             NSDictionary *errorDictionary = responseObject[@"error"];
             if (!errorDictionary) {
-                return [NSError errorWithDomain:MLAPICommonRequestFailedErrorDomain code:MLAPICommonRequestFailedErrorCode userInfo:@{NSLocalizedDescriptionKey:MLAPICommonRequestFailedErrorDescription}];
+                return [NSError errorWithDomain:MLAPICommonRequestFailedErrorDomain code:MLAPICommonRequestFailedUnknownErrorCode userInfo:@{NSLocalizedDescriptionKey:MLAPICommonRequestFailedUnknownErrorDescription}];
             }
             
-            NSInteger code = [errorDictionary integerValueForKey:@"code" default:MLAPICommonRequestFailedErrorCode];
-            NSString *description = [errorDictionary stringValueForKey:@"message" default:MLAPICommonRequestFailedErrorDescription];
+            NSInteger code = [errorDictionary integerValueForKey:@"code" default:MLAPICommonRequestFailedUnknownErrorCode];
+            NSString *description = [errorDictionary stringValueForKey:@"message" default:MLAPICommonRequestFailedUnknownErrorDescription];
             
             return [NSError errorWithDomain:MLAPICommonRequestFailedErrorDomain code:code userInfo:@{NSLocalizedDescriptionKey:description}];
         }

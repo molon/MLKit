@@ -13,16 +13,6 @@ SYNTH_DUMMY_CLASS(UICollectionViewCell_MLAdd)
 
 @implementation UICollectionViewCell (MLAdd)
 
-+ (UINib *)nib
-{
-    return [UINib nibWithNibName:NSStringFromClass([self class]) bundle:[NSBundle mainBundle]];
-}
-
-+ (instancetype)instanceFromNib
-{
-    return [[[NSBundle mainBundle]loadNibNamed:NSStringFromClass([self class]) owner:nil options:nil]lastObject];
-}
-
 + (NSString *)cellReuseIdentifier
 {
     return NSStringFromClass([self class]);

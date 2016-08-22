@@ -8,9 +8,15 @@
 
 #import "MLAPIHelper.h"
 
+//业务接口的错误domain
 FOUNDATION_EXPORT NSString * const MLAPICommonRequestFailedErrorDomain;
-FOUNDATION_EXPORT NSInteger const MLAPICommonRequestFailedErrorCode;
-FOUNDATION_EXPORT NSString * const MLAPICommonRequestFailedErrorDescription;
+
+//业务接口的未知错误code
+FOUNDATION_EXPORT NSInteger const MLAPICommonRequestFailedUnknownErrorCode;
+
+//业务接口的未知错误描述
+FOUNDATION_EXPORT NSString * const MLAPICommonRequestFailedUnknownErrorDescription;
+
 
 @interface BaseAPIHelper : MLAPIHelper
 
