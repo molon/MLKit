@@ -26,7 +26,7 @@ NS_ASSUME_NONNULL_BEGIN
  Returns the bottom y of navigationBar.
  The value is usually the starting point of layout subviews of self.view or the top inset of UIScrollView.
  */
-- (CGFloat)navigationBarBottomY;
+- (CGFloat)navigationBarBottom;
 
 /**
  Returns the occupied height of tabBar in self.view.
