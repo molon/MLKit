@@ -47,6 +47,7 @@
 #import "UIView+MLAdd.h"
 #import "UIWindow+MLAdd.h"
 #import "UIViewController+MLAdd.h"
+#import "UINavigationController+MLAdd.h"
 
 #import "CALayer+MLAdd.h"
 #import "MLCGUtilities.h"
