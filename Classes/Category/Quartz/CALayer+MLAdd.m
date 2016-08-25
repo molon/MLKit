@@ -288,4 +288,16 @@ SYNTH_DUMMY_CLASS(CALayer_MLAdd)
     }
 }
 
+- (void)addTransitionWithType:(NSString*)type duration:(NSTimeInterval)duration {
+    CATransition *animation = [CATransition animation];
+    animation.duration = duration;
+    animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut];
+    animation.type = type;
+    [self addAnimation:animation forKey:nil];
+}
+
+- (void)addFadeTransitionWithDuration:(NSTimeInterval)duration {
+    [self addTransitionWithType:kCATransitionFade duration:duration];
+}
+
 @end

@@ -21,7 +21,7 @@ NSString * const MLAPIHelperParamPrefix = @"p_";
 NSString * const MLAPIHelperFileParamPrefix = @"f_";
 NSString * const MLAPIHelperResponsePrefix = @"r_";
 
-NSString * const MLAPIHelperResponseModelArrayKey = @"reponseModels";
+NSString * const MLAPIHelperResponseModelArrayKey = @"responseModels";
 NSString * const MLAPIHelperResponseModelKey = @"responseModel";
 
 NSString * const MLAPIHelperStateDidChangeNotificationNamePrefix = @"com.molon.MLAPI.didChangeStateForAPIHelper.";

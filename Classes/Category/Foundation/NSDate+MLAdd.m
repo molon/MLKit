@@ -272,4 +272,8 @@ return ABS([difference _method_]);
     RETURN_INTERVAL(NSCalendarUnitSecond, second);
 }
 
++ (instancetype)dateWithMicroTimeIntervalSince1970:(NSTimeInterval)microsecs {
+    return [self dateWithTimeIntervalSince1970:microsecs/1000.0f];
+}
+
 @end

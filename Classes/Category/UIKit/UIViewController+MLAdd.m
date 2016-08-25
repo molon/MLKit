@@ -91,7 +91,7 @@ SYNTH_DUMMY_CLASS(UIViewController_MLAdd)
 + (void)validateNoBackTitleForNavigationBar {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        [self swizzleInstanceMethod:@selector(viewDidLoad) with:@selector(____hookViewDidLoad)];
+        [UIViewController swizzleInstanceMethod:@selector(viewDidLoad) with:@selector(____hookViewDidLoad)];
     });
 }
 

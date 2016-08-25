@@ -287,6 +287,16 @@ NS_ASSUME_NONNULL_BEGIN
  */
 + (NSInteger)secondsBetweenDate:(NSDate*)fromDateTime withDate:(NSDate*)toDateTime;
 
+#pragma mark - Other
+/**
+ Same with `dateWithTimeIntervalSince1970:`, but the param must be microseconds
+ 
+ @param microsecs microsecs
+ 
+ @return instance
+ */
++ (instancetype)dateWithMicroTimeIntervalSince1970:(NSTimeInterval)microsecs;
+
 @end
 
 

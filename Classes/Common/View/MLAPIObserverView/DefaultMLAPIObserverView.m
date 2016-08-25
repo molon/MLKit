@@ -10,6 +10,7 @@
 #import "UIView+MLAdd.h"
 #import "MLKitMacro.h"
 #import "UIImage+MLAdd.h"
+#import "CALayer+MLAdd.h"
 
 @interface DefaultMLAPIObserverView()
 
@@ -51,6 +52,7 @@
         case MLAPIHelperStateInit:
         case MLAPIHelperStateRequestSucceed:
             self.hidden = YES;
+            [self.layer addFadeTransitionWithDuration:.15f];
             break;
         case MLAPIHelperStateRequestError:
         case MLAPIHelperStateRequestFailed:

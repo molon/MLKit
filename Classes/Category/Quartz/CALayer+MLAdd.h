@@ -57,6 +57,21 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)removeAllSublayers;
 
+/**
+ Add transition with type and duration
+ @warning The timeFunction is kCAMediaTimingFunctionEaseOut
+ 
+ @param type     type
+ @param duration duration
+ */
+- (void)addTransitionWithType:(NSString*)type duration:(NSTimeInterval)duration;
+
+/**
+ Add transition whose type is kCATransitionFade
+ 
+ @param duration duration
+ */
+- (void)addFadeTransitionWithDuration:(NSTimeInterval)duration;
 
 @end
 
