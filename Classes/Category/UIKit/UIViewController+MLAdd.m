@@ -15,6 +15,11 @@ SYNTH_DUMMY_CLASS(UIViewController_MLAdd)
 
 @implementation UIViewController (MLAdd)
 
++ (instancetype)instanceFromNib {
+    Class cls = [self class];
+    return [[self alloc]initWithNibName:NSStringFromClass(cls) bundle:[NSBundle bundleForClass:cls]];
+}
+
 + (CGFloat)statusBarHeight {
     //    CGSize statusBarSize = [[UIApplication sharedApplication] statusBarFrame].size;
     //    return [UIApplication sharedApplication].statusBarHidden?0.0f:fmin(statusBarSize.width, statusBarSize.height);

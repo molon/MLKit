@@ -16,6 +16,13 @@ NS_ASSUME_NONNULL_BEGIN
 @interface UIViewController (MLAdd)
 
 /**
+ Return instancetype with nib name([self class])
+ 
+ @return instancetype
+ */
++ (instancetype)instanceFromNib;
+
+/**
  Get height of statusBarHeight, always is 20 now.
  
  @return 20.0f
