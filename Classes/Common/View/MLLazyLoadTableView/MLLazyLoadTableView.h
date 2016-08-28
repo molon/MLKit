@@ -67,6 +67,11 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy) void(^refreshFailedBlock)(MLLazyLoadTableView *tableView, MLAPIHelper *apiHelper);
 
 /**
+ block after `reset` method excuted
+ */
+@property (nonatomic, copy) void(^afterResetBlock)(MLLazyLoadTableView *tableView);
+
+/**
  init
  
  @param lazyLoadSection   the section for lazy-loading

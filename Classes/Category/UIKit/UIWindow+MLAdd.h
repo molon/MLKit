@@ -16,11 +16,14 @@ NS_ASSUME_NONNULL_BEGIN
 @interface UIWindow (MLAdd)
 
 /**
- The window which windowLevel==UIWindowLevelNormal and visible==YES and displays at the topmost zIndex on mainScreen
+ Detect whether contains one window which visible on mainScreen with test block
+ @warning reverseObjectEnumerator
  
- @return window
+ @param comparator comparator
+ 
+ @return bool
  */
-+ (UIWindow*)currentVisbileNormalWindow;
++ (BOOL)containsVisibleWindowOnMainScreenReversePassingTest:(BOOL (^)(UIWindow *window,BOOL aboveAppDelegateWindow,BOOL *stop))comparator;
 
 @end
 

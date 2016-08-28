@@ -412,8 +412,13 @@
     _refreshing = NO;
     _entries = nil;
     _needLazyLoad = NO;
+    _lazyLoadCell.status = MLLazyLoadCellStatusInit;
     
     [self doReloadDataWithCompletion:nil];
+    
+    if (self.afterResetBlock) {
+        self.afterResetBlock(self);
+    }
 }
 
 - (void)doRefresh {

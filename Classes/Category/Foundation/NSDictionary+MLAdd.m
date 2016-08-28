@@ -168,6 +168,22 @@ return def;
     return def;
 }
 
+- (NSDictionary *)dictionaryValueForKey:(NSString *)key default:(NSDictionary *)def {
+    if (!key) return def;
+    id value = self[key];
+    if (!value || value == [NSNull null]) return def;
+    if ([value isKindOfClass:[NSDictionary class]]) return value;
+    return def;
+}
+
+- (NSArray *)arrayValueForKey:(NSString *)key default:(NSArray *)def {
+    if (!key) return def;
+    id value = self[key];
+    if (!value || value == [NSNull null]) return def;
+    if ([value isKindOfClass:[NSArray class]]) return value;
+    return def;
+}
+
 @end
 
 

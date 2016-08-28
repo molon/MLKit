@@ -112,6 +112,9 @@ NS_ASSUME_NONNULL_BEGIN
 - (nullable NSString *)stringValueForKey:(NSString *)key default:(nullable NSString *)def;
 - (nullable NSURL *)URLValueForKey:(NSString *)key default:(nullable NSURL *)def;
 
+- (NSDictionary *)dictionaryValueForKey:(NSString *)key default:(nullable NSDictionary *)def;
+- (NSArray *)arrayValueForKey:(NSString *)key default:(nullable NSArray *)def;
+
 @end
 
 
