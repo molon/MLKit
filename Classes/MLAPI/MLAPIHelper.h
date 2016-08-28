@@ -259,6 +259,11 @@ FOUNDATION_EXPORT NSString * MLAPI_AFQueryStringFromParameters(NSDictionary *par
  */
 - (void)cancel;
 
+/**
+ 重置
+ */
+- (void)reset;
+
 #pragma mark - block及callbackObject的混合回调请求方法
 /**
  发出请求，指定回调对象，关于回调对象相关方法可查看NSObject+MLAPI

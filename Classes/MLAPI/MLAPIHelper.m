@@ -371,6 +371,8 @@ NSString * MLAPI_AFQueryStringFromParameters(NSDictionary *parameters) {
 }
 
 - (void)reset {
+    [self cancel];
+    
     _isCurrentPreloaded = NO;
     _isRespondWithCache = NO;
     _responseEntry = nil;

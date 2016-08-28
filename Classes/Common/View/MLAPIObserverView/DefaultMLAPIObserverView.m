@@ -56,9 +56,17 @@
             break;
         case MLAPIHelperStateRequestError:
         case MLAPIHelperStateRequestFailed:
-            self.hidden = NO;
-            [_indicatorView stopAnimating];
-            _retryButton.hidden = NO;
+        {
+            //if no retry block，just do same with MLAPIHelperStateRequestSucceed
+            if (!self.retryBlock) {
+                self.hidden = YES;
+                [self.layer addFadeTransitionWithDuration:.15f];
+            }else{
+                self.hidden = NO;
+                [_indicatorView stopAnimating];
+                _retryButton.hidden = NO;
+            }
+        }
             break;
         case MLAPIHelperStateCachePreloaded:
         case MLAPIHelperStateRequesting:
