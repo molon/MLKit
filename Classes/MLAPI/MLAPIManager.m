@@ -16,6 +16,10 @@
 #import "NSString+MLAdd.h"
 #import "MLAPICacheItem.h"
 
+NSString * const MLAPIHelperStateDidChangeNotificationNamePrefix = @"com.molon.MLAPI.didChangeStateForAPIHelper.";
+NSString * const MLAPIHelperStateDidChangeNotificationAPIHelperKeyForUserInfo = @"apiHelper";
+NSString * const MLAPIHelperStateDidChangeNotificationPostTagKeyForUserInfo = @"postTag";
+
 NSString * const MLAPICacheRootDirectoryName = @"MLAPICache";
 
 static inline void mlapi_dispatch_async_on_main_queue(void (^block)()) {
@@ -457,7 +461,17 @@ GOON_CALLBACK(_method_) \
 - (void)postStateDidChangeNotificationForAPIHelper:(MLAPIHelper*)apiHelper {
     ASSERT_MUST_EXCUTE_ON_MAIN_THREAD
     
-    NSDictionary *userInfo = @{MLAPIHelperStateDidChangeNotificationAPIHelperKeyForUserInfo:apiHelper};
+    //每一次投递行为的唯一标识
+    static NSInteger postTag = 0;
+    if (postTag==NSIntegerMax) {
+        postTag = 0;
+    }
+    postTag++;
+    
+    NSDictionary *userInfo = @{
+                               MLAPIHelperStateDidChangeNotificationPostTagKeyForUserInfo:@(postTag),
+                               MLAPIHelperStateDidChangeNotificationAPIHelperKeyForUserInfo:apiHelper};
+    
     //父类也要通知到，直到MLAPIHelper不需要通知了
     Class cls = [apiHelper class];
     Class untilCls = [MLAPIHelper class];

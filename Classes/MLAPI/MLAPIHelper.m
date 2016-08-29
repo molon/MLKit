@@ -24,9 +24,6 @@ NSString * const MLAPIHelperResponsePrefix = @"r_";
 NSString * const MLAPIHelperResponseModelArrayKey = @"responseModels";
 NSString * const MLAPIHelperResponseModelKey = @"responseModel";
 
-NSString * const MLAPIHelperStateDidChangeNotificationNamePrefix = @"com.molon.MLAPI.didChangeStateForAPIHelper.";
-NSString * const MLAPIHelperStateDidChangeNotificationAPIHelperKeyForUserInfo = @"apiHelper";
-
 static inline NSDictionary *kResetResponseProtypeDictionary(Class cls) {
     static NSMutableDictionary *protypeResponses = nil;
     static dispatch_once_t onceToken;

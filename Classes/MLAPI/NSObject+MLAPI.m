@@ -8,24 +8,24 @@
 
 #import "NSObject+MLAPI.h"
 #import <objc/runtime.h>
-#import "MLAPIHelper.h"
+#import "MLAPIManager.h"
 #import "MLKitMacro.h"
+#import "MLAPIHelper.h"
 
 @interface CareAboutAPIHelperNotificationObserver : NSObject
 
-@property (nonatomic, strong) NSMutableArray *careAboutAPIHelperNotificationNames;
 @property (nonatomic, weak) id<MLAPICareAboutCallbackProtocol> delegate;
 
 @end
 
-@implementation CareAboutAPIHelperNotificationObserver
+@implementation CareAboutAPIHelperNotificationObserver {
+    NSMutableArray *_careAboutAPIHelperNotificationNames;
+    NSInteger _lastPostTag;
+}
 
 - (void)dealloc {
     //移除观察者
-    if (self.careAboutAPIHelperNotificationNames.count>0) {
-//        [self.careAboutAPIHelperNotificationNames enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-//            [[NSNotificationCenter defaultCenter]removeObserver:self name:obj object:nil];
-//        }];
+    if (_careAboutAPIHelperNotificationNames.count>0) {
         //这个类只会add关心请求的通知，没有其他的，直接移除全部观察者就OK啦
         [[NSNotificationCenter defaultCenter]removeObserver:self];
     }
@@ -33,28 +33,36 @@
 
 - (void)careAboutAPIHelperClass:(Class)apiHelperClass {
     NSString *notificationName = [NSString stringWithFormat:@"%@%@",MLAPIHelperStateDidChangeNotificationNamePrefix,NSStringFromClass(apiHelperClass)];
-    if ([self.careAboutAPIHelperNotificationNames containsObject:notificationName]) {
+    if ([_careAboutAPIHelperNotificationNames containsObject:notificationName]) {
         return;
     }
     
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(careAboutAPIHelperNotificationCallback:) name:notificationName object:nil];
     
     //记录下
-    if (!self.careAboutAPIHelperNotificationNames) {
-        self.careAboutAPIHelperNotificationNames = [NSMutableArray array];
+    if (!_careAboutAPIHelperNotificationNames) {
+        _careAboutAPIHelperNotificationNames = [NSMutableArray array];
     }
-    [self.careAboutAPIHelperNotificationNames addObject:notificationName];
+    [_careAboutAPIHelperNotificationNames addObject:notificationName];
 }
 
 - (void)careAboutAPIHelperNotificationCallback:(NSNotification*)notification {
-    MLAPIHelper *apiHelper = notification.userInfo[MLAPIHelperStateDidChangeNotificationAPIHelperKeyForUserInfo];
-    if (apiHelper.state==MLAPIHelperStateRequestSucceed) {
-        if (self.delegate&&[self.delegate respondsToSelector:@selector(afterRequestSucceedForCaredAboutAPIHelper:)]) {
-            [self.delegate afterRequestSucceedForCaredAboutAPIHelper:apiHelper];
-        }
+    NSInteger postTag = [notification.userInfo[MLAPIHelperStateDidChangeNotificationPostTagKeyForUserInfo] integerValue];
+    if (postTag==_lastPostTag) {
+        return;
     }
-    if (self.delegate&&[self.delegate respondsToSelector:@selector(didChangeStateForCaredAboutAPIHelper:)]) {
-        [self.delegate didChangeStateForCaredAboutAPIHelper:apiHelper];
+    _lastPostTag = postTag;
+    
+    MLAPIHelper *apiHelper = notification.userInfo[MLAPIHelperStateDidChangeNotificationAPIHelperKeyForUserInfo];
+    if (apiHelper) {
+        if (apiHelper.state==MLAPIHelperStateRequestSucceed) {
+            if (_delegate&&[_delegate respondsToSelector:@selector(afterRequestSucceedForCaredAboutAPIHelper:)]) {
+                [_delegate afterRequestSucceedForCaredAboutAPIHelper:apiHelper];
+            }
+        }
+        if (_delegate&&[_delegate respondsToSelector:@selector(didChangeStateForCaredAboutAPIHelper:)]) {
+            [_delegate didChangeStateForCaredAboutAPIHelper:apiHelper];
+        }
     }
 }
 

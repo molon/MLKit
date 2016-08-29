@@ -38,9 +38,6 @@ typedef NS_ENUM(NSUInteger, MLAPIHelperRequestMethod) {
 
 FOUNDATION_EXPORT NSTimeInterval const MLAPIHelperDefaultTimeoutInterval;
 
-FOUNDATION_EXPORT NSString * const MLAPIHelperStateDidChangeNotificationNamePrefix;
-FOUNDATION_EXPORT NSString * const MLAPIHelperStateDidChangeNotificationAPIHelperKeyForUserInfo;
-
 FOUNDATION_EXPORT NSString * MLAPI_HTTPMethod(MLAPIHelperRequestMethod requestMethod);
 FOUNDATION_EXPORT BOOL MLAPI_IsErrorCancelled(NSError *error);
 

@@ -13,6 +13,10 @@ NS_ASSUME_NONNULL_BEGIN
 @class MLAPIHelper;
 @class MLAPICacheItem;
 
+FOUNDATION_EXPORT NSString * const MLAPIHelperStateDidChangeNotificationNamePrefix;
+FOUNDATION_EXPORT NSString * const MLAPIHelperStateDidChangeNotificationAPIHelperKeyForUserInfo;
+FOUNDATION_EXPORT NSString * const MLAPIHelperStateDidChangeNotificationPostTagKeyForUserInfo;
+
 @interface MLAPIManager : NSObject
 
 @property (nonatomic, strong, readonly) AFHTTPSessionManager *httpSessionManager;
