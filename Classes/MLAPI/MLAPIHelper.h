@@ -71,6 +71,11 @@ FOUNDATION_EXPORT NSString * MLAPI_AFQueryStringFromParameters(NSDictionary *par
 @property (nonatomic, copy, readonly) NSString *apiName;
 
 /**
+ nil number
+ */
+@property (nonatomic, strong, readonly) NSNumber *nilNumber;
+
+/**
  request method GET POST ....
  */
 @property (nonatomic, assign, readonly) MLAPIHelperRequestMethod requestMethod;
@@ -147,6 +152,13 @@ FOUNDATION_EXPORT NSString * MLAPI_AFQueryStringFromParameters(NSDictionary *par
  自定义根URL
  */
 - (nullable NSURL*)configureBaseURL;
+
+/**
+ 定义个表示nil的number，这样的话，如果参数属性中某标量或者NSNumber等于此值，则表示其不会去做传递
+ @warning 别设置太大，这样对于长度短的标量就无法用其表示了,建议INT16_MIN就合适
+ @warning NaN是除去设置的这个，另外一个唯一的绝对不会作为参数传递的数值
+ */
+- (NSNumber *)configureNilNumber;
 
 #pragma mark - 可选继承的方法
 /**

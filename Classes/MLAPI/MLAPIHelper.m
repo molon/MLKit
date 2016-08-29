@@ -193,6 +193,7 @@ NSString * MLAPI_AFQueryStringFromParameters(NSDictionary *parameters) {
 @property (nonatomic, copy) NSString *apiName;
 @property (nonatomic, assign) MLAPIHelperRequestMethod requestMethod;
 @property (nonatomic, strong) NSURL *baseURL;
+@property (nonatomic, strong) NSNumber *nilNumber;
 
 @property (nonatomic, assign) MLAPIHelperState state;
 @property (nonatomic, strong) id responseEntry;
@@ -224,6 +225,9 @@ NSString * MLAPI_AFQueryStringFromParameters(NSDictionary *parameters) {
         NSAssert([_apiName isNotBlank], @"接口%@的apiName不可为空",NSStringFromClass([self class]));
         
         _requestMethod = [self configureRequestMethod];
+        
+        _nilNumber = [self configureNilNumber];
+        NSAssert(_nilNumber, @"必须设置一个nilNumber");
         
         //if subclass override setState: , the setting is useful.
         self.state = MLAPIHelperStateInit;
@@ -287,10 +291,14 @@ NSString * MLAPI_AFQueryStringFromParameters(NSDictionary *parameters) {
         }
         id object = [self valueForKey:key];
         if (object && object!= (id)kCFNull) {
+            if ([object isKindOfClass:[NSNumber class]]&&
+                ([object isEqualToNumber:_nilNumber]||[object isEqualToNumber:[NSDecimalNumber notANumber]])) {
+                continue;
+            }
             NSAssert([object isKindOfClass:[NSString class]]
-                     ||([object isKindOfClass:[NSNumber class]]&&![object isEqualToNumber:[NSDecimalNumber notANumber]])
+                     ||[object isKindOfClass:[NSNumber class]]
                      ||([object isKindOfClass:[NSURL class]]&&![object isFileURL]),
-                     @"作为参数的属性只能是非NaN的数字或NSNumber，NSString, 非FileURL的NSURL其中之一");
+                     @"作为参数的属性只能是数字或NSNumber，NSString, 非FileURL的NSURL其中之一");
             //如果是空字符串也直接忽略
             if ([object isKindOfClass:[NSString class]]&&![object isNotBlank]) {
                 continue;
@@ -416,6 +424,11 @@ NSString * MLAPI_AFQueryStringFromParameters(NSDictionary *parameters) {
 - (NSURL*)configureBaseURL {
     [self doesNotRecognizeSelector:_cmd];
     return nil;
+}
+
+- (NSNumber *)nilNumberParam {
+    [self doesNotRecognizeSelector:_cmd];
+    return [NSDecimalNumber notANumber];
 }
 
 #pragma mark - override optionally
