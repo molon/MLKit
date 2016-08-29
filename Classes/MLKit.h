@@ -49,6 +49,7 @@
 #import "UIViewController+MLAdd.h"
 #import "UINavigationController+MLAdd.h"
 #import "UISearchBar+MLAdd.h"
+#import "UINavigationBar+MLAdd.h"
 
 #import "CALayer+MLAdd.h"
 #import "MLCGUtilities.h"
