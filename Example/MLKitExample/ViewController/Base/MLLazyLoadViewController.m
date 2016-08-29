@@ -26,7 +26,7 @@
 @end
 
 @implementation MLLazyLoadViewController {
-    BOOL _hasRequested;
+    BOOL _hasRequestSucceedOnce;
 }
 
 @dynamic tableView;
@@ -72,19 +72,27 @@
         
         [helper requestWithCallbackObject:self];
         
-        self.apiObserverView.observingAPIHelper =  self->_hasRequested?nil:([self autoObserveFirstRequest]?helper:nil);
-        self->_hasRequested = YES;
+        self.apiObserverView.observingAPIHelper =  self->_hasRequestSucceedOnce?nil:([self autoObserveFirstRequest]?helper:nil);
         
         //hide backgroundViewIfEmptyList
         tableView.backgroundView = nil;
         
         return helper;
     }];
+    
+    [self.tableView setAfterResetBlock:^(MLLazyLoadTableView * _Nonnull tableView) {
+        STRONG_SELF
+        self.currentPageNo = 0;
+        tableView.backgroundView = nil;
+        self.apiObserverView.observingAPIHelper = nil;
+    }];
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    self.view.backgroundColor = [UIColor whiteColor];
+    
     WEAK_SELF
     if ([self autoObserveFirstRequest]) {
         [self.apiObserverView setRetryBlock:^(MLAPIObserverView *v) {
@@ -99,7 +107,7 @@
         [self.tableView enableRefreshingWithAction:^{
             STRONG_SELF
             [self.tableView doRefresh];
-        } style:MLRefreshControlViewStyleFixed originalTopInset:[self navigationBarBottomY] scrollToTopAfterEndRefreshing:NO];
+        } style:MLRefreshControlViewStyleFollow originalTopInset:self.tableView.contentInset.top scrollToTopAfterEndRefreshing:NO];
     }
 }
 
@@ -173,6 +181,8 @@
 
 - (void)afterRequestSucceed:(MLAPIHelper *)apiHelper {
     if ([apiHelper isEqual:self.tableView.requestingAPIHelper]) {
+        _hasRequestSucceedOnce = YES;
+        
         LazyLoadAPIHelper *helper = (LazyLoadAPIHelper*)apiHelper;
         
         NSMutableArray *rows = [helper.r_rows mutableCopy];
@@ -216,9 +226,23 @@
     [super afterRequestFailed:apiHelper];
 }
 
+- (void)afterRequestError:(MLAPIHelper *)apiHelper {
+    [super afterRequestError:apiHelper];
+}
+
 #pragma mark - operations
-- (void)deleteRowsInLazyLoadSectionWithEntryID:(nullable NSString*)entryID rowAnimation:(UITableViewRowAnimation)animation {
-    NSAssert(_keyOfEntryIDForDeduplication, @"_keyOfEntryIDForDeduplication must be provided if using `deleteRowsInLazyLoadSectionWithEntryID:rowAnimation:`");
+- (void)deleteRowsInLazyLoadSectionWithEntry:(id)entry withRowAnimation:(UITableViewRowAnimation)animation {
+    if (!entry) {
+        return;
+    }
+    [self.tableView deleteRowsInLazyLoadSectionWithEntry:entry withRowAnimation:animation];
+    
+    if (self.tableView.entries.count<=0) {
+        self.tableView.backgroundView = _backgroundViewIfEmptyList;
+    }
+}
+- (void)deleteRowsInLazyLoadSectionWithEntryID:(nullable id)entryID rowAnimation:(UITableViewRowAnimation)animation {
+    NSAssert(_keyOfEntryIDForDeduplication, @"_keyOfEntryIDForDeduplication must be provided if using `%@`",NSStringFromSelector(_cmd));
     [self.tableView deleteRowsInLazyLoadSectionWithEntryID:entryID keyOfEntryID:_keyOfEntryIDForDeduplication rowAnimation:animation];
     
     if (self.tableView.entries.count<=0) {
@@ -226,21 +250,19 @@
     }
 }
 
-- (void)deleteRowsInLazyLoadSectionWithEntry:(id)entry withRowAnimation:(UITableViewRowAnimation)animation {
-    [self.tableView deleteRowsInLazyLoadSectionWithEntry:entry withRowAnimation:animation];
-    
-    if (self.tableView.entries.count<=0) {
-        self.tableView.backgroundView = _backgroundViewIfEmptyList;
-    }
-}
-
-- (void)reloadRowsInLazyLoadSectionWithEntryID:(nullable NSString*)entryID rowAnimation:(UITableViewRowAnimation)animation {
-    NSAssert(_keyOfEntryIDForDeduplication, @"_keyOfEntryIDForDeduplication must be provided if using `deleteRowsInLazyLoadSectionWithEntryID:rowAnimation:`");
-    [self.tableView reloadRowsInLazyLoadSectionWithEntryID:entryID keyOfEntryID:_keyOfEntryIDForDeduplication rowAnimation:animation];
-}
-
 - (void)reloadRowsInLazyLoadSectionWithEntry:(id)entry withRowAnimation:(UITableViewRowAnimation)animation {
+    if (!entry) {
+        return;
+    }
     [self.tableView reloadRowsInLazyLoadSectionWithEntry:entry withRowAnimation:animation];
+}
+
+- (void)replaceEntriesAndReloadRowsWithEntry:(id)entry rowAnimation:(UITableViewRowAnimation)animation {
+    NSAssert(_keyOfEntryIDForDeduplication, @"_keyOfEntryIDForDeduplication must be provided if using `%@`",NSStringFromSelector(_cmd));
+    if (!entry) {
+        return;
+    }
+    [self.tableView replaceEntriesAndReloadRowsWithEntry:entry keyOfEntryID:_keyOfEntryIDForDeduplication rowAnimation:animation];
 }
 
 @end

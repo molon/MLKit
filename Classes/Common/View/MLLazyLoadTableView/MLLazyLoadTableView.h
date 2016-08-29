@@ -136,10 +136,11 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSInteger)numberOfRowsInLazyLoadSection;
 
 #pragma mark - operations
-- (void)deleteRowsInLazyLoadSectionWithEntryID:(nullable NSString*)entryID keyOfEntryID:(NSString*)keyOfEntryID rowAnimation:(UITableViewRowAnimation)animation;
 - (void)deleteRowsInLazyLoadSectionWithEntry:(id)entry withRowAnimation:(UITableViewRowAnimation)animation;
-- (void)reloadRowsInLazyLoadSectionWithEntryID:(nullable NSString*)entryID keyOfEntryID:(NSString*)keyOfEntryID rowAnimation:(UITableViewRowAnimation)animation;
+- (void)deleteRowsInLazyLoadSectionWithEntryID:(nullable id)entryID keyOfEntryID:(NSString*)keyOfEntryID rowAnimation:(UITableViewRowAnimation)animation;
+
 - (void)reloadRowsInLazyLoadSectionWithEntry:(id)entry withRowAnimation:(UITableViewRowAnimation)animation;
+- (void)replaceEntriesAndReloadRowsWithEntry:(id)entry keyOfEntryID:(NSString*)keyOfEntryID rowAnimation:(UITableViewRowAnimation)animation;
 
 #pragma mark - block setter helper
 - (void)setRequestingAPIHelperBlock:(MLAPIHelper * _Nonnull (^ _Nonnull)(MLLazyLoadTableView * _Nonnull tableView, BOOL refreshing))requestingAPIHelperBlock;

@@ -106,6 +106,12 @@ DEALLOC_SELF_DLOG
         self.currentPageNo = 1;
         [self.tableView appendEntries:helper.r_rows noMore:NO apiHelper:helper];
     }
+    
+//    WEAK_SELF
+//    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"测试" style:UIBarButtonItemStylePlain actionBlock:^(UIBarButtonItem * _Nonnull barButtonItem) {
+//        STRONG_SELF
+//        [self deleteRowsInLazyLoadSectionWithEntryID:@"21" rowAnimation:UITableViewRowAnimationFade];
+//    }];
 }
 
 - (BOOL)autoRefreshWhenFirstDidAppear {

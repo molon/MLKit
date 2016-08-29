@@ -36,10 +36,11 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)afterRequestFailed:(MLAPIHelper *)apiHelper  __attribute__((objc_requires_super));
 
 #pragma mark - operations
-- (void)deleteRowsInLazyLoadSectionWithEntryID:(nullable NSString*)entryID rowAnimation:(UITableViewRowAnimation)animation;
 - (void)deleteRowsInLazyLoadSectionWithEntry:(id)entry withRowAnimation:(UITableViewRowAnimation)animation;
-- (void)reloadRowsInLazyLoadSectionWithEntryID:(nullable NSString*)entryID rowAnimation:(UITableViewRowAnimation)animation;
+- (void)deleteRowsInLazyLoadSectionWithEntryID:(nullable id)entryID rowAnimation:(UITableViewRowAnimation)animation;
+
 - (void)reloadRowsInLazyLoadSectionWithEntry:(id)entry withRowAnimation:(UITableViewRowAnimation)animation;
+- (void)replaceEntriesAndReloadRowsWithEntry:(id)entry rowAnimation:(UITableViewRowAnimation)animation;
 
 @end
 

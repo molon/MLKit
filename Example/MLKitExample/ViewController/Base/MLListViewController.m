@@ -31,7 +31,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    self.view.backgroundColor = [UIColor whiteColor];
     self.automaticallyAdjustsScrollViewInsets = NO;
     
     [self loadAPIObserverView];
@@ -39,7 +38,7 @@
     if (!_apiObserverView) {
         _apiObserverView = ({
             DefaultMLAPIObserverView *observerView = [DefaultMLAPIObserverView new];
-            observerView.backgroundColor = [UIColor whiteColor];
+            observerView.backgroundColor = self.view.backgroundColor;
             observerView;
         });
     }else if (_apiObserverView.superview) {
@@ -76,7 +75,7 @@
 - (void)adjustTableViewContentInset {
     _tableView.contentInsetBottom = [self tabBarOccupiedHeight];
     
-    CGFloat topInset = [self navigationBarBottomY];
+    CGFloat topInset = [self navigationBarBottom];
     //如果有refreshView则使用其来设置inset.top,其内部也会自动对tableView的进行设置
     if (_tableView.refreshView) {
         _tableView.refreshView.originalTopInset = topInset;

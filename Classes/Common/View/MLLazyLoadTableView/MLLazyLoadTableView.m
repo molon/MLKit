@@ -243,44 +243,6 @@
     [self endRefreshing];
 }
 
-- (void)deleteRowsInLazyLoadSectionWithEntryID:(NSString*)entryID keyOfEntryID:(NSString*)keyOfEntryID rowAnimation:(UITableViewRowAnimation)animation {
-    NSParameterAssert(keyOfEntryID);
-    
-    NSMutableArray *indexPaths = [NSMutableArray array];
-    NSIndexSet *indexes = [_entries indexesOfObjectsPassingTest:^BOOL(id  _Nonnull entry, NSUInteger idx, BOOL * _Nonnull stop) {
-        NSAssert([[entry class]yy_containsPropertyKey:keyOfEntryID], @"keyOfEntryID is not exist in entry");
-        
-        id value = nil;
-        @try {
-            value = [entry valueForKeyPath:keyOfEntryID];
-        } @catch (NSException *exception) {
-            DDLogError(@"%@",exception);
-        }
-        
-        if (!value && !entry) {
-            DDLogWarn(@"Entry:%@\nvalue for keyOfEntryID(%@) is nil",entry,keyOfEntryID);
-            [indexPaths addObject:[NSIndexPath indexPathForRow:idx inSection:_lazyLoadSection]];
-            return YES;
-        }
-        
-        if ([value isEqual:entryID]) {
-            [indexPaths addObject:[NSIndexPath indexPathForRow:idx inSection:_lazyLoadSection]];
-            return YES;
-        }
-        
-        return NO;
-    }];
-    
-    if (indexes.count>0) {
-        [_entries removeObjectsAtIndexes:indexes];
-        if (_entries.count<=0) {
-            _needLazyLoad = NO;
-            _lazyLoadCell.status = MLLazyLoadCellStatusEmpty;
-        }
-        [self deleteRowsAtIndexPaths:indexPaths withRowAnimation:animation];
-    }
-}
-
 - (void)deleteRowsInLazyLoadSectionWithEntry:(id)entry withRowAnimation:(UITableViewRowAnimation)animation {
     NSParameterAssert(entry);
     
@@ -303,34 +265,41 @@
     }
 }
 
-
-- (void)reloadRowsInLazyLoadSectionWithEntryID:(id)entryID keyOfEntryID:(NSString*)keyOfEntryID rowAnimation:(UITableViewRowAnimation)animation {
+- (void)deleteRowsInLazyLoadSectionWithEntryID:(id)entryID keyOfEntryID:(NSString*)keyOfEntryID rowAnimation:(UITableViewRowAnimation)animation {
     NSParameterAssert(keyOfEntryID);
     
     NSMutableArray *indexPaths = [NSMutableArray array];
-    [_entries enumerateObjectsUsingBlock:^(id  _Nonnull entry, NSUInteger idx, BOOL * _Nonnull stop) {
-        NSAssert([[entry class]yy_containsPropertyKey:keyOfEntryID], @"keyOfEntryID is not exist in entry");
+    NSIndexSet *indexes = [_entries indexesOfObjectsPassingTest:^BOOL(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        NSAssert([[obj class]yy_containsPropertyKey:keyOfEntryID], @"keyOfEntryID is not exist in entry:%@",obj);
         
         id value = nil;
         @try {
-            value = [entry valueForKeyPath:keyOfEntryID];
+            value = [obj valueForKeyPath:keyOfEntryID];
         } @catch (NSException *exception) {
             DDLogError(@"%@",exception);
         }
         
-        if (!value && !entry) {
-            DDLogWarn(@"Entry:%@\nvalue for keyOfEntryID(%@) is nil",entry,keyOfEntryID);
+        if (!value && !entryID) {
+            DDLogWarn(@"Entry:%@\nvalue for keyOfEntryID(%@) is nil",obj,keyOfEntryID);
             [indexPaths addObject:[NSIndexPath indexPathForRow:idx inSection:_lazyLoadSection]];
-            return;
+            return YES;
         }
         
         if ([value isEqual:entryID]) {
             [indexPaths addObject:[NSIndexPath indexPathForRow:idx inSection:_lazyLoadSection]];
+            return YES;
         }
+        
+        return NO;
     }];
     
-    if (indexPaths.count>0) {
-        [self reloadRowsAtIndexPaths:indexPaths withRowAnimation:animation];
+    if (indexes.count>0) {
+        [_entries removeObjectsAtIndexes:indexes];
+        if (_entries.count<=0) {
+            _needLazyLoad = NO;
+            _lazyLoadCell.status = MLLazyLoadCellStatusEmpty;
+        }
+        [self deleteRowsAtIndexPaths:indexPaths withRowAnimation:animation];
     }
 }
 
@@ -345,6 +314,52 @@
     }];
     
     if (indexPaths.count>0) {
+        [self reloadRowsAtIndexPaths:indexPaths withRowAnimation:animation];
+    }
+}
+
+- (void)replaceEntriesAndReloadRowsWithEntry:(id)entry keyOfEntryID:(NSString*)keyOfEntryID rowAnimation:(UITableViewRowAnimation)animation {
+    NSParameterAssert(keyOfEntryID);
+    NSParameterAssert(entry);
+    
+    NSAssert([[entry class]yy_containsPropertyKey:keyOfEntryID], @"keyOfEntryID is not exist in entry:%@",entry);
+    id entryID = nil;
+    @try {
+        entryID = [entry valueForKeyPath:keyOfEntryID];
+    } @catch (NSException *exception) {
+        DDLogError(@"%@",exception);
+    }
+    
+    NSMutableArray *arr = [NSMutableArray array];
+    NSMutableArray *indexPaths = [NSMutableArray array];
+    NSIndexSet *indexes = [_entries indexesOfObjectsPassingTest:^BOOL(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        NSAssert([[obj class]yy_containsPropertyKey:keyOfEntryID], @"keyOfEntryID is not exist in entry:%@",obj);
+        
+        id value = nil;
+        @try {
+            value = [obj valueForKeyPath:keyOfEntryID];
+        } @catch (NSException *exception) {
+            DDLogError(@"%@",exception);
+        }
+        
+        if (!value && !entryID) {
+            DDLogWarn(@"Entry:%@\nvalue for keyOfEntryID(%@) is nil",obj,keyOfEntryID);
+            [arr addObject:entry];
+            [indexPaths addObject:[NSIndexPath indexPathForRow:idx inSection:_lazyLoadSection]];
+            return YES;
+        }
+        
+        if ([value isEqual:entryID]) {
+            [arr addObject:entry];
+            [indexPaths addObject:[NSIndexPath indexPathForRow:idx inSection:_lazyLoadSection]];
+            return YES;
+        }
+        
+        return NO;
+    }];
+    
+    if (indexPaths.count>0) {
+        [_entries replaceObjectsAtIndexes:indexes withObjects:arr];
         [self reloadRowsAtIndexPaths:indexPaths withRowAnimation:animation];
     }
 }

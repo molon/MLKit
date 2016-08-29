@@ -14,7 +14,8 @@
 		36408B1D1D4EF7EA00E78ACA /* Article.m in Sources */ = {isa = PBXBuildFile; fileRef = 36408B1C1D4EF7EA00E78ACA /* Article.m */; };
 		36408B201D4EF81400E78ACA /* TestAPIHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 36408B1F1D4EF81400E78ACA /* TestAPIHelper.m */; };
 		36408B231D4F098400E78ACA /* TestLazyLoadAPIHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 36408B221D4F098400E78ACA /* TestLazyLoadAPIHelper.m */; };
-		3678E5481D64ADED006E9302 /* MLListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3678E5471D64ADED006E9302 /* MLListViewController.m */; };
+		36592A681D7497790089464E /* MLLazyLoadViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 36592A651D7497790089464E /* MLLazyLoadViewController.m */; };
+		36592A691D7497790089464E /* MLListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 36592A671D7497790089464E /* MLListViewController.m */; };
 		36920B821D638FC200517070 /* BaseTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 36920B811D638FC200517070 /* BaseTableViewCell.m */; };
 		36A374251D2640EE00EDD9A8 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 36A374241D2640EE00EDD9A8 /* main.m */; };
 		36A374281D2640EE00EDD9A8 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 36A374271D2640EE00EDD9A8 /* AppDelegate.m */; };
@@ -25,7 +26,6 @@
 		36A374491D2640EE00EDD9A8 /* MLKitExampleUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 36A374481D2640EE00EDD9A8 /* MLKitExampleUITests.m */; };
 		36A6D3B71D4F172200DB09C9 /* ArticleTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 36A6D3B61D4F172200DB09C9 /* ArticleTableViewCell.m */; };
 		36D198231D45C19300434111 /* BaseAPIHelpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 36D198221D45C19300434111 /* BaseAPIHelpers.m */; };
-		36F441041D5A37D200FA6803 /* MLLazyLoadViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 36F441031D5A37D200FA6803 /* MLLazyLoadViewController.m */; };
 		36F7BA271D5DCD6F003EB0AE /* ExampleUserDefaults.m in Sources */ = {isa = PBXBuildFile; fileRef = 36F7BA261D5DCD6F003EB0AE /* ExampleUserDefaults.m */; };
 		CAE999C913054DC0B4B38585 /* libPods-MLKitExample.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 38812E9F8774D01922777819 /* libPods-MLKitExample.a */; };
 /* End PBXBuildFile section */
@@ -61,8 +61,10 @@
 		36408B1F1D4EF81400E78ACA /* TestAPIHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestAPIHelper.m; sourceTree = "<group>"; };
 		36408B211D4F098400E78ACA /* TestLazyLoadAPIHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestLazyLoadAPIHelper.h; sourceTree = "<group>"; };
 		36408B221D4F098400E78ACA /* TestLazyLoadAPIHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestLazyLoadAPIHelper.m; sourceTree = "<group>"; };
-		3678E5461D64ADED006E9302 /* MLListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MLListViewController.h; sourceTree = "<group>"; };
-		3678E5471D64ADED006E9302 /* MLListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MLListViewController.m; sourceTree = "<group>"; };
+		36592A641D7497790089464E /* MLLazyLoadViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MLLazyLoadViewController.h; sourceTree = "<group>"; };
+		36592A651D7497790089464E /* MLLazyLoadViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MLLazyLoadViewController.m; sourceTree = "<group>"; };
+		36592A661D7497790089464E /* MLListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MLListViewController.h; sourceTree = "<group>"; };
+		36592A671D7497790089464E /* MLListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MLListViewController.m; sourceTree = "<group>"; };
 		36920B801D638FC200517070 /* BaseTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseTableViewCell.h; sourceTree = "<group>"; };
 		36920B811D638FC200517070 /* BaseTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseTableViewCell.m; sourceTree = "<group>"; };
 		36A374201D2640EE00EDD9A8 /* MLKitExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MLKitExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -85,8 +87,6 @@
 		36D198211D45C19300434111 /* BaseAPIHelpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BaseAPIHelpers.h; path = ../BaseAPIHelpers.h; sourceTree = "<group>"; };
 		36D198221D45C19300434111 /* BaseAPIHelpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BaseAPIHelpers.m; path = ../BaseAPIHelpers.m; sourceTree = "<group>"; };
 		36D198271D4A203B00434111 /* MLKitExample-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MLKitExample-Prefix.pch"; sourceTree = "<group>"; };
-		36F441021D5A37D200FA6803 /* MLLazyLoadViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MLLazyLoadViewController.h; sourceTree = "<group>"; };
-		36F441031D5A37D200FA6803 /* MLLazyLoadViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MLLazyLoadViewController.m; sourceTree = "<group>"; };
 		36F7BA251D5DCD6F003EB0AE /* ExampleUserDefaults.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExampleUserDefaults.h; sourceTree = "<group>"; };
 		36F7BA261D5DCD6F003EB0AE /* ExampleUserDefaults.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ExampleUserDefaults.m; sourceTree = "<group>"; };
 		38812E9F8774D01922777819 /* libPods-MLKitExample.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MLKitExample.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -256,10 +256,10 @@
 		36F441011D5A37D200FA6803 /* Base */ = {
 			isa = PBXGroup;
 			children = (
-				3678E5461D64ADED006E9302 /* MLListViewController.h */,
-				3678E5471D64ADED006E9302 /* MLListViewController.m */,
-				36F441021D5A37D200FA6803 /* MLLazyLoadViewController.h */,
-				36F441031D5A37D200FA6803 /* MLLazyLoadViewController.m */,
+				36592A641D7497790089464E /* MLLazyLoadViewController.h */,
+				36592A651D7497790089464E /* MLLazyLoadViewController.m */,
+				36592A661D7497790089464E /* MLListViewController.h */,
+				36592A671D7497790089464E /* MLListViewController.m */,
 			);
 			path = Base;
 			sourceTree = "<group>";
@@ -470,12 +470,12 @@
 				36408B151D4EF77200E78ACA /* ArticleListViewController.m in Sources */,
 				36408B161D4EF77200E78ACA /* ViewController.m in Sources */,
 				36A374281D2640EE00EDD9A8 /* AppDelegate.m in Sources */,
-				36F441041D5A37D200FA6803 /* MLLazyLoadViewController.m in Sources */,
-				3678E5481D64ADED006E9302 /* MLListViewController.m in Sources */,
 				36408B191D4EF7C100E78ACA /* UIViewController+MLAPI.m in Sources */,
 				36F7BA271D5DCD6F003EB0AE /* ExampleUserDefaults.m in Sources */,
 				36A6D3B71D4F172200DB09C9 /* ArticleTableViewCell.m in Sources */,
 				36D198231D45C19300434111 /* BaseAPIHelpers.m in Sources */,
+				36592A691D7497790089464E /* MLListViewController.m in Sources */,
+				36592A681D7497790089464E /* MLLazyLoadViewController.m in Sources */,
 				36A374251D2640EE00EDD9A8 /* main.m in Sources */,
 				36920B821D638FC200517070 /* BaseTableViewCell.m in Sources */,
 				36408B201D4EF81400E78ACA /* TestAPIHelper.m in Sources */,

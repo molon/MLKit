@@ -62,9 +62,13 @@ NSString * const MLAPICommonRequestFailedUnknownErrorDescription = @"未知错�
 }
 
 - (nullable NSURL*)configureBaseURL {
-    return [NSURL URLWithString:@"http://192.168.100.5:8080"];
+//    return [NSURL URLWithString:@"http://192.168.100.5:8080"];
 //    return [NSURL URLWithString:@"http://10.17.72.140:8080"];
-//    return [NSURL URLWithString:@"http://localhost:8080"];
+    return [NSURL URLWithString:@"http://localhost:8080"];
+}
+
+- (NSNumber*)configureNilNumber {
+    return @(INT16_MIN);
 }
 
 - (void)treatWithConstructedRequest:(NSMutableURLRequest *)mutableRequest {
