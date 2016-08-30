@@ -243,7 +243,7 @@
     [self endRefreshing];
 }
 
-- (void)deleteRowsInLazyLoadSectionWithEntry:(id)entry withRowAnimation:(UITableViewRowAnimation)animation {
+- (NSInteger)deleteRowsInLazyLoadSectionWithEntry:(id)entry withRowAnimation:(UITableViewRowAnimation)animation {
     NSParameterAssert(entry);
     
     NSMutableArray *indexPaths = [NSMutableArray array];
@@ -263,9 +263,10 @@
         }
         [self deleteRowsAtIndexPaths:indexPaths withRowAnimation:animation];
     }
+    return indexes.count;
 }
 
-- (void)deleteRowsInLazyLoadSectionWithEntryID:(id)entryID keyOfEntryID:(NSString*)keyOfEntryID rowAnimation:(UITableViewRowAnimation)animation {
+- (NSInteger)deleteRowsInLazyLoadSectionWithEntryID:(id)entryID keyOfEntryID:(NSString*)keyOfEntryID rowAnimation:(UITableViewRowAnimation)animation {
     NSParameterAssert(keyOfEntryID);
     
     NSMutableArray *indexPaths = [NSMutableArray array];
@@ -301,9 +302,11 @@
         }
         [self deleteRowsAtIndexPaths:indexPaths withRowAnimation:animation];
     }
+    
+    return indexes.count;
 }
 
-- (void)reloadRowsInLazyLoadSectionWithEntry:(id)entry withRowAnimation:(UITableViewRowAnimation)animation {
+- (NSInteger)reloadRowsInLazyLoadSectionWithEntry:(id)entry withRowAnimation:(UITableViewRowAnimation)animation {
     NSParameterAssert(entry);
     
     NSMutableArray *indexPaths = [NSMutableArray array];
@@ -316,9 +319,11 @@
     if (indexPaths.count>0) {
         [self reloadRowsAtIndexPaths:indexPaths withRowAnimation:animation];
     }
+    
+    return indexPaths.count;
 }
 
-- (void)replaceEntriesAndReloadRowsWithEntry:(id)entry keyOfEntryID:(NSString*)keyOfEntryID rowAnimation:(UITableViewRowAnimation)animation {
+- (NSInteger)replaceEntriesAndReloadRowsWithEntry:(id)entry keyOfEntryID:(NSString*)keyOfEntryID rowAnimation:(UITableViewRowAnimation)animation {
     NSParameterAssert(keyOfEntryID);
     NSParameterAssert(entry);
     
@@ -362,6 +367,8 @@
         [_entries replaceObjectsAtIndexes:indexes withObjects:arr];
         [self reloadRowsAtIndexPaths:indexPaths withRowAnimation:animation];
     }
+    
+    return indexPaths.count;
 }
 
 #pragma mark - tableView

@@ -171,7 +171,7 @@ FOUNDATION_EXPORT NSString * MLAPI_AFQueryStringFromParameters(NSDictionary *par
 /**
  自定义requestSerializer，否则就使用[MLAPIManager defaultManager].httpSessionManager里的
  */
-- (AFHTTPRequestSerializer *)requestSerializer;
+- (nullable AFHTTPRequestSerializer *)requestSerializer;
 
 /**
  构造请求参数之前,每次allRequestParams都会调用,请只做请求参数相关内容
