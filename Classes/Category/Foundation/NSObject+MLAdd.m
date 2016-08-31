@@ -96,4 +96,55 @@ static inline BOOL class_respondsToSelectorWithoutSuper (Class cls,SEL sel) {
     return obj;
 }
 
+- (NSDictionary *)callerMessage {
+#ifdef DEBUG
+    NSArray *symbols = [NSThread callStackSymbols];
+    if (symbols.count<3) {
+        return nil;
+    }
+    NSString *sourceString = symbols[2];
+    if (sourceString.length<=0) {
+        return nil;
+    }
+    
+    NSRange range = [sourceString rangeOfString:@"["];
+    if (range.length<=0||range.location<=0) {
+        return nil;
+    }
+    
+    BOOL isInstance = [[sourceString substringWithRange:NSMakeRange(range.location-1,1)] isEqualToString:@"+"];
+    
+    sourceString = [sourceString substringFromIndex:range.location+1];
+    
+    range = [sourceString rangeOfString:@"]"];
+    if (range.length<=0) {
+        return nil;
+    }
+    sourceString = [sourceString substringToIndex:range.location];
+    
+    NSMutableArray *array = [[sourceString componentsSeparatedByString:@" "]mutableCopy];
+    if (array.count!=2) {
+        return nil;
+    }
+    
+    NSMutableDictionary *message = [NSMutableDictionary dictionary];
+    
+    range = [array[0] rangeOfString:@"("];
+    if (range.length>0) {
+        NSString *categoryName = [array[0] substringWithRange:NSMakeRange(range.location+1, ((NSString*)array[0]).length-(range.location+1)-1)];
+        message[@"Category"] = categoryName;
+        
+        
+        array[0] = [array[0] substringToIndex:range.location];
+    }
+    message[@"Class"] = NSClassFromString(array[0]);
+    message[@"Method"] = array[1];
+    message[@"IsInstance"] = @(isInstance);
+    
+    return message;
+#else
+    return nil;
+#endif
+}
+
 @end

@@ -82,6 +82,17 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (nullable id)deepCopyWithArchiver:(Class)archiver unarchiver:(Class)unarchiver;
 
+#pragma mark - Deep copy
+///=============================================================================
+/// @name Other
+///=============================================================================
+
+/**
+ Returns the caller message
+ @warning the method only valid for DEBUG!! ifndef DEBUG,it will returns nil
+ */
+- (NSDictionary *)callerMessage;
+
 @end
 
 NS_ASSUME_NONNULL_END
