@@ -11,19 +11,67 @@
 
 SYNTH_DUMMY_CLASS(UIColor_MLAdd)
 
-@implementation UIColor (MLAdd)
+/**
+ If you want to get color with color format
+ The singleton can find whether a color with same format exist.
+ If exist, just return it ,dont need to recreate.
+ The singleton doesn't retain any color.
+ */
+@interface _UIColor_MLAdd_Record : NSObject
 
-+ (UIColor*)colorWithFormat:(NSString*)format
-{
-    if ([format hasPrefix:@"{"]||[format hasPrefix:@"["]){
-        return [[self class] colorWithFloatStringFormat:format];
-    }
-    
-    return [[self class] colorWithHexStringFormat:format];
+@end
+
+@implementation _UIColor_MLAdd_Record {
+    NSMapTable *_mapTable;
 }
 
-+ (UIColor*)colorWithFloatStringFormat:(NSString*)string
-{
++ (instancetype)record {
+    static id _sharedInstance = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        _sharedInstance = [[self class] new];
+    });
+    return _sharedInstance;
+}
+
+- (instancetype)init {
+    self = [super init];
+    if (self) {
+        _mapTable = [NSMapTable strongToWeakObjectsMapTable];
+    }
+    return self;
+}
+
+- (void)addRecordWithFormat:(NSString*)format color:(UIColor*)color {
+    [_mapTable setObject:color forKey:format];
+}
+
+- (UIColor*)colorWithFormat:(NSString*)format {
+    return [_mapTable objectForKey:format];
+}
+
+@end
+
+@implementation UIColor (MLAdd)
+
++ (UIColor*)colorWithFormat:(NSString*)format {
+    UIColor *color = [[_UIColor_MLAdd_Record record]colorWithFormat:format];
+    if (color) {
+        return color;
+    }
+    
+    if ([format hasPrefix:@"{"]||[format hasPrefix:@"["]){
+        color = [[self class] colorWithFloatStringFormat:format];
+    }else{
+        color = [[self class] colorWithHexStringFormat:format];
+    }
+    
+    [[_UIColor_MLAdd_Record record] addRecordWithFormat:format color:color];
+    
+    return color;
+}
+
++ (UIColor*)colorWithFloatStringFormat:(NSString*)string {
     BOOL isCalced = NO; //是否还需要/255.0,中括号的不需要，大括号的需要
     
     NSScanner *scanner = [NSScanner scannerWithString:string];
