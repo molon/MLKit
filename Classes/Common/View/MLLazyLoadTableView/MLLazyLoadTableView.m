@@ -187,11 +187,6 @@
         _refreshing = YES;
         _lazyLoadCell.status = MLLazyLoadCellStatusInit;
         
-        //if no data now,dont need lazy load
-        if (_entries.count<=0) {
-            _needLazyLoad = NO;
-        }
-        
         requestBlock();
         
         self.lastRefreshTime = [NSDate date];
@@ -258,6 +253,8 @@
     if (indexes.count>0) {
         [_entries removeObjectsAtIndexes:indexes];
         if (_entries.count<=0) {
+            //set the status first, if `deleteRowsAtIndexPaths:withRowAnimation:` raises lazy-load, it's status will be change to correct.
+            //if not raise, empty status is correct.
             _lazyLoadCell.status = MLLazyLoadCellStatusEmpty;
         }
         [self deleteRowsAtIndexPaths:indexPaths withRowAnimation:animation];
@@ -296,6 +293,8 @@
     if (indexes.count>0) {
         [_entries removeObjectsAtIndexes:indexes];
         if (_entries.count<=0) {
+            //set the status first, if `deleteRowsAtIndexPaths:withRowAnimation:` raises lazy-load, it's status will be change to correct.
+            //if not raise, empty status is correct.
             _lazyLoadCell.status = MLLazyLoadCellStatusEmpty;
         }
         [self deleteRowsAtIndexPaths:indexPaths withRowAnimation:animation];
@@ -456,14 +455,6 @@
         //end refreshing if using MLRefreshControl
         [self endRefreshing];
         
-        //If refresh failed , but the original entries is still exist.
-        //So we must treat with it, check whether need lazy-loading now for it.
-        
-        if (_entries.count>0) {
-            //needLazyLoad can be YES only when _entries.count>0
-            _needLazyLoad = YES;
-        }
-        
         //refresh failed block
         if (self.refreshFailedBlock) {
             self.refreshFailedBlock(self,apiHelper);
@@ -544,7 +535,7 @@
         }
     }
     
-    NSAssert(!_needLazyLoad||(_entries.count>0&&_needLazyLoad), @"`_needLazyLoad` can be YES only when _entries.count>0");
+    NSAssert(!_needLazyLoad||(_entries.count>0&&_needLazyLoad), @"`_needLazyLoad` can be YES only when _entries.count>0 after `%@`",NSStringFromSelector(_cmd));
     
     _refreshing = NO;
 }
