@@ -236,6 +236,9 @@ static NSArray * kChineseWeekdays() {
 }
 
 #define RETURN_INTERVAL(_unit_,_method_)                                                     \
+if (!fromDateTime||!toDateTime) {\
+return NSIntegerMax;\
+}\
 NSDate *fromDate;\
 NSDate *toDate;\
 NSCalendar *calendar = [NSCalendar currentCalendar];\
