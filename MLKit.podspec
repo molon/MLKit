@@ -20,7 +20,7 @@ s.resource = "Classes/**/*.{bundle}"
 s.libraries = 'z'
 
 s.dependency 'MLPersonalModel', '~> 11.0.4'
-s.dependency 'SAMKeychain', '~> 1.5.0'
+s.dependency 'SAMKeychain', '~> 1.5.1'
 s.dependency 'DHSmartScreenshot', '~> 1.3.1'
 s.dependency 'AFNetworking' , '~> 2.6.3' #, '~> 3.1.0'
 s.dependency 'YYCache', '~> 1.0.3'
