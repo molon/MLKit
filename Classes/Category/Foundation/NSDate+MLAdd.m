@@ -237,6 +237,7 @@ static NSArray * kChineseWeekdays() {
 
 #define RETURN_INTERVAL(_unit_,_method_)                                                     \
 if (!fromDateTime||!toDateTime) {\
+DDLogError(@"(NSDate)`%@` cant support nil param",NSStringFromSelector(_cmd)); \
 return NSIntegerMax;\
 }\
 NSDate *fromDate;\
