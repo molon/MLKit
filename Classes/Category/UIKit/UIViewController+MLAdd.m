@@ -107,4 +107,15 @@ SYNTH_DUMMY_CLASS(UIViewController_MLAdd)
     [self ____hookViewDidLoad];
 }
 
++ (void)load {
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        [self swizzleInstanceMethod:@selector(prefersStatusBarHidden) with:@selector(____hookPrefersStatusBarHidden)];
+    });
+}
+
+- (BOOL)____hookPrefersStatusBarHidden {
+    return NO;
+}
+
 @end
