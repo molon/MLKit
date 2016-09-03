@@ -258,7 +258,6 @@
     if (indexes.count>0) {
         [_entries removeObjectsAtIndexes:indexes];
         if (_entries.count<=0) {
-            _needLazyLoad = NO;
             _lazyLoadCell.status = MLLazyLoadCellStatusEmpty;
         }
         [self deleteRowsAtIndexPaths:indexPaths withRowAnimation:animation];
@@ -297,7 +296,6 @@
     if (indexes.count>0) {
         [_entries removeObjectsAtIndexes:indexes];
         if (_entries.count<=0) {
-            _needLazyLoad = NO;
             _lazyLoadCell.status = MLLazyLoadCellStatusEmpty;
         }
         [self deleteRowsAtIndexPaths:indexPaths withRowAnimation:animation];
