@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
 s.name         = "MLKit"
-s.version      = "0.0.8"
+s.version      = "0.1.0"
 s.summary      = "MLKit"
 
 s.homepage     = 'https://github.com/molon/MLKit'
@@ -19,13 +19,13 @@ s.source_files  = 'Classes/**/*.{h,m}'
 s.resource = "Classes/**/*.{bundle}"
 s.libraries = 'z'
 
-s.dependency 'MLPersonalModel', '~> 11.0.4'
+s.dependency 'MLPersonalModel', '~> 11.1.0'
 s.dependency 'SAMKeychain', '~> 1.5.1'
 s.dependency 'DHSmartScreenshot', '~> 1.3.1'
 s.dependency 'AFNetworking' , '~> 2.6.3' #, '~> 3.1.0'
 s.dependency 'YYCache', '~> 1.0.3'
 s.dependency 'CocoaLumberjack', '~> 2.3.0'
-s.dependency 'MLRefreshControl', '~> 0.1.0'
-s.dependency 'MLLayout', '~> 0.2.4'
+s.dependency 'MLRefreshControl', '~> 0.1.1'
+s.dependency 'MLLayout', '~> 0.3.1'
 
 end
