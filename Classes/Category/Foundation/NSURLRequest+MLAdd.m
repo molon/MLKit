@@ -32,6 +32,20 @@ SYNTH_DUMMY_CLASS(NSURLRequest_MLAdd)
         [curlString appendFormat:@" -H \"%@: %@\"", headerKey, headerValue];
     }
     
+    NSArray *cookies = [[NSHTTPCookieStorage sharedHTTPCookieStorage]cookiesForURL:self.URL];
+    if (cookies.count>0) {
+        NSMutableString *cookieString = [NSMutableString stringWithString:@"--cookie \""];
+        for (NSHTTPCookie *cookie in cookies) {
+            NSString *cookieKey = [cookie.name stringByEscapingQuotes];
+            NSString *cookieValue = [cookie.value stringByEscapingQuotes];
+            [cookieString appendFormat:@"%@=%@; ", cookieKey, cookieValue];
+        }
+        [cookieString deleteCharactersInRange:NSMakeRange(cookieString.length-2, 2)];
+        [cookieString appendString:@"\""];
+        
+        [curlString appendFormat:@" %@",cookieString];
+    }
+    
     NSString *bodyDataString = [[NSString alloc] initWithData:self.HTTPBody encoding:NSUTF8StringEncoding];
     if ([bodyDataString isNotBlank]) {
         bodyDataString = [bodyDataString stringByEscapingQuotes];

@@ -30,21 +30,21 @@ PODS:
     - CocoaLumberjack/Default
   - DHSmartScreenshot (1.3.1)
   - MBProgressHUD (1.0.0)
-  - MLKit (0.0.8):
+  - MLKit (0.1.0):
     - AFNetworking (~> 2.6.3)
     - CocoaLumberjack (~> 2.3.0)
     - DHSmartScreenshot (~> 1.3.1)
-    - MLLayout (~> 0.2.4)
-    - MLPersonalModel (~> 11.0.4)
-    - MLRefreshControl (~> 0.1.0)
-    - SAMKeychain (~> 1.5.0)
+    - MLLayout (~> 0.3.1)
+    - MLPersonalModel (~> 11.1.0)
+    - MLRefreshControl (~> 0.1.1)
+    - SAMKeychain (~> 1.5.1)
     - YYCache (~> 1.0.3)
-  - MLLayout (0.2.4)
-  - MLPersonalModel (11.0.4)
-  - MLProgressHUD (1.0.0):
+  - MLLayout (0.3.1)
+  - MLPersonalModel (11.1.0)
+  - MLProgressHUD (1.0.3):
     - MBProgressHUD (= 1.0.0)
-  - MLRefreshControl (0.1.0)
-  - SAMKeychain (1.5.0)
+  - MLRefreshControl (0.1.1)
+  - SAMKeychain (1.5.1)
   - YYCache (1.0.3)
 
 DEPENDENCIES:
@@ -60,12 +60,12 @@ SPEC CHECKSUMS:
   CocoaLumberjack: 97fab7ee5f507fe54445cca7ea80f926729cfd15
   DHSmartScreenshot: ee749048bd7126c4826748f98df3a4adc6ad6c78
   MBProgressHUD: 4890f671c94e8a0f3cf959aa731e9de2f036d71a
-  MLKit: c0be304b8a02cf2d5812de3ae2a635679f498dda
-  MLLayout: 1f71fb07184a999b1d5a9f10cd10ad8ef784f9db
-  MLPersonalModel: aa34b7c549f1e74995ee88ca95fef36f87427b9d
-  MLProgressHUD: ee6ebc7b1dcee3fbc69c1e1b780f4ced69d82089
-  MLRefreshControl: fbb3ea9049031c2b5302de764d3ba6aae222efd0
-  SAMKeychain: 1fc9ae02f576365395758b12888c84704eebc423
+  MLKit: d53224594f861d64d4ae2b26051a36a23edaa6a1
+  MLLayout: 39e784bad8739a0d210d02098a475f5269517681
+  MLPersonalModel: 8abb253e11eb143c29f97bcd158a542da5b38729
+  MLProgressHUD: 1cdaae3434f56866eff0064d1225d73b48f3f4b6
+  MLRefreshControl: a2c4746d9b9a456aa93f16f5b20a0438c2717c28
+  SAMKeychain: 6b04852a20684167aea97bdf8ba12c95d3616376
   YYCache: 282f35b5b0990833d0b7a06d864a87141a021da2
 
 PODFILE CHECKSUM: 445707476c8aa3b9a35323e9c7b47f72a709114f
