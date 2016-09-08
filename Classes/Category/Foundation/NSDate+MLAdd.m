@@ -121,27 +121,19 @@ static NSArray * kChineseWeekdays() {
 }
 
 - (NSDate *)dateByAddingDays:(NSInteger)days {
-    NSTimeInterval aTimeInterval = [self timeIntervalSinceReferenceDate] + 86400 * days;
-    NSDate *newDate = [NSDate dateWithTimeIntervalSinceReferenceDate:aTimeInterval];
-    return newDate;
+    return [self dateByAddingTimeInterval:86400 * days];
 }
 
 - (NSDate *)dateByAddingHours:(NSInteger)hours {
-    NSTimeInterval aTimeInterval = [self timeIntervalSinceReferenceDate] + 3600 * hours;
-    NSDate *newDate = [NSDate dateWithTimeIntervalSinceReferenceDate:aTimeInterval];
-    return newDate;
+    return [self dateByAddingTimeInterval:3600 * hours];
 }
 
 - (NSDate *)dateByAddingMinutes:(NSInteger)minutes {
-    NSTimeInterval aTimeInterval = [self timeIntervalSinceReferenceDate] + 60 * minutes;
-    NSDate *newDate = [NSDate dateWithTimeIntervalSinceReferenceDate:aTimeInterval];
-    return newDate;
+    return [self dateByAddingTimeInterval:60 * minutes];
 }
 
 - (NSDate *)dateByAddingSeconds:(NSInteger)seconds {
-    NSTimeInterval aTimeInterval = [self timeIntervalSinceReferenceDate] + seconds;
-    NSDate *newDate = [NSDate dateWithTimeIntervalSinceReferenceDate:aTimeInterval];
-    return newDate;
+    return [self dateByAddingTimeInterval:seconds];
 }
 
 - (NSString *)stringWithFormat:(NSString *)format {
