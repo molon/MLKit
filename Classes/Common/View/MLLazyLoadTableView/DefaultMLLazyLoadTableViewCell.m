@@ -51,14 +51,13 @@
 {
     [super setStatus:status];
     
-    NSString *text;
+    NSString *text = @"";
     if (status == MLLazyLoadCellStatusLoading) {
-        text = @"";
         [_indicator startAnimating];
     }else{
         [_indicator stopAnimating];
         if (status == MLLazyLoadCellStatusInit) {
-            text = @"";//@"...";
+//            text = @"...";
         }else if (status == MLLazyLoadCellStatusLoadFailed){
             text = @"加载失败，点击重试";
         }else if (status == MLLazyLoadCellStatusNoMore){
@@ -68,7 +67,7 @@
         }
     }
     
-    _tipsLabel.attributedText = [[NSAttributedString alloc] initWithString:text?:@""
+    _tipsLabel.attributedText = [[NSAttributedString alloc] initWithString:text
                                                                 attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:14.0f],
                                                                              NSForegroundColorAttributeName:[UIColor darkGrayColor]}];
     [self setNeedsLayout];

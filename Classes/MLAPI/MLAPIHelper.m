@@ -351,7 +351,7 @@ NSString * MLAPI_AFQueryStringFromParameters(NSDictionary *parameters) {
                     NSAssert(NO,@"接口%@的%@参数所指向的上传文件地址有误，请检查", NSStringFromClass([self class]), key);
                     continue;
                 }
-                BOOL isDirectory;
+                BOOL isDirectory = NO;
                 if (![[NSFileManager defaultManager]fileExistsAtPath:[filePath path] isDirectory:&isDirectory]||isDirectory) {
                     DDLogError(@"接口%@的%@参数所指向的上传文件地址不存在，请检查", NSStringFromClass([self class]), key);
                     NSAssert(NO,@"接口%@的%@参数所指向的上传文件地址不存在，请检查", NSStringFromClass([self class]), key);
