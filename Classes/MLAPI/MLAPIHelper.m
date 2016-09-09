@@ -402,6 +402,11 @@ NSString * MLAPI_AFQueryStringFromParameters(NSDictionary *parameters) {
     return MLAPIHelperRequestMethodGET;
 }
 
+- (NSNumber *)configureNilNumber {
+    [self doesNotRecognizeSelector:_cmd];
+    return nil;
+}
+
 #pragma mark - must implement
 - (nullable NSError*)errorOfResponseObject:(id)responseObject {
     [self doesNotRecognizeSelector:_cmd];
