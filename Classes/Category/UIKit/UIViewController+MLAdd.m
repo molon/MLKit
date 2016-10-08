@@ -65,18 +65,21 @@ SYNTH_DUMMY_CLASS(UIViewController_MLAdd)
 }
 
 - (UIViewController*)topVisibleViewController {
-    UIViewController *presentedVC = self;
-    while (presentedVC.presentedViewController) {
-        presentedVC = presentedVC.presentedViewController;
+    UIViewController *vc = self;
+    while (vc.presentedViewController) {
+        vc = vc.presentedViewController;
     }
-    if ([presentedVC isEqual:self]) {
-        if ([self isKindOfClass:[UINavigationController class]]) {
-            return [((UINavigationController*)self) topViewController];
-        }else if ([self isKindOfClass:[UITabBarController class]]) {
-            return ((UITabBarController*)self).selectedViewController;
+    
+    while ([vc isKindOfClass:[UINavigationController class]]||
+           [vc isKindOfClass:[UITabBarController class]]) {
+        if ([vc isKindOfClass:[UINavigationController class]]) {
+            vc = [((UINavigationController*)vc) topViewController];
+        }else if ([vc isKindOfClass:[UITabBarController class]]) {
+            vc = ((UITabBarController*)self).selectedViewController;
         }
     }
-    return presentedVC;
+    
+    return vc;
 }
 
 - (void)disappear {

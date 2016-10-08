@@ -45,7 +45,8 @@ NS_ASSUME_NONNULL_BEGIN
  Returns the top visible viewController.
  It is usually the top presentedViewController.
  If no presentedViewController, it is usually self.
- If self is ContainerViewController,like `UINavigationController`,`UITabBarController`,returns it's topVieController or selectedViewController
+ If self is ContainerViewController,like `UINavigationController`,`UITabBarController`,returns it's topVieController or selectedViewController.
+ @warning The result will always not be `UINavigationController` or `UITabBarController`.
  */
 - (UIViewController*)topVisibleViewController;
 
