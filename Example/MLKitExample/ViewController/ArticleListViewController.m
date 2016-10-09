@@ -143,13 +143,22 @@ DEALLOC_SELF_DLOG
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     ArticleTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[ArticleTableViewCell cellReuseIdentifier] forIndexPath:indexPath];
+    
+    if (!cell.indexPathForMLAutoRecordFrameBlock) {
+        __weak __typeof__(self) wSelf = self;
+        [cell setIndexPathForMLAutoRecordFrameBlock:^NSIndexPath * _Nullable(MLAutoRecordFrameTableViewCell * _Nonnull cell) {
+            __strong __typeof__(wSelf) sSelf = wSelf;
+            return [sSelf.tableView indexPathForEntry:((ArticleTableViewCell*)cell).article];
+        }];
+    }
+    
     cell.article = self.tableView.entries[indexPath.row];
     return cell;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return [ArticleTableViewCell heightForRowUsingPureMLLayoutAtIndexPath:indexPath tableView:(MLAutoRecordFrameTableView*)tableView beforeLayout:^(UITableViewCell * _Nonnull protypeCell) {
+    return [ArticleTableViewCell heightForRowUsingPureMLLayoutAtIndexPath:indexPath tableView:(MLAutoRecordFrameTableView*)tableView beforeLayout:^(MLAutoRecordFrameTableViewCell * _Nonnull protypeCell) {
         ((ArticleTableViewCell*)protypeCell).article = self.tableView.entries[indexPath.row];
     }];
 }
