@@ -214,6 +214,14 @@
     return [NSIndexPath indexPathForRow:[self indexForLazyLoadCell] inSection:_lazyLoadSection];
 }
 
+- (NSIndexPath*)indexPathForEntry:(id)entry {
+    NSInteger index = [_entries indexOfObject:entry];
+    if (index==NSNotFound) {
+        return nil;
+    }
+    return [NSIndexPath indexPathForRow:index inSection:_lazyLoadSection];
+}
+
 /**
  Maybe the lazy-loading cell still displays after appending,
  So we need to check whether requests for next page if not noMore or failed

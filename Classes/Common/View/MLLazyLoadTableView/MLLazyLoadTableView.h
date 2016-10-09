@@ -135,6 +135,11 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (NSInteger)numberOfRowsInLazyLoadSection;
 
+/**
+ Returns the indexPath for entry
+ */
+- (nullable NSIndexPath*)indexPathForEntry:(id)entry;
+
 #pragma mark - operations
 - (NSInteger)deleteRowsInLazyLoadSectionWithEntry:(id)entry withRowAnimation:(UITableViewRowAnimation)animation;
 - (NSInteger)deleteRowsInLazyLoadSectionWithEntryID:(nullable id)entryID keyOfEntryID:(NSString*)keyOfEntryID rowAnimation:(UITableViewRowAnimation)animation;
