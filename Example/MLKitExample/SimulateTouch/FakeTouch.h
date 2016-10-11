@@ -10,8 +10,10 @@
 
 @interface FakeTouch : NSObject
 
-+ (void)fakeTouchAtPoint:(CGPoint)point;
-+ (void)fakeTouchAtPoint:(CGPoint)point window:(UIWindow*)window;
++ (void)tapAtPoint:(CGPoint)point moveOffset:(UIOffset)moveOffset window:(UIWindow*)window;
++ (void)tapAtPoint:(CGPoint)point moveOffset:(UIOffset)moveOffset;
++ (void)tapAtPoint:(CGPoint)point;
++ (void)defaultTap5OffsetAtPoint:(CGPoint)point;
 
 @end
 

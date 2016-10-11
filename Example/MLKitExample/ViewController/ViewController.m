@@ -12,10 +12,36 @@
 #import "ArticleListViewController.h"
 #import "ExampleUserDefaults.h"
 #import <MLProgressHUD.h>
+#import "FakeTouch.h"
+
+#define MARK DDLogInfo(@"%@ %@",NSStringFromSelector(_cmd),NSStringFromCGPoint([[touches anyObject]locationInView:self]));
+@interface FakeTouchTestView : UIView
+
+@end
+@implementation FakeTouchTestView
+
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    MARK
+    [super touchesBegan:touches withEvent:event];
+}
+
+- (void)touchesMoved:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    MARK
+    [super touchesMoved:touches withEvent:event];
+}
+
+- (void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    MARK
+    [super touchesEnded:touches withEvent:event];
+}
+
+@end
 
 @interface ViewController ()
 
 @property (nonatomic, strong) UIButton *button;
+
+@property (nonatomic, strong) FakeTouchTestView *fakeTouchView;
 
 @end
 
@@ -48,6 +74,16 @@
     return _button;
 }
 
+- (FakeTouchTestView *)fakeTouchView
+{
+    if (!_fakeTouchView) {
+        _fakeTouchView = [FakeTouchTestView new];
+        _fakeTouchView.backgroundColor = [UIColor blackColor];
+    }
+    return _fakeTouchView;
+}
+
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
@@ -55,6 +91,7 @@
     
     //    [self.view addSubview:self.tableView];
     [self.view addSubview:self.button];
+    [self.view addSubview:self.fakeTouchView];
     
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"List" style:UIBarButtonItemStylePlain target:self action:@selector(gotoList)];
 }
@@ -64,6 +101,8 @@
     [super viewWillLayoutSubviews];
     
     self.button.frame = [self.view centerFrameWithWidth:100 height:50];
+    
+    self.fakeTouchView.frame = CGRectMake(0, 64, 100, 100);
 }
 
 - (void)didReceiveMemoryWarning {
@@ -78,6 +117,9 @@
 
 - (void)test
 {
+    [FakeTouch tapAtPoint:CGPointMake(10, 70) moveOffset:UIOffsetMake(arc4random()%5, arc4random()%5)];
+    return;
+    
     DDLogInfo(@"%@",[ExampleUserDefaults defaults].username);
     [ExampleUserDefaults defaults].username = @"jinjin";
     

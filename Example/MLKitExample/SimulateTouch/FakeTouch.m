@@ -19,6 +19,7 @@
 - (void)setView:(id)arg1;
 - (void)setWindow:(id)arg1;
 
+//这个resetPrevious设置为YES的意思表示方法执行完的时候，最终_previousLocationInWindow会被重置为和_locationInWindow相等
 - (void)_setLocationInWindow:(CGPoint)arg1 resetPrevious:(BOOL)arg2;
 
 @end
@@ -130,20 +131,89 @@
 
 @implementation FakeTouch
 
-+ (void)fakeTouchAtPoint:(CGPoint)point window:(UIWindow*)window {
++ (void)tapAtPoint:(CGPoint)point moveOffset:(UIOffset)moveOffset window:(UIWindow*)window {
     UITouch *touch = [UITouch touchWithPoint:point window:window];
     
     //begin
-    UIEvent *eventDown = [[UIEvent alloc] initWithTouch:touch];
-    [touch.view touchesBegan:[eventDown allTouches] withEvent:eventDown];
+    UIEvent *beginEvent = [[UIEvent alloc] initWithTouch:touch];
+    [touch.view touchesBegan:[beginEvent allTouches] withEvent:beginEvent];
     
-    [touch setPhase:UITouchPhaseEnded];
-    UIEvent *eventUp = [[UIEvent alloc] initWithTouch:touch];
-    [touch.view touchesEnded:[eventUp allTouches] withEvent:eventUp];
+    void (^endBlock)() = ^{
+        //end
+        [touch setPhase:UITouchPhaseEnded];
+        UIEvent *endEvent = [[UIEvent alloc] initWithTouch:touch];
+        [touch.view touchesEnded:[endEvent allTouches] withEvent:endEvent];
+    };
+    
+    if (UIOffsetEqualToOffset(moveOffset, UIOffsetZero)) {
+        //虽说是0.01f。但是实际运行起来没那么准确的，刚好也真实点
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.01f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            endBlock();
+        });
+        return;
+    }
+    
+    //move
+    //模拟几个移动点
+    NSInteger t = (int)(fmax(ABS(moveOffset.horizontal), ABS(moveOffset.vertical)));
+    NSInteger movePointCount = fmax(1, (t==0?0:arc4random()%t)); //最多N个轨迹点，N由offset来决定
+    
+    NSMutableArray *xs = [NSMutableArray arrayWithCapacity:movePointCount];
+    NSMutableArray *ys = [NSMutableArray arrayWithCapacity:movePointCount];
+    NSMutableArray *movePoints = [NSMutableArray arrayWithCapacity:movePointCount];
+    for (NSInteger i=0; i<movePointCount; i++) {
+        CGFloat randomOffsetX = (moveOffset.horizontal==0?0:arc4random()%((int)(moveOffset.horizontal))) * (moveOffset.horizontal>0?1:-1);
+        CGFloat randomOffsetY = (moveOffset.vertical==0?0:arc4random()%((int)(moveOffset.vertical))) * (moveOffset.vertical>0?1:-1);
+        
+        [xs addObject:@(point.x+randomOffsetX)];
+        [ys addObject:@(point.y+randomOffsetY)];
+    }
+    //整理xs和ys，使轨迹走正常方向
+    [xs sortUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"self" ascending:moveOffset.horizontal>0]]];
+    [ys sortUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"self" ascending:moveOffset.vertical>0]]];
+    
+    for (NSInteger i=0; i<movePointCount; i++) {
+        [movePoints addObject:[NSValue valueWithCGPoint:CGPointMake([xs[i] doubleValue], [ys[i] doubleValue])]];
+    }
+    
+    [self _moveTouch:touch locations:movePoints locationIndex:0 endBlock:endBlock];
 }
 
-+ (void)fakeTouchAtPoint:(CGPoint)point {
-    [self fakeTouchAtPoint:point window:[UIApplication sharedApplication].keyWindow];
++ (void)_moveTouch:(UITouch*)touch locations:(NSArray*)locations locationIndex:(NSInteger)locationIndex endBlock:(void(^)())endBlock {
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.01f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        if (locationIndex>=locations.count) {
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.01f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                endBlock();
+            });
+            return;
+        }
+        
+        CGPoint location = [locations[locationIndex]CGPointValue];
+        //如果和上一个相同就忽略这个
+        if (CGPointEqualToPoint(location, [touch locationInView:touch.view])) {
+            [self _moveTouch:touch locations:locations locationIndex:locationIndex+1 endBlock:endBlock];
+            return;
+        }
+        
+        [touch setPhase:UITouchPhaseMoved];
+        [touch _setLocationInWindow:location resetPrevious:NO];
+        UIEvent *moveEvent = [[UIEvent alloc]initWithTouch:touch];
+        [touch.view touchesMoved:[moveEvent allTouches] withEvent:moveEvent];
+        
+        [self _moveTouch:touch locations:locations locationIndex:locationIndex+1 endBlock:endBlock];
+    });
+}
+
++ (void)tapAtPoint:(CGPoint)point moveOffset:(UIOffset)moveOffset {
+    [self tapAtPoint:point moveOffset:moveOffset window:[UIApplication sharedApplication].keyWindow];
+}
+
++ (void)tapAtPoint:(CGPoint)point {
+    [self tapAtPoint:point moveOffset:UIOffsetZero];
+}
+
++ (void)defaultTap5OffsetAtPoint:(CGPoint)point {
+    [self tapAtPoint:point moveOffset:UIOffsetMake(5.0F, 5.0f)];
 }
 
 @end
