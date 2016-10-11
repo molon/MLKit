@@ -17,6 +17,7 @@
 		36592A681D7497790089464E /* MLLazyLoadViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 36592A651D7497790089464E /* MLLazyLoadViewController.m */; };
 		36592A691D7497790089464E /* MLListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 36592A671D7497790089464E /* MLListViewController.m */; };
 		36920B821D638FC200517070 /* BaseTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 36920B811D638FC200517070 /* BaseTableViewCell.m */; };
+		369545981DAD6715003FC193 /* FakeTouch.m in Sources */ = {isa = PBXBuildFile; fileRef = 369545971DAD6715003FC193 /* FakeTouch.m */; };
 		36A374251D2640EE00EDD9A8 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 36A374241D2640EE00EDD9A8 /* main.m */; };
 		36A374281D2640EE00EDD9A8 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 36A374271D2640EE00EDD9A8 /* AppDelegate.m */; };
 		36A3742E1D2640EE00EDD9A8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 36A3742C1D2640EE00EDD9A8 /* Main.storyboard */; };
@@ -67,6 +68,8 @@
 		36592A671D7497790089464E /* MLListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MLListViewController.m; sourceTree = "<group>"; };
 		36920B801D638FC200517070 /* BaseTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseTableViewCell.h; sourceTree = "<group>"; };
 		36920B811D638FC200517070 /* BaseTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseTableViewCell.m; sourceTree = "<group>"; };
+		369545961DAD6715003FC193 /* FakeTouch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FakeTouch.h; sourceTree = "<group>"; };
+		369545971DAD6715003FC193 /* FakeTouch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FakeTouch.m; sourceTree = "<group>"; };
 		36A374201D2640EE00EDD9A8 /* MLKitExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MLKitExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		36A374241D2640EE00EDD9A8 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		36A374261D2640EE00EDD9A8 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -127,6 +130,15 @@
 				38812E9F8774D01922777819 /* libPods-MLKitExample.a */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		360B16391DACD28A00E08932 /* SimulateTouch */ = {
+			isa = PBXGroup;
+			children = (
+				369545961DAD6715003FC193 /* FakeTouch.h */,
+				369545971DAD6715003FC193 /* FakeTouch.m */,
+			);
+			path = SimulateTouch;
 			sourceTree = "<group>";
 		};
 		36408B0E1D4EF74C00E78ACA /* APIHelper */ = {
@@ -199,6 +211,7 @@
 		36A374221D2640EE00EDD9A8 /* MLKitExample */ = {
 			isa = PBXGroup;
 			children = (
+				360B16391DACD28A00E08932 /* SimulateTouch */,
 				36F7BA241D5DCD61003EB0AE /* Manager */,
 				36A6D3B41D4F16E900DB09C9 /* Cell */,
 				36408B1A1D4EF7DA00E78ACA /* Model */,
@@ -465,6 +478,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				369545981DAD6715003FC193 /* FakeTouch.m in Sources */,
 				36408B231D4F098400E78ACA /* TestLazyLoadAPIHelper.m in Sources */,
 				36408B1D1D4EF7EA00E78ACA /* Article.m in Sources */,
 				36408B151D4EF77200E78ACA /* ArticleListViewController.m in Sources */,
