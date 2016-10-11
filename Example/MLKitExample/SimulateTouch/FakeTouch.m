@@ -7,6 +7,7 @@
 //
 
 #import "FakeTouch.h"
+#import <objc/runtime.h>
 
 //暴露私有方法
 @interface UITouch()

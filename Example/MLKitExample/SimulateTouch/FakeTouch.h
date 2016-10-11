@@ -6,7 +6,7 @@
 //  Copyright © 2016年 molon. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
 @interface FakeTouch : NSObject
 
