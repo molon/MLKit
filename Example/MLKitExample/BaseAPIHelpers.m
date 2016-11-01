@@ -74,8 +74,10 @@ NSString * const MLAPICommonRequestFailedUnknownErrorDescription = @"未知错�
 - (void)treatWithConstructedRequest:(NSMutableURLRequest *)mutableRequest {
     [super treatWithConstructedRequest:mutableRequest];
     
-    //这个回调实际上不应该做这件事，但是只有这里适合做这件事。。。
-    DDLogInfo(@"\n\n%@\n",[mutableRequest cURLCommandStringWithDumpHeader:NO jsonPP:YES]);
+    //这个回调实际上不应该做这件事，但是只有这里最适合做这件事。。。
+    //如果放到setState里判断requesting那里读取NSURLRequest的话可能会产生崩溃
+    //因为NSURLRequest不是线程安全的，投递中在异步线程有调用。
+    DDLogInfo(@"\n\n%@\n",[mutableRequest curlCommandWithDumpHeader:NO jsonPP:YES]);
 }
 
 #ifdef DEBUG

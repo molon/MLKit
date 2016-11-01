@@ -152,8 +152,8 @@ FOUNDATION_EXPORT NSString * MLAPI_AFQueryStringFromParameters(NSDictionary *par
 
 /**
  定义个表示nil的number，这样的话，如果参数属性中某标量或者NSNumber等于此值，则表示其不会去做传递
- @warning 别设置太大，这样对于长度短的标量就无法用其表示了,建议INT16_MIN就合适
- @warning NaN是除去设置的这个，另外一个唯一的绝对不会作为参数传递的数值
+ @warning 别设置太大，这样对于短类型标量(例如short)就无法用此值表示无效了,建议INT16_MIN就合适
+ @warning NaN天生是不会作为参数传递的数值，所以不需设置为NaN
  */
 - (NSNumber *)configureNilNumber;
 

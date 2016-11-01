@@ -12,54 +12,68 @@
 
 SYNTH_DUMMY_CLASS(NSURLRequest_MLAdd)
 
-@implementation NSURLRequest (MLAdd)
+@interface NSMutableString (____ForNSURLRequest)
+- (void)____appendCommandLineArgument:(NSString *)arg;
+@end
 
-- (NSString *)cURLCommandString {
-    return [self cURLCommandStringWithDumpHeader:YES jsonPP:NO];
+@implementation NSMutableString (____ForNSURLRequest)
+
+- (void)____appendCommandLineArgument:(NSString *)arg {
+    [self appendFormat:@" %@", [arg stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]];
 }
 
-- (NSString *)cURLCommandStringWithDumpHeader:(BOOL)dumpHeader jsonPP:(BOOL)jsonPP {
-    NSMutableString *curlString = [NSMutableString stringWithFormat:@"curl -k -X %@", self.HTTPMethod];
+@end
+
+@implementation NSURLRequest (MLAdd)
+
+- (NSString*)curlCommandWithDumpHeader:(BOOL)dumpHeader jsonPP:(BOOL)jsonPP {
+    NSAssert(!(dumpHeader&&jsonPP), @"`dumpHeader` and `jsonPP` cant be YES simultaneously!");
+    
+    NSMutableString *command = [NSMutableString stringWithString:@"curl"];
+    
+    [command ____appendCommandLineArgument:[NSString stringWithFormat:@"-X %@", [self HTTPMethod]]];
     
     if (dumpHeader) {
-        [curlString appendString:@" --dump-header -"];
+        [command ____appendCommandLineArgument:@"--dump-header -"];
     }
     
-    for (NSString *key in self.allHTTPHeaderFields.allKeys) {
-        NSString *headerKey = [key stringByEscapingQuotes];
-        NSString *headerValue = [self.allHTTPHeaderFields[key] stringByEscapingQuotes];
-        
-        [curlString appendFormat:@" -H \"%@: %@\"", headerKey, headerValue];
+    if ([[self HTTPBody] length] > 0) {
+        NSMutableString *HTTPBodyString = [[NSMutableString alloc] initWithData:[self HTTPBody] encoding:NSUTF8StringEncoding];
+        [HTTPBodyString replaceOccurrencesOfString:@"\\" withString:@"\\\\" options:0 range:NSMakeRange(0, [HTTPBodyString length])];
+        [HTTPBodyString replaceOccurrencesOfString:@"`" withString:@"\\`" options:0 range:NSMakeRange(0, [HTTPBodyString length])];
+        [HTTPBodyString replaceOccurrencesOfString:@"\"" withString:@"\\\"" options:0 range:NSMakeRange(0, [HTTPBodyString length])];
+        [HTTPBodyString replaceOccurrencesOfString:@"$" withString:@"\\$" options:0 range:NSMakeRange(0, [HTTPBodyString length])];
+        [command ____appendCommandLineArgument:[NSString stringWithFormat:@"-d \"%@\"", HTTPBodyString]];
     }
     
-    NSArray *cookies = [[NSHTTPCookieStorage sharedHTTPCookieStorage]cookiesForURL:self.URL];
-    if (cookies.count>0) {
-        NSMutableString *cookieString = [NSMutableString stringWithString:@"--cookie \""];
-        for (NSHTTPCookie *cookie in cookies) {
-            NSString *cookieKey = [cookie.name stringByEscapingQuotes];
-            NSString *cookieValue = [cookie.value stringByEscapingQuotes];
-            [cookieString appendFormat:@"%@=%@; ", cookieKey, cookieValue];
+    NSString *acceptEncodingHeader = [[self allHTTPHeaderFields] valueForKey:@"Accept-Encoding"];
+    if ([acceptEncodingHeader rangeOfString:@"gzip"].location != NSNotFound) {
+        [command ____appendCommandLineArgument:@"--compressed"];
+    }
+    
+    if ([self URL]) {
+        NSArray *cookies = [[NSHTTPCookieStorage sharedHTTPCookieStorage] cookiesForURL:[self URL]];
+        if (cookies.count) {
+            NSMutableString *mutableCookieString = [NSMutableString string];
+            for (NSHTTPCookie *cookie in cookies) {
+                [mutableCookieString appendFormat:@"%@=%@;", cookie.name, cookie.value];
+            }
+            
+            [command ____appendCommandLineArgument:[NSString stringWithFormat:@"--cookie \"%@\"", mutableCookieString]];
         }
-        [cookieString deleteCharactersInRange:NSMakeRange(cookieString.length-2, 2)];
-        [cookieString appendString:@"\""];
-        
-        [curlString appendFormat:@" %@",cookieString];
     }
     
-    NSString *bodyDataString = [[NSString alloc] initWithData:self.HTTPBody encoding:NSUTF8StringEncoding];
-    if ([bodyDataString isNotBlank]) {
-        bodyDataString = [bodyDataString stringByEscapingQuotes];
-        
-        [curlString appendFormat:@" -d \"%@\"", bodyDataString];
+    for (id field in [self allHTTPHeaderFields]) {
+        [command ____appendCommandLineArgument:[NSString stringWithFormat:@"-H %@", [NSString stringWithFormat:@"'%@: %@'", field, [[self valueForHTTPHeaderField:field] stringByReplacingOccurrencesOfString:@"\'" withString:@"\\\'"]]]];
     }
     
-    [curlString appendFormat:@" \"%@\"", self.URL.absoluteString];
+    [command ____appendCommandLineArgument:[NSString stringWithFormat:@"\"%@\"", [[self URL] absoluteString]]];
     
     if (jsonPP) {
-        [curlString appendString:@" | json_pp"];
+        [command ____appendCommandLineArgument:@"| json_pp"];
     }
     
-    return curlString;
+    return [NSString stringWithString:command];
 }
 
 @end

@@ -13,19 +13,15 @@ NS_ASSUME_NONNULL_BEGIN
 @interface NSURLRequest (MLAdd)
 
 /**
- Returns curl command string which has `--dump-header -`
- */
-- (NSString *)cURLCommandString;
-
-/**
  Returns curl command string
+ @warning `dumpHeader` and `jsonPP` cant be YES simultaneously!
  
  @param dumpHeader whether add `--dump-header -`
  @param jsonPP     whether add `| json_pp`
  
  @return curl command string
  */
-- (NSString *)cURLCommandStringWithDumpHeader:(BOOL)dumpHeader jsonPP:(BOOL)jsonPP;
+- (NSString*)curlCommandWithDumpHeader:(BOOL)dumpHeader jsonPP:(BOOL)jsonPP;
 
 @end
 
