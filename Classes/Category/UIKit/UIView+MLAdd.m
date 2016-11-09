@@ -10,6 +10,7 @@
 #import <QuartzCore/QuartzCore.h>
 #import "MLKitMacro.h"
 #import "NSString+MLAdd.h"
+#import <UIView+DHSmartScreenshot.h>
 
 SYNTH_DUMMY_CLASS(UIView_MLAdd)
 
@@ -141,11 +142,7 @@ SYNTH_DUMMY_CLASS(UIView_MLAdd)
 }
 
 - (UIImage *)snapshotImage {
-    UIGraphicsBeginImageContextWithOptions(self.bounds.size, self.opaque, 0);
-    [self.layer renderInContext:UIGraphicsGetCurrentContext()];
-    UIImage *snap = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    return snap;
+    return [self screenshot];
 }
 
 - (UIImage *)snapshotImageAfterScreenUpdates:(BOOL)afterUpdates {

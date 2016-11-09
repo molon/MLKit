@@ -26,6 +26,6 @@ s.dependency 'AFNetworking' , '~> 2.6.3' #, '~> 3.1.0'
 s.dependency 'YYCache', '~> 1.0.4'
 s.dependency 'CocoaLumberjack', '~> 2.3.0'
 s.dependency 'MLRefreshControl', '~> 0.1.1'
-s.dependency 'MLLayout', '~> 0.4.0'
+s.dependency 'MLLayout', '~> 0.4.1'
 
 end

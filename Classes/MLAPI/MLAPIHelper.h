@@ -275,7 +275,7 @@ FOUNDATION_EXPORT NSString * MLAPI_AFQueryStringFromParameters(NSDictionary *par
 
 #pragma mark - block及callbackObject的混合回调请求方法
 /**
- 发出请求，指定回调对象，关于回调对象相关方法可查看NSObject+MLAPI
+ 发出请求，指定回调对象，关于回调对象相关方法可查看NSObject+MLAPI，block若为nil，继续执行callbackObject回调，若非nil返回NO，则忽略对应callbackObject回调
  */
 - (void)requestWithBefore:(nullable BOOL (^)(MLAPIHelper *apiHelper))beforeBlock
            uploadProgress:(nullable BOOL (^)(MLAPIHelper *apiHelper, NSProgress *uploadProgress))uploadProgressBlock
@@ -288,7 +288,7 @@ FOUNDATION_EXPORT NSString * MLAPI_AFQueryStringFromParameters(NSDictionary *par
            callbackObject:(nullable id)callbackObject;
 
 /**
- 去除了上传下载进度的以及预加载回调block的稍简洁写法
+ 去除了上传下载进度的以及预加载回调block的稍简洁写法，block若为nil，继续执行callbackObject回调，若非nil返回NO，则忽略对应callbackObject回调
  */
 - (void)requestWithBefore:(nullable BOOL (^)(MLAPIHelper *apiHelper))beforeBlock
                  complete:(nullable BOOL (^)(MLAPIHelper *apiHelper))completeBlock
@@ -298,7 +298,7 @@ FOUNDATION_EXPORT NSString * MLAPI_AFQueryStringFromParameters(NSDictionary *par
            callbackObject:(nullable id)callbackObject;
 
 /**
- 去除了上传下载进度的以及预加载回调block的稍简洁写法，failure和error使用相同的回调
+ 去除了上传下载进度的以及预加载回调block的稍简洁写法，failure和error使用相同的回调，block若为nil，继续执行callbackObject回调，若非nil返回NO，则忽略对应callbackObject回调
  */
 - (void)requestWithBefore:(nullable BOOL (^)(MLAPIHelper *apiHelper))beforeBlock
                  complete:(nullable BOOL (^)(MLAPIHelper *apiHelper))completeBlock
