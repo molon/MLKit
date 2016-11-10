@@ -37,6 +37,7 @@ static inline void mlapi_dispatch_async_on_main_queue(void (^block)()) {
 @interface MLAPIHelper(Private)
 
 @property (nonatomic, assign) MLAPIHelperState state;
+@property (nonatomic, strong) id responseObject;
 @property (nonatomic, weak) id callbackObject;
 @property (nonatomic, strong) NSURLSessionDataTask *dataTask;
 @property (nonatomic, assign) BOOL isRespondWithCache;
@@ -319,6 +320,8 @@ GOON_CALLBACK(_method_) \
         
         void (^requestSuccessWrapper)(NSURLSessionDataTask *, id) = ^(NSURLSessionDataTask *task, id responseObject) {
             mlapi_dispatch_async_on_main_queue(^{
+                apiHelper.responseObject = responseObject;
+                
                 NSError *error = [apiHelper errorOfResponseObject:responseObject];
                 if (!error) {
                     //代表请求成功

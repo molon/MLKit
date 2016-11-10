@@ -83,9 +83,14 @@ FOUNDATION_EXPORT NSString * MLAPI_AFQueryStringFromParameters(NSDictionary *par
 @property (nonatomic, assign, readonly) MLAPIHelperState state;
 
 /**
- 接口返回的原始数据，便于自定义
+ 接口请求成功返回的原始数据实体部分，便于自定义
  */
 @property (nonatomic, strong, readonly, nullable) id responseEntry;
+
+/**
+ 接口返回的原始数据，便于自定义
+ */
+@property (nonatomic, strong, readonly, nullable) id responseObject;
 
 /**
  接口如果失败或者错误之后返回的信息
@@ -242,6 +247,7 @@ FOUNDATION_EXPORT NSString * MLAPI_AFQueryStringFromParameters(NSDictionary *par
  设置特殊默认值的地方，一般是对结果相关有特殊默认值的时候，才需要考虑这个方法，实际上是MLPersonalModel里的特性
  */
 + (NSDictionary *)modelCustomPropertyDefaultValueMapper __attribute__((objc_requires_super));
+
 #pragma mark - outcall
 /**
  返回是否处于请求完成状态，可能是成功，失败，错误。

@@ -194,6 +194,7 @@ NSString * MLAPI_AFQueryStringFromParameters(NSDictionary *parameters) {
 
 @property (nonatomic, assign) MLAPIHelperState state;
 @property (nonatomic, strong) id responseEntry;
+@property (nonatomic, strong) id responseObject;
 @property (nonatomic, strong) NSError *responseError;
 @property (nonatomic, assign) BOOL isRespondWithCache;
 @property (nonatomic, assign) BOOL isCurrentPreloaded;
@@ -380,6 +381,7 @@ NSString * MLAPI_AFQueryStringFromParameters(NSDictionary *parameters) {
     
     _isCurrentPreloaded = NO;
     _isRespondWithCache = NO;
+    _responseObject = nil;
     _responseEntry = nil;
     _responseError = nil;
     _dataTask = nil;
