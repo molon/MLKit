@@ -41,8 +41,6 @@ FOUNDATION_EXPORT NSTimeInterval const MLAPIHelperDefaultTimeoutInterval;
 FOUNDATION_EXPORT NSString * MLAPI_HTTPMethod(MLAPIHelperRequestMethod requestMethod);
 FOUNDATION_EXPORT BOOL MLAPI_IsErrorCancelled(NSError *error);
 
-FOUNDATION_EXPORT NSString * MLAPI_AFQueryStringFromParameters(NSDictionary *parameters);
-
 @class MLAPICacheItem;
 @interface MLAPIHelper : NSObject
 

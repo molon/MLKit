@@ -72,119 +72,6 @@ BOOL MLAPI_IsErrorCancelled(NSError *error) {
             &&error.code==NSURLErrorCancelled);
 }
 
-#warning this is because AF3.0---- ,so...
-NSString * MLAPI_AFPercentEscapedStringFromString(NSString *string) {
-    static NSString * const kAFCharactersGeneralDelimitersToEncode = @":#[]@"; // does not include "?" or "/" due to RFC 3986 - Section 3.4
-    static NSString * const kAFCharactersSubDelimitersToEncode = @"!$&'()*+,;=";
-    
-    NSMutableCharacterSet * allowedCharacterSet = [[NSCharacterSet URLQueryAllowedCharacterSet] mutableCopy];
-    [allowedCharacterSet removeCharactersInString:[kAFCharactersGeneralDelimitersToEncode stringByAppendingString:kAFCharactersSubDelimitersToEncode]];
-    
-    // FIXME: https://github.com/AFNetworking/AFNetworking/pull/3028
-    // return [string stringByAddingPercentEncodingWithAllowedCharacters:allowedCharacterSet];
-    
-    static NSUInteger const batchSize = 50;
-    
-    NSUInteger index = 0;
-    NSMutableString *escaped = @"".mutableCopy;
-    
-    while (index < string.length) {
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wgnu"
-        NSUInteger length = MIN(string.length - index, batchSize);
-#pragma GCC diagnostic pop
-        NSRange range = NSMakeRange(index, length);
-        
-        // To avoid breaking up character sequences such as 👴🏻👮🏽
-        range = [string rangeOfComposedCharacterSequencesForRange:range];
-        
-        NSString *substring = [string substringWithRange:range];
-        NSString *encoded = [substring stringByAddingPercentEncodingWithAllowedCharacters:allowedCharacterSet];
-        [escaped appendString:encoded];
-        
-        index += range.length;
-    }
-    
-    return escaped;
-}
-
-
-@interface MLAPI_AFQueryStringPair : NSObject
-@property (readwrite, nonatomic, strong) id field;
-@property (readwrite, nonatomic, strong) id value;
-
-- (instancetype)initWithField:(id)field value:(id)value;
-
-- (NSString *)URLEncodedStringValue;
-@end
-
-@implementation MLAPI_AFQueryStringPair
-
-- (instancetype)initWithField:(id)field value:(id)value {
-    self = [super init];
-    if (!self) {
-        return nil;
-    }
-    
-    self.field = field;
-    self.value = value;
-    
-    return self;
-}
-
-- (NSString *)URLEncodedStringValue {
-    if (!self.value || [self.value isEqual:[NSNull null]]) {
-        return MLAPI_AFPercentEscapedStringFromString([self.field description]);
-    } else {
-        return [NSString stringWithFormat:@"%@=%@", MLAPI_AFPercentEscapedStringFromString([self.field description]), MLAPI_AFPercentEscapedStringFromString([self.value description])];
-    }
-}
-
-@end
-
-
-NSArray * MLAPI_AFQueryStringPairsFromKeyAndValue(NSString *key, id value) {
-    NSMutableArray *mutableQueryStringComponents = [NSMutableArray array];
-    
-    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"description" ascending:YES selector:@selector(compare:)];
-    
-    if ([value isKindOfClass:[NSDictionary class]]) {
-        NSDictionary *dictionary = value;
-        // Sort dictionary keys to ensure consistent ordering in query string, which is important when deserializing potentially ambiguous sequences, such as an array of dictionaries
-        for (id nestedKey in [dictionary.allKeys sortedArrayUsingDescriptors:@[ sortDescriptor ]]) {
-            id nestedValue = dictionary[nestedKey];
-            if (nestedValue) {
-                [mutableQueryStringComponents addObjectsFromArray:MLAPI_AFQueryStringPairsFromKeyAndValue((key ? [NSString stringWithFormat:@"%@[%@]", key, nestedKey] : nestedKey), nestedValue)];
-            }
-        }
-    } else if ([value isKindOfClass:[NSArray class]]) {
-        NSArray *array = value;
-        for (id nestedValue in array) {
-            [mutableQueryStringComponents addObjectsFromArray:MLAPI_AFQueryStringPairsFromKeyAndValue([NSString stringWithFormat:@"%@[]", key], nestedValue)];
-        }
-    } else if ([value isKindOfClass:[NSSet class]]) {
-        NSSet *set = value;
-        for (id obj in [set sortedArrayUsingDescriptors:@[ sortDescriptor ]]) {
-            [mutableQueryStringComponents addObjectsFromArray:MLAPI_AFQueryStringPairsFromKeyAndValue(key, obj)];
-        }
-    } else {
-        [mutableQueryStringComponents addObject:[[MLAPI_AFQueryStringPair alloc] initWithField:key value:value]];
-    }
-    
-    return mutableQueryStringComponents;
-}
-
-NSString * MLAPI_AFQueryStringFromParameters(NSDictionary *parameters) {
-    NSMutableArray *mutablePairs = [NSMutableArray array];
-    for (MLAPI_AFQueryStringPair *pair in MLAPI_AFQueryStringPairsFromKeyAndValue(nil,parameters)) {
-        NSString *stringValue = [pair URLEncodedStringValue];
-        [mutablePairs addObject:stringValue];
-    }
-    
-    return [mutablePairs componentsJoinedByString:@"&"];
-}
-
-
 @interface MLAPIHelper()
 
 @property (nonatomic, copy) NSString *apiName;
@@ -259,7 +146,7 @@ NSString * MLAPI_AFQueryStringFromParameters(NSDictionary *parameters) {
 - (NSURL*)apiURLWithParameters:(NSDictionary*)parameters {
     NSURL *apiURL = [NSURL URLWithString:_apiName relativeToURL:_baseURL];
     if ([[MLAPIManager defaultManager].httpSessionManager.requestSerializer.HTTPMethodsEncodingParametersInURI containsObject:MLAPI_HTTPMethod(_requestMethod)]) {
-        NSString *query = MLAPI_AFQueryStringFromParameters(parameters);
+        NSString *query = AFQueryStringFromParameters(parameters);
         if (query && query.length > 0) {
             apiURL = [NSURL URLWithString:[[apiURL absoluteString] stringByAppendingFormat:apiURL.query ? @"&%@" : @"?%@", query]];
         }
