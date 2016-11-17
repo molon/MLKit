@@ -29,7 +29,7 @@ static inline void dispatch_async_on_global_queue(void (^block)()) {
 }
 
 /*
- Copy from ASyncDisplayKit below
+ Copy from AsyncDisplayKit below
  */
 
 #if defined (__cplusplus) && defined (__GNUC__)
