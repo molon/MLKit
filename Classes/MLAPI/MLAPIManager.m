@@ -419,9 +419,9 @@ GOON_CALLBACK(_method_) \
                 }
                 requestSuccessWrapper(task,responseObject);
             } failure:errorWrapper];
+            
+            [apiHelper.dataTask resume];
         }
-        
-        [apiHelper.dataTask resume];
         
         //标记请求中
         apiHelper.state = MLAPIHelperStateRequesting;

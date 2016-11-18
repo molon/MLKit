@@ -115,8 +115,39 @@
     [self.navigationController pushViewController:vc animated:YES];
 }
 
++ (void)panFromPoint:(CGPoint)point toPoint:(CGPoint)toPoint window:(UIWindow*)window {
+    
+    //模拟轨迹
+    NSMutableArray *movePoints = [NSMutableArray array];
+    CGPoint movePoint = point;
+    int xDirection = (toPoint.x-point.x>0)?1:-1;
+    if (toPoint.x==point.x) {
+        xDirection = 0;
+    }
+    int yDirection = (toPoint.y-point.y>0)?1:-1;
+    if (toPoint.y==point.y) {
+        yDirection = 0;
+    }
+#define kRandomOffset 5
+    while (true) {
+        movePoint = CGPointMake(movePoint.x+(int)(arc4random()%kRandomOffset)*xDirection, movePoint.y+(int)(arc4random()%kRandomOffset)*yDirection);
+        BOOL overX = (movePoint.x>toPoint.x&&xDirection>0)||(movePoint.x<toPoint.x&&xDirection<0)||xDirection==0;
+        BOOL overY = (movePoint.y>toPoint.y&&yDirection>0)||(movePoint.y<toPoint.y&&yDirection<0)||yDirection==0;
+        
+        if (overX&&overY) {
+            break;
+        }
+        
+        [movePoints addObject:[NSValue valueWithCGPoint:movePoint]];
+    }
+    
+    NSLog(@"%@",movePoints);
+}
+
 - (void)test
 {
+    [ViewController panFromPoint:CGPointMake(258, 206) toPoint:CGPointMake(558, 206) window:nil];
+    return;
     [FakeTouch tapAtPoint:CGPointMake(10, 70) moveOffset:UIOffsetMake(arc4random()%5, arc4random()%5)];
     return;
     
