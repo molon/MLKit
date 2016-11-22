@@ -10,7 +10,7 @@
 #import <QuartzCore/QuartzCore.h>
 #import "MLKitMacro.h"
 #import "NSString+MLAdd.h"
-#import <UIView+DHSmartScreenshot.h>
+#import <DHSmartScreenshot/UIView+DHSmartScreenshot.h>
 
 SYNTH_DUMMY_CLASS(UIView_MLAdd)
 
