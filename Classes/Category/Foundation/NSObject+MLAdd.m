@@ -49,9 +49,9 @@ static inline BOOL class_respondsToSelectorWithoutSuper (Class cls,SEL sel) {
     if (!originalMethod || !newMethod) return NO;
     
     NSAssert([self instancesRespondToSelectorWithoutSuper:originalSel],
-             @"Can't swizzle instance method of superclass:%@",NSStringFromSelector(originalSel));
+             @"Can't swizzle instance method of superclass->%@, please inherit it directly!",NSStringFromSelector(originalSel));
     NSAssert([self instancesRespondToSelectorWithoutSuper:newSel],
-             @"Can't swizzle instance method of superclass:%@",NSStringFromSelector(newSel));
+             @"Can't swizzle instance method of superclass->%@, please inherit it directly!",NSStringFromSelector(newSel));
     
     method_exchangeImplementations(originalMethod,
                                    newMethod);
@@ -64,9 +64,9 @@ static inline BOOL class_respondsToSelectorWithoutSuper (Class cls,SEL sel) {
     if (!originalMethod || !newMethod) return NO;
     
     NSAssert([self respondsToSelectorWithoutSuper:originalSel],
-             @"Can't swizzle class method of superclass:%@",NSStringFromSelector(originalSel));
+             @"Can't swizzle class method of superclass->%@, please inherit it directly!",NSStringFromSelector(originalSel));
     NSAssert([self respondsToSelectorWithoutSuper:newSel],
-             @"Can't swizzle class method of superclass:%@",NSStringFromSelector(newSel));
+             @"Can't swizzle class method of superclass->%@, please inherit it directly!",NSStringFromSelector(newSel));
     
     method_exchangeImplementations(originalMethod, newMethod);
     return YES;
