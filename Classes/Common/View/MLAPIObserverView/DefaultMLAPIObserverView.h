@@ -11,6 +11,16 @@
 @interface DefaultMLAPIObserverView : MLAPIObserverView
 
 /**
+ whether click background to refresh when refresh button displays
+ */
+@property (nonatomic, assign) BOOL clickBackgroundToRefresh;
+
+/**
+ custom retry button image
+ */
+@property (nonatomic, strong) UIImage *retryButtonImage;
+
+/**
  *  whether penetrable
  */
 @property (nonatomic, assign) BOOL penetrable;

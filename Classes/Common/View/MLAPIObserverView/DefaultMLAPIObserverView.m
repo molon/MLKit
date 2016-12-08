@@ -11,6 +11,7 @@
 #import "MLKitMacro.h"
 #import "UIImage+MLAdd.h"
 #import "CALayer+MLAdd.h"
+#import "UIScreen+MLAdd.h"
 
 @interface DefaultMLAPIObserverView()
 
@@ -35,10 +36,12 @@
             UIButton *button = [[UIButton alloc]init];
             [button addTarget:self action:@selector(clickRetry) forControlEvents:UIControlEventTouchUpInside];
             button.imageView.contentMode = UIViewContentModeScaleAspectFit;
-            [button setImage:[MLKIT_BUNDLE_PNG_IMAGE(@"刷新") imageWithTintColor:[UIColor grayColor]] forState:UIControlStateNormal];
             [self addSubview:button];
             button;
         });
+        self.retryButtonImage = [MLKIT_BUNDLE_PNG_IMAGE(@"刷新") imageWithTintColor:[UIColor grayColor]];
+        
+        [self addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(clickBackground)]];
     }
     return self;
 }
@@ -83,22 +86,37 @@
     }
 }
 
+- (void)setRetryButtonImage:(UIImage *)retryButtonImage {
+    _retryButtonImage = retryButtonImage;
+    
+    [_retryButton setImage:retryButtonImage forState:UIControlStateNormal];
+    
+    [self setNeedsLayout];
+}
+
 #pragma mark - event
-- (void)clickRetry
-{
+- (void)clickRetry {
     if (self.retryBlock) {
         self.retryBlock(self);
     }
 }
 
+- (void)clickBackground {
+    if (_clickBackgroundToRefresh&&!_retryButton.hidden) {
+        [self clickRetry];
+    }
+}
+
 #pragma mark - layout
-- (void)layoutSubviews
-{
+- (void)layoutSubviews {
     [super layoutSubviews];
     
     self.indicatorView.center = CGPointMake(self.width/2, self.height/2);
-#define kRetryButtonSide 30.0f
-    self.retryButton.frame = [self centerFrameWithWidth:kRetryButtonSide height:kRetryButtonSide];
+#define kRetryButtonSide 40.0f
+    UIImage *image = [self.retryButton imageForState:UIControlStateNormal];
+    CGFloat side = fmax(image.size.width*image.scale/kScreenScale, image.size.height*image.scale/kScreenScale);
+    side = fmax(kRetryButtonSide, side);
+    self.retryButton.frame = [self centerFrameWithWidth:side height:side];
 }
 
 #pragma mark - penetrable
