@@ -246,6 +246,12 @@ FOUNDATION_EXPORT BOOL MLAPI_IsErrorCancelled(NSError *error);
  */
 + (NSDictionary *)modelCustomPropertyDefaultValueMapper __attribute__((objc_requires_super));
 
+/**
+ 请求参数构造时候，可以指定特殊名字的便利方法
+ 例如 @{@“p_xxx”:@"yyy"}
+ */
++ (NSDictionary *)customRequestParamKeyMapper __attribute__((objc_requires_super));
+
 #pragma mark - outcall
 /**
  返回是否处于请求完成状态，可能是成功，失败，错误。

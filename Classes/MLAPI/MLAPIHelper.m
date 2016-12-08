@@ -16,7 +16,7 @@
 
 NSTimeInterval const MLAPIHelperDefaultTimeoutInterval = 10.0f;
 
-NSInteger const MLAPIHelperParamPrefixLength = 2;
+NSInteger const MLAPIHelperCommonPrefixLength = 2;
 NSString * const MLAPIHelperParamPrefix = @"p_";
 NSString * const MLAPIHelperFileParamPrefix = @"f_";
 NSString * const MLAPIHelperResponsePrefix = @"r_";
@@ -168,6 +168,11 @@ BOOL MLAPI_IsErrorCancelled(NSError *error) {
 - (NSMutableDictionary*)constructRequestParams {
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
     
+    NSDictionary *paramKeyMapper = [[self class]customRequestParamKeyMapper];
+    if (paramKeyMapper.count<=0) {
+        paramKeyMapper = nil;
+    }
+    
     //找到p_开头的属性，如果其不为空，则认作是有效参数传过去
     NSDictionary<NSString *, YYClassPropertyInfo *> *propertyInfos = [[self class] yy_propertyInfosUntilClass:[MLAPIHelper class] ignoreUntilClass:YES];
     for (NSString *key in [propertyInfos allKeys]) {
@@ -188,8 +193,14 @@ BOOL MLAPI_IsErrorCancelled(NSError *error) {
             if ([object isKindOfClass:[NSString class]]&&![object isNotBlank]) {
                 continue;
             }
-            //去除前缀的名称
-            NSString *paramKey = [key substringFromIndex:MLAPIHelperParamPrefixLength];
+            
+            NSString *paramKey = nil;
+            if (paramKeyMapper[key]) {
+                paramKey = paramKeyMapper[key];
+            }else{
+                //去除前缀的名称
+                paramKey = [key substringFromIndex:MLAPIHelperCommonPrefixLength];
+            }
             if ([object isKindOfClass:[NSURL class]]) {
                 params[paramKey] = [object absoluteString];
             }else{
@@ -204,6 +215,11 @@ BOOL MLAPI_IsErrorCancelled(NSError *error) {
 - (NSMutableDictionary*)constructRequestFileParams {
     NSMutableDictionary *files = [NSMutableDictionary dictionary];
     
+    NSDictionary *paramKeyMapper = [[self class]customRequestParamKeyMapper];
+    if (paramKeyMapper.count<=0) {
+        paramKeyMapper = nil;
+    }
+    
     //找到p_开头的属性，如果其不为空，则认作是有效参数传过去
     NSDictionary<NSString *, YYClassPropertyInfo *> *propertyInfos = [[self class] yy_propertyInfosUntilClass:[MLAPIHelper class] ignoreUntilClass:YES];
     for (NSString *key in [propertyInfos allKeys]) {
@@ -215,8 +231,13 @@ BOOL MLAPI_IsErrorCancelled(NSError *error) {
         
         id object = [self valueForKey:key];
         if (object && object!= (id)kCFNull) {
-            //去除前缀的名称
-            NSString *paramKey = [key substringFromIndex:MLAPIHelperParamPrefixLength];
+            NSString *paramKey = nil;
+            if (paramKeyMapper[key]) {
+                paramKey = paramKeyMapper[key];
+            }else{
+                //去除前缀的名称
+                paramKey = [key substringFromIndex:MLAPIHelperCommonPrefixLength];
+            }
             //NSData是有效的上传数据
             if ([object isKindOfClass:[NSData class]]) {
                 NSData *fileData = object;
@@ -373,7 +394,7 @@ BOOL MLAPI_IsErrorCancelled(NSError *error) {
             //则是r_开头的需要关心下，其他不用管
             for (NSString *key in [response allKeys]) {
                 if ([key hasPrefix:MLAPIHelperResponsePrefix]) {
-                    NSString *responseKey = [key substringFromIndex:MLAPIHelperParamPrefixLength];
+                    NSString *responseKey = [key substringFromIndex:MLAPIHelperCommonPrefixLength];
                     if (responseEntry[responseKey]) {
                         response[key] = responseEntry[responseKey];
                     }
@@ -388,6 +409,11 @@ BOOL MLAPI_IsErrorCancelled(NSError *error) {
 + (NSDictionary *)modelCustomPropertyDefaultValueMapper {
     return @{};
 }
+
++ (NSDictionary *)customRequestParamKeyMapper {
+    return @{};
+}
+
 #pragma mark - 请求方法
 - (void)requestWithBefore:(nullable BOOL (^)(MLAPIHelper *apiHelper))beforeBlock
            uploadProgress:(nullable BOOL (^)(MLAPIHelper *apiHelper, NSProgress *uploadProgress))uploadProgressBlock
