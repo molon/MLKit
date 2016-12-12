@@ -185,7 +185,7 @@
     
     if (refresh) {
         _refreshing = YES;
-        _lazyLoadCell.status = MLLazyLoadCellStatusInit;
+//        _lazyLoadCell.status = MLLazyLoadCellStatusInit;
         
         requestBlock();
         
