@@ -131,11 +131,12 @@
 
 #pragma mark - setter
 - (void)setRequestingAPIHelper:(MLAPIHelper * _Nullable)requestingAPIHelper {
-    if (_requestingAPIHelper) {
-        [_requestingAPIHelper cancel];
-    }
-    
+    MLAPIHelper *originalRequestingAPIHelper = _requestingAPIHelper;
     _requestingAPIHelper = requestingAPIHelper;
+    
+    if (originalRequestingAPIHelper) {
+        [originalRequestingAPIHelper cancel];
+    }
 }
 
 - (void)setDataSource:(id<UITableViewDataSource>)dataSource {
@@ -185,7 +186,12 @@
     
     if (refresh) {
         _refreshing = YES;
-//        _lazyLoadCell.status = MLLazyLoadCellStatusInit;
+        
+        //if refresh failed and status==MLLazyLoadCellStatusInit,
+        //checkLazyLoadRightNow will be excuted.
+        if (_needLazyLoad) {
+            _lazyLoadCell.status = MLLazyLoadCellStatusInit;
+        }
         
         requestBlock();
         

@@ -13,7 +13,7 @@
  */
 typedef NS_ENUM(NSUInteger, MLLazyLoadCellStatus) {
     /**
-     init or refreshing
+     init
      */
     MLLazyLoadCellStatusInit,
     /**
