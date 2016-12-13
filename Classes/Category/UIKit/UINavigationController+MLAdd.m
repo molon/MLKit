@@ -13,8 +13,12 @@ SYNTH_DUMMY_CLASS(UINavigationController_MLAdd)
 
 @implementation UINavigationController (MLAdd)
 
-- (UIStatusBarStyle)preferredStatusBarStyle {
-    return [self.topViewController preferredStatusBarStyle];
+- (UIViewController *)childViewControllerForStatusBarStyle {
+    return self.topViewController;
+}
+
+- (UIViewController *)childViewControllerForStatusBarHidden {
+    return self.topViewController;
 }
 
 @end
