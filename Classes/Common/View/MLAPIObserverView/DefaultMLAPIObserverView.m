@@ -27,11 +27,6 @@
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
-        _indicatorView = ({
-            UIActivityIndicatorView *view = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-            [self addSubview:view];
-            view;
-        });
         _retryButton = ({
             UIButton *button = [[UIButton alloc]init];
             [button addTarget:self action:@selector(clickRetry) forControlEvents:UIControlEventTouchUpInside];
@@ -51,6 +46,8 @@
 {
     [super setState:state];
     
+    [_indicatorView removeFromSuperview];
+    
     switch (state) {
         case MLAPIHelperStateInit:
         case MLAPIHelperStateRequestSucceed:
@@ -66,7 +63,6 @@
                 [self.layer addFadeTransitionWithDuration:.15f];
             }else{
                 self.hidden = NO;
-                [_indicatorView stopAnimating];
                 _retryButton.hidden = NO;
             }
         }
@@ -77,13 +73,21 @@
                 self.hidden = YES;
             }else{
                 self.hidden = NO;
-                [_indicatorView startAnimating];
                 _retryButton.hidden = YES;
+                _indicatorView = ({
+                    UIActivityIndicatorView *view = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+                    view.hidesWhenStopped = NO;
+                    [self addSubview:view];
+                    view;
+                });
+                [_indicatorView startAnimating];
             }
             break;
         default:
             break;
     }
+    
+    [self setNeedsLayout];
 }
 
 - (void)setRetryButtonImage:(UIImage *)retryButtonImage {
@@ -111,12 +115,13 @@
 - (void)layoutSubviews {
     [super layoutSubviews];
     
-    self.indicatorView.center = CGPointMake(self.width/2, self.height/2);
+    _indicatorView.center = CGPointMake(self.width/2, self.height/2);
+    
 #define kRetryButtonSide 40.0f
     UIImage *image = [self.retryButton imageForState:UIControlStateNormal];
     CGFloat side = fmax(image.size.width*image.scale/kScreenScale, image.size.height*image.scale/kScreenScale);
     side = fmax(kRetryButtonSide, side);
-    self.retryButton.frame = [self centerFrameWithWidth:side height:side];
+    _retryButton.frame = [self centerFrameWithWidth:side height:side];
 }
 
 #pragma mark - penetrable
@@ -125,7 +130,7 @@
     
     if (result) {
         //penetrable except button
-        if (_penetrable&&!CGRectContainsPoint(self.retryButton.frame, point)) {
+        if (_penetrable&&!CGRectContainsPoint(_retryButton.frame, point)) {
             return NO;
         }
     }
