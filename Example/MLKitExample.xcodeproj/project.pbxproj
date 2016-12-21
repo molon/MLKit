@@ -27,6 +27,7 @@
 		36A374491D2640EE00EDD9A8 /* MLKitExampleUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 36A374481D2640EE00EDD9A8 /* MLKitExampleUITests.m */; };
 		36A6D3B71D4F172200DB09C9 /* ArticleTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 36A6D3B61D4F172200DB09C9 /* ArticleTableViewCell.m */; };
 		36D198231D45C19300434111 /* BaseAPIHelpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 36D198221D45C19300434111 /* BaseAPIHelpers.m */; };
+		36E303F11E0A64230011662F /* gfw.json in Resources */ = {isa = PBXBuildFile; fileRef = 36E303F01E0A64230011662F /* gfw.json */; };
 		36F7BA271D5DCD6F003EB0AE /* ExampleUserDefaults.m in Sources */ = {isa = PBXBuildFile; fileRef = 36F7BA261D5DCD6F003EB0AE /* ExampleUserDefaults.m */; };
 		CAE999C913054DC0B4B38585 /* libPods-MLKitExample.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 38812E9F8774D01922777819 /* libPods-MLKitExample.a */; };
 /* End PBXBuildFile section */
@@ -90,6 +91,7 @@
 		36D198211D45C19300434111 /* BaseAPIHelpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BaseAPIHelpers.h; path = ../BaseAPIHelpers.h; sourceTree = "<group>"; };
 		36D198221D45C19300434111 /* BaseAPIHelpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BaseAPIHelpers.m; path = ../BaseAPIHelpers.m; sourceTree = "<group>"; };
 		36D198271D4A203B00434111 /* MLKitExample-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MLKitExample-Prefix.pch"; sourceTree = "<group>"; };
+		36E303F01E0A64230011662F /* gfw.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = gfw.json; sourceTree = "<group>"; };
 		36F7BA251D5DCD6F003EB0AE /* ExampleUserDefaults.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExampleUserDefaults.h; sourceTree = "<group>"; };
 		36F7BA261D5DCD6F003EB0AE /* ExampleUserDefaults.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ExampleUserDefaults.m; sourceTree = "<group>"; };
 		38812E9F8774D01922777819 /* libPods-MLKitExample.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MLKitExample.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -231,6 +233,7 @@
 		36A374231D2640EE00EDD9A8 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				36E303F01E0A64230011662F /* gfw.json */,
 				36D198271D4A203B00434111 /* MLKitExample-Prefix.pch */,
 				3621C75A1D2CB60C0012DAED /* avatar.jpg */,
 				36A374241D2640EE00EDD9A8 /* main.m */,
@@ -405,6 +408,7 @@
 				3621C75B1D2CB60C0012DAED /* avatar.jpg in Resources */,
 				36A374331D2640EE00EDD9A8 /* LaunchScreen.storyboard in Resources */,
 				36A374301D2640EE00EDD9A8 /* Assets.xcassets in Resources */,
+				36E303F11E0A64230011662F /* gfw.json in Resources */,
 				36A3742E1D2640EE00EDD9A8 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -438,7 +442,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run \'pod install\' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 		8FE8DFA286D832EE60E268DB /* [CP] Copy Pods Resources */ = {

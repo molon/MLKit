@@ -35,7 +35,23 @@
     [[MLKitManager defaultManager]setupWithDDLog:YES];
     [[MLAPIManager defaultManager]setupWithSessionConfiguration:nil];
     
+    [self printGFWHostsForProxifier];
+    
     return YES;
 }
 
+- (void)printGFWHostsForProxifier {
+    NSString *path = [[NSBundle mainBundle]pathForResource:@"gfw" ofType:@"json"];
+    NSString *string = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:nil];
+    
+    NSArray *strs = [string objectFromJSONString];
+    __block NSString *resultString = @"";
+    for (NSString *s in strs) {
+        [s enumerateRegexMatches:@"[a-zA-Z0-9]+\\.[a-zA-Z]{2,5}$" options:NSRegularExpressionCaseInsensitive usingBlock:^(NSString * _Nonnull match, NSRange matchRange, BOOL * _Nonnull stop) {
+            resultString = [resultString stringByAppendingFormat:@"*.%@;",match];
+            *stop = YES;
+        }];
+    }
+    DDLogDebug(@"%@",resultString);
+}
 @end
