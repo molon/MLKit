@@ -185,10 +185,7 @@ BOOL MLAPI_IsErrorCancelled(NSError *error) {
                 ([object isEqualToNumber:_nilNumber]||[object isEqualToNumber:[NSDecimalNumber notANumber]])) {
                 continue;
             }
-            NSAssert([object isKindOfClass:[NSString class]]
-                     ||[object isKindOfClass:[NSNumber class]]
-                     ||([object isKindOfClass:[NSURL class]]&&![object isFileURL]),
-                     @"作为参数的属性只能是数字或NSNumber，NSString, 非FileURL的NSURL其中之一");
+            
             //如果是空字符串也直接忽略
             if ([object isKindOfClass:[NSString class]]&&![object isNotBlank]) {
                 continue;
@@ -202,9 +199,10 @@ BOOL MLAPI_IsErrorCancelled(NSError *error) {
                 paramKey = [key substringFromIndex:MLAPIHelperCommonPrefixLength];
             }
             if ([object isKindOfClass:[NSURL class]]) {
+                NSAssert(![object isFileURL], @"作为参数的属性值不可谓 FileURL");
                 params[paramKey] = [object absoluteString];
             }else{
-                params[paramKey] = object;
+                params[paramKey] = [object yy_modelToJSONObject];
             }
         }
     }
