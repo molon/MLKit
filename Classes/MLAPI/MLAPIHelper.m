@@ -202,7 +202,7 @@ BOOL MLAPI_IsErrorCancelled(NSError *error) {
                 NSAssert(![object isFileURL], @"作为参数的属性值不可谓 FileURL");
                 params[paramKey] = [object absoluteString];
             }else{
-                params[paramKey] = [object yy_modelToJSONObject];
+                params[paramKey] = [object yy_modelToJSONObjectOrRootSelf:YES];
             }
         }
     }

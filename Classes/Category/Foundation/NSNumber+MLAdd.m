@@ -63,7 +63,7 @@ SYNTH_DUMMY_CLASS(NSNumber_MLAdd)
         if (isnan(num) || isinf(num)) return nil;
         return @(num);
     } else {
-        return @(atoll(cstring));
+        return @(strtoull(cstring, NULL, 0));
     }
 }
 
