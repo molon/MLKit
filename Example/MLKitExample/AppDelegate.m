@@ -35,7 +35,7 @@
     [[MLKitManager defaultManager]setupWithDDLog:YES];
     [[MLAPIManager defaultManager]setupWithSessionConfiguration:nil];
     
-    [self printGFWHostsForProxifier];
+//    [self printGFWHostsForProxifier];
     
     return YES;
 }
