@@ -91,7 +91,7 @@ NS_ASSUME_NONNULL_BEGIN
  Returns the caller message
  @warning the method only valid for DEBUG!! ifndef DEBUG,it will returns nil
  */
-- (NSDictionary *)callerMessage;
+- (NSString *)callerMessage;
 
 @end
 

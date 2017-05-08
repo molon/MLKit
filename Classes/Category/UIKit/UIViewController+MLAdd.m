@@ -96,6 +96,20 @@ SYNTH_DUMMY_CLASS(UIViewController_MLAdd)
     }
 }
 
+//- (BOOL)hidesBottomBarWhenPushed {
+//    //nav除了第一个页面，后面的都自动hide bottom
+//    if (!self.navigationController) {
+//        return NO;
+//    }
+//    
+//    UIViewController *vc = self;
+//    while (![self.navigationController isEqual:vc.parentViewController]) {
+//        vc = vc.parentViewController;
+//    }
+//    
+//    return [[self.navigationController.viewControllers firstObject] isEqual:vc]?NO:[self.navigationController.topViewController isEqual:vc];
+//}
+
 + (void)validateNoBackTitleForNavigationBar {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{

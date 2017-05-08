@@ -9,6 +9,12 @@
 #import "MLKitManager.h"
 #import "MLKitMacro.h"
 
+@interface MLKitManager()
+
+@property (nonatomic, strong) DDFileLogger *fileLogger;
+
+@end
+
 @implementation MLKitManager
 
 + (instancetype)defaultManager {
@@ -49,9 +55,10 @@
         DDFileLogger *fileLogger = [[DDFileLogger alloc] init]; // File Logger
         fileLogger.rollingFrequency = 60 * 60 * 24; // 24 hour rolling
         fileLogger.logFileManager.maximumNumberOfLogFiles = 7;
+        self.fileLogger = fileLogger;
         [DDLog addLogger:fileLogger];
         
-        DDLogDebug(@"DDLog setup succeed");
+        DDLogDebug(@"DDLog setup succeed, currentLogFileInfo: %@",fileLogger.currentLogFileInfo);
     }
 }
 @end

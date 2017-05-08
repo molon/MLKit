@@ -10,7 +10,10 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@class DDFileLogger;
 @interface MLKitManager : NSObject
+
+@property (nonatomic, strong, readonly) DDFileLogger *fileLogger;
 
 + (instancetype)defaultManager;
 
