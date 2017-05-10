@@ -16,14 +16,22 @@ NS_ASSUME_NONNULL_BEGIN
 @interface UIWindow (MLAdd)
 
 /**
- Detect whether contains one window which visible on mainScreen with test block
+ Detect whether contains windows which in visible windows on mainScreen with test block
  @warning reverseObjectEnumerator
  
  @param comparator comparator
  
  @return bool
  */
-+ (BOOL)containsVisibleWindowOnMainScreenReversePassingTest:(BOOL (^)(UIWindow *window,BOOL aboveAppDelegateWindow,BOOL *stop))comparator;
++ (BOOL)containsInVisibleWindowsOnMainScreenReversePassingTest:(BOOL (^)(UIWindow *window,BOOL aboveAppDelegateWindow,BOOL *stop))comparator;
+
+/*!
+ @brief Enumerate windows which is visible on mainScreen
+ 
+ @param reverse reverse
+ @param block   block
+ */
++ (void)enumerateVisibleWindowsOnMainScreenWithReverse:(BOOL)reverse usingBlock:(void (^)(UIWindow *window,BOOL aboveAppDelegateWindow,BOOL *stop))block;
 
 @end
 

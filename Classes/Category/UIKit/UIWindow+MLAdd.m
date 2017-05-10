@@ -14,7 +14,7 @@ SYNTH_DUMMY_CLASS(UIWindow_MLAdd)
 
 @implementation UIWindow (MLAdd)
 
-+ (BOOL)containsVisibleWindowOnMainScreenReversePassingTest:(BOOL (^)(UIWindow *window,BOOL aboveAppDelegateWindow,BOOL *stop))comparator {
++ (BOOL)containsInVisibleWindowOnMainScreenReversePassingTest:(BOOL (^)(UIWindow *window,BOOL aboveAppDelegateWindow,BOOL *stop))comparator {
     NSEnumerator *frontToBackWindows = [[[UIApplication sharedApplication]windows] reverseObjectEnumerator];
     UIScreen *mainScreen = [UIScreen mainScreen];
     
@@ -35,6 +35,42 @@ SYNTH_DUMMY_CLASS(UIWindow_MLAdd)
         }
     }
     return NO;
+}
+
+
++ (void)enumerateVisibleWindowsOnMainScreenWithReverse:(BOOL)reverse usingBlock:(void (^)(UIWindow *window,BOOL aboveAppDelegateWindow,BOOL *stop))block {
+    NSEnumerator *windows = reverse?[[[UIApplication sharedApplication]windows] reverseObjectEnumerator]:[[UIApplication sharedApplication]windows];
+    
+    UIScreen *mainScreen = [UIScreen mainScreen];
+    
+    BOOL aboveAppDelegateWindow = reverse?YES:NO;
+    BOOL stop = NO;
+    for (UIWindow *window in windows) {
+        if (window.screen != mainScreen || window.hidden) {
+            continue;
+        }
+        if (reverse){
+            if(aboveAppDelegateWindow&&kAppDelegate.window==window) {
+                aboveAppDelegateWindow = NO;
+            }
+        }else{
+            if (!aboveAppDelegateWindow&&kAppDelegate.window==window) {
+                block(window,aboveAppDelegateWindow,&stop);
+                
+                aboveAppDelegateWindow = YES;
+                if (stop) {
+                    return;
+                }
+                
+                continue;
+            }
+        }
+        
+        block(window,aboveAppDelegateWindow,&stop);
+        if (stop) {
+            return;
+        }
+    }
 }
 
 @end
