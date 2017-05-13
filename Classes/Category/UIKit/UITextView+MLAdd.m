@@ -107,7 +107,7 @@ SYNTH_DYNAMIC_PROPERTY_OBJECT(____ml_placeholderObserver, set____ml_placeholderO
         label.font = font;
         label.text = self.placeholder;
         
-        CGRect frame = CGRectMake(self.contentInset.left+self.textContainerInset.left+5, self.contentInset.top+self.textContainerInset.top, self.frame.size.width-self.contentInset.left-self.textContainerInset.left-5, self.frame.size.height-self.contentInset.top-self.textContainerInset.top);
+        CGRect frame = CGRectMake(self.contentInset.left+self.textContainerInset.left+5, self.contentInset.top+self.textContainerInset.top, self.frame.size.width-self.contentInset.left-self.textContainerInset.left-5-10, self.frame.size.height-self.contentInset.top-self.textContainerInset.top);
         frame.size.height = [label sizeThatFits:frame.size].height;
         label.frame = frame;
     }else{
