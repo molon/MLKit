@@ -24,6 +24,8 @@ NSString * const MLAPIHelperResponsePrefix = @"r_";
 NSString * const MLAPIHelperResponseModelArrayKey = @"responseModels";
 NSString * const MLAPIHelperResponseModelKey = @"responseModel";
 
+NSString * const MLAPIHelperRequestModelKey = @"requestModel";
+
 static inline NSDictionary *kResetResponseProtypeDictionary(Class cls) {
     static NSMutableDictionary *protypeResponses = nil;
     static dispatch_once_t onceToken;
@@ -168,6 +170,17 @@ BOOL MLAPI_IsErrorCancelled(NSError *error) {
 - (NSMutableDictionary*)constructRequestParams {
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
     
+    if ([[self class]yy_containsPropertyKey:MLAPIHelperRequestModelKey untilClass:[MLAPIHelper class] ignoreUntilClass:YES]) {
+        id requestModel = [self valueForKey:MLAPIHelperRequestModelKey];
+        if (requestModel) {
+            id requestModelDict = [requestModel yy_modelToJSONObjectOrRootSelf:NO];
+            NSAssert([requestModelDict isKindOfClass:[NSDictionary class]], @"%@只支持可转换为NSDictionary的对象",MLAPIHelperRequestModelKey);
+            if ([requestModelDict isKindOfClass:[NSDictionary class]]) {
+                [params addEntriesFromDictionary:requestModelDict];
+            }
+        }
+    }
+    
     NSDictionary *paramKeyMapper = [[self class]customRequestParamKeyMapper];
     if (paramKeyMapper.count<=0) {
         paramKeyMapper = nil;
@@ -176,7 +189,7 @@ BOOL MLAPI_IsErrorCancelled(NSError *error) {
     //找到p_开头的属性，如果其不为空，则认作是有效参数传过去
     NSDictionary<NSString *, YYClassPropertyInfo *> *propertyInfos = [[self class] yy_propertyInfosUntilClass:[MLAPIHelper class] ignoreUntilClass:YES];
     for (NSString *key in [propertyInfos allKeys]) {
-        if (![key hasPrefix:MLAPIHelperParamPrefix]) {
+        if (![key hasPrefix:MLAPIHelperParamPrefix]&&!paramKeyMapper[key]) {
             continue;
         }
         id object = [self valueForKey:key];
