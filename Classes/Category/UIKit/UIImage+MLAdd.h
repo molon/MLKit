@@ -42,6 +42,14 @@ NS_ASSUME_NONNULL_BEGIN
  */
 + (nullable UIImage *)imageWithColor:(UIColor *)color;
 
+/*!
+ Create and return a image with the given color and size
+ 
+ @param color The color.
+ @param size  The size.
+ */
++ (nullable UIImage *)imageWithColor:(UIColor *)color size:(CGSize)size;
+
 #pragma mark - Image Info
 ///=============================================================================
 /// @name Image Info
