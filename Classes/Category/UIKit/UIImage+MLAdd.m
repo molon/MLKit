@@ -142,6 +142,12 @@ CGRect ____CGRectFitWithContentMode(CGRect rect, CGSize size, UIViewContentMode 
     return image;
 }
 
++ (UIImage *)resizableImageWithColor:(UIColor *)color byRoundCornerRadius:(CGFloat)radius {
+    CGFloat padding = radius+2.0f;
+    UIImage *image = [[[UIImage imageWithColor:color size:CGSizeMake(radius*2+10, radius*2+10)]imageByRoundCornerRadius:radius]resizableImageWithCapInsets:UIEdgeInsetsMake(padding, padding, padding, padding)];
+    return image;
+}
+
 - (BOOL)hasAlphaChannel {
     if (self.CGImage == NULL) return NO;
     CGImageAlphaInfo alpha = CGImageGetAlphaInfo(self.CGImage) & kCGBitmapAlphaInfoMask;

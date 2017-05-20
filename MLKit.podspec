@@ -19,7 +19,7 @@ s.source_files  = 'Classes/**/*.{h,m}'
 s.resource = "Classes/**/*.{bundle}"
 s.libraries = 'z'
 
-s.dependency 'MLPersonalModel', '~> 11.1.1'
+s.dependency 'MLPersonalModel', '~> 11.2.0'
 s.dependency 'SAMKeychain', '~> 1.5.2'
 s.dependency 'DHSmartScreenshot', '~> 1.3.1'
 s.dependency 'AFNetworking' , '~> 3.1.0'

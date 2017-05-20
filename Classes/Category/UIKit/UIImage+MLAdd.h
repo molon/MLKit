@@ -50,6 +50,16 @@ NS_ASSUME_NONNULL_BEGIN
  */
 + (nullable UIImage *)imageWithColor:(UIColor *)color size:(CGSize)size;
 
+/*!
+ Create and return a resizable image with the given color and corner radius
+ 
+ @param color  color
+ @param radius radius
+ 
+ @return image
+ */
++ (UIImage *)resizableImageWithColor:(UIColor *)color byRoundCornerRadius:(CGFloat)radius;
+
 #pragma mark - Image Info
 ///=============================================================================
 /// @name Image Info
