@@ -202,16 +202,6 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (NSRange)rangeOfAll;
 
-/**
- Create a string from the file in main bundle (similar to [UIImage imageNamed:]).
- 
- @param name The file name (in main bundle).
- 
- @return A new string create from the file in UTF-8 character encoding.
- */
-+ (nullable NSString *)stringNamed:(NSString *)name;
-
-
 #pragma mark - Drawing
 ///=============================================================================
 /// @name Drawing

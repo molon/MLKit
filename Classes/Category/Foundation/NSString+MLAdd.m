@@ -290,16 +290,6 @@ SYNTH_DUMMY_CLASS(NSString_MLAdd)
     return NSMakeRange(0, self.length);
 }
 
-+ (NSString *)stringNamed:(NSString *)name {
-    NSString *path = [[NSBundle mainBundle] pathForResource:name ofType:@""];
-    NSString *str = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:NULL];
-    if (!str) {
-        path = [[NSBundle mainBundle] pathForResource:name ofType:@"txt"];
-        str = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:NULL];
-    }
-    return str;
-}
-
 - (CGSize)sizeForFont:(UIFont *)font size:(CGSize)size mode:(NSLineBreakMode)lineBreakMode {
     NSAssert(font!=nil, @"sizeForFont:size:mode: must be given a font");
     if (self.length<=0) {
