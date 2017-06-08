@@ -17,6 +17,11 @@ NS_ASSUME_NONNULL_BEGIN
 @interface UIControl (MLAdd)
 
 /**
+ The message transfer
+ */
+@property (nullable, nonatomic, strong) id userInfo;
+
+/**
  Removes all targets and actions for a particular event (or events)
  from an internal dispatch table.
  */

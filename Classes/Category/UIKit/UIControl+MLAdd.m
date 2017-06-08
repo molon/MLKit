@@ -44,6 +44,8 @@ static const int block_key;
 
 @implementation UIControl (MLAdd)
 
+SYNTH_DYNAMIC_PROPERTY_OBJECT(userInfo, setUserInfo:, RETAIN_NONATOMIC, id)
+
 - (void)removeAllTargets {
     [[self allTargets] enumerateObjectsUsingBlock: ^(id object, BOOL *stop) {
         [self removeTarget:object action:NULL forControlEvents:UIControlEventAllEvents];
