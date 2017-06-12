@@ -290,6 +290,20 @@ SYNTH_DUMMY_CLASS(NSString_MLAdd)
     return NSMakeRange(0, self.length);
 }
 
+- (NSArray*)componentsSeparatedWithoutBlankByString:(NSString*)str {
+    NSMutableArray *arr = [[self componentsSeparatedByString:str]mutableCopy];
+    NSMutableIndexSet *indexes = [NSMutableIndexSet indexSet];
+    [arr enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if (![obj isNotBlank]) {
+            [indexes addIndex:idx];
+        }
+    }];
+    if (indexes.count>0) {
+        [arr removeObjectsAtIndexes:indexes];
+    }
+    return arr;
+}
+
 - (CGSize)sizeForFont:(UIFont *)font size:(CGSize)size mode:(NSLineBreakMode)lineBreakMode {
     NSAssert(font!=nil, @"sizeForFont:size:mode: must be given a font");
     if (self.length<=0) {

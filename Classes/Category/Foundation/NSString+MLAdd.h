@@ -202,6 +202,15 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (NSRange)rangeOfAll;
 
+/*!
+ @brief Like `componentsSeparatedByString:`, but remove all blank string then returns
+ 
+ @param str separater
+ 
+ @return components
+ */
+- (NSArray*)componentsSeparatedWithoutBlankByString:(NSString*)str;
+
 #pragma mark - Drawing
 ///=============================================================================
 /// @name Drawing
