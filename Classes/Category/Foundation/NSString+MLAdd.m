@@ -11,6 +11,7 @@
 #import "NSData+MLAdd.h"
 #import "NSNumber+MLAdd.h"
 #import "UIScreen+MLAdd.h"
+#import "NSAttributedString+MLAdd.h"
 
 SYNTH_DUMMY_CLASS(NSString_MLAdd)
 
@@ -302,6 +303,11 @@ SYNTH_DUMMY_CLASS(NSString_MLAdd)
         [arr removeObjectsAtIndexes:indexes];
     }
     return arr;
+}
+
+- (NSAttributedString*)attributedStringWithRegex:(NSRegularExpression*)regex block:(NSAttributedString*(^)(NSRange range, NSArray *groups, BOOL * _Nonnull stop))block {
+    NSAttributedString *attStr = [[NSAttributedString alloc]initWithString:self];
+    return [attStr attributedStringWithRegex:regex block:block];
 }
 
 - (CGSize)sizeForFont:(UIFont *)font size:(CGSize)size mode:(NSLineBreakMode)lineBreakMode {

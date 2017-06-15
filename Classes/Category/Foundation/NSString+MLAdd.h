@@ -211,6 +211,16 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (NSArray*)componentsSeparatedWithoutBlankByString:(NSString*)str;
 
+/*!
+ According a regex match result, replace it's string to display new one.
+ 
+ @param regex regex
+ @param block block
+ 
+ @return new attributedString
+ */
+- (NSAttributedString*)attributedStringWithRegex:(NSRegularExpression*)regex block:(NSAttributedString*(^)(NSRange range, NSArray *groups, BOOL * _Nonnull stop))block;
+
 #pragma mark - Drawing
 ///=============================================================================
 /// @name Drawing

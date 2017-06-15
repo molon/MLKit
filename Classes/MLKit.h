@@ -24,6 +24,7 @@
 #import "NSNumber+MLAdd.h"
 #import "NSObject+MLAdd.h"
 #import "NSString+MLAdd.h"
+#import "NSAttributedString+MLAdd.h"
 #import "NSURLRequest+MLAdd.h"
 
 #import "UIActionSheet+MLAdd.h"
@@ -50,6 +51,7 @@
 #import "UINavigationController+MLAdd.h"
 #import "UISearchBar+MLAdd.h"
 #import "UINavigationBar+MLAdd.h"
+#import "UIButton+MLAdd.h"
 
 #import "CALayer+MLAdd.h"
 #import "MLCGUtilities.h"
