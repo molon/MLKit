@@ -106,7 +106,7 @@
 }
 
 - (void)clickBackground {
-    if (_clickBackgroundToRefresh&&!_retryButton.hidden) {
+    if (_canClickBackgroundToRetry&&!_retryButton.hidden) {
         [self clickRetry];
     }
 }

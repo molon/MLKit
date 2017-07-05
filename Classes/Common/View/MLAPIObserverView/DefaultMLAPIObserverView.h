@@ -11,9 +11,9 @@
 @interface DefaultMLAPIObserverView : MLAPIObserverView
 
 /**
- whether click background to refresh when refresh button displays
+ whether click background to retry when retry button displays
  */
-@property (nonatomic, assign) BOOL clickBackgroundToRefresh;
+@property (nonatomic, assign) BOOL canClickBackgroundToRetry;
 
 /**
  custom retry button image
