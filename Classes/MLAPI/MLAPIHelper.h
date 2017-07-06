@@ -106,9 +106,9 @@ FOUNDATION_EXPORT BOOL MLAPI_IsErrorCancelled(NSError *error);
 @property (nonatomic, assign, readonly) BOOL isRespondWithCache;
 
 /**
- 当前是否处于预加载状态下
+ 是否经历过预加载状态，一般在请求完毕回调里需要判断
  */
-@property (nonatomic, assign, readonly) BOOL isCurrentPreloaded;
+@property (nonatomic, assign, readonly) BOOL hasPreloaded;
 
 /**
  当前的回调对象

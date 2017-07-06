@@ -86,7 +86,7 @@ BOOL MLAPI_IsErrorCancelled(NSError *error) {
 @property (nonatomic, strong) id responseObject;
 @property (nonatomic, strong) NSError *responseError;
 @property (nonatomic, assign) BOOL isRespondWithCache;
-@property (nonatomic, assign) BOOL isCurrentPreloaded;
+@property (nonatomic, assign) BOOL hasPreloaded;
 @property (nonatomic, weak) id callbackObject;
 
 @property (nonatomic, strong) NSURLSessionDataTask *dataTask;
@@ -298,7 +298,7 @@ BOOL MLAPI_IsErrorCancelled(NSError *error) {
 - (void)reset {
     [self cancel];
     
-    _isCurrentPreloaded = NO;
+    _hasPreloaded = NO;
     _isRespondWithCache = NO;
     _responseObject = nil;
     _responseEntry = nil;

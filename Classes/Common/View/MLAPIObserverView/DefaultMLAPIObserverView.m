@@ -69,7 +69,7 @@
             break;
         case MLAPIHelperStateCachePreloaded:
         case MLAPIHelperStateRequesting:
-            if (self.observingAPIHelper.isCurrentPreloaded) {
+            if (self.observingAPIHelper.hasPreloaded) {
                 self.hidden = YES;
             }else{
                 self.hidden = NO;
