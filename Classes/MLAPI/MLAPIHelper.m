@@ -14,7 +14,7 @@
 #import "MLAPICacheItem.h"
 #import "NSObject+MLAdd.h"
 
-NSTimeInterval const MLAPIHelperDefaultTimeoutInterval = 10.0f;
+NSTimeInterval const MLAPIHelperDefaultTimeoutInterval = 5.0f;
 
 NSInteger const MLAPIHelperCommonPrefixLength = 2;
 NSString * const MLAPIHelperParamPrefix = @"p_";
