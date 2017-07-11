@@ -603,47 +603,49 @@ static void ____cleanupBuffer(void *userData, void *buf_data) {
 - (void)compressImageToMaxSideLength:(CGFloat)maxSideLength maxDataLength:(NSUInteger)maxDataLength withCallback:(void(^)(UIImage *originalImage,NSData *compressedData))callback {
     __block UIImage *image = [self copy];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        UIImage *(^imageByScalingToMaxSideLengthBlock)(CGFloat) = ^(CGFloat maxSideLength) {
-            CGFloat ratio = fmax(image.size.height,image.size.width) / maxSideLength;
-            CGSize  sizeForAspectScale = CGSizeMake(image.size.width / ratio, image.size.height / ratio);
-            return [image imageByResizeToSize:sizeForAspectScale];
-        };
-        
-        if (maxSideLength>0) {
-            image = imageByScalingToMaxSideLengthBlock(maxSideLength);
-        }
-        
-        //Find the max side which has a possibility to compress to maxDataLength
-        while (UIImageJPEGRepresentation(image, 0).length>maxDataLength) {
-            //If side less than 1, just return nil
-            if (fmin(image.size.width, image.size.height)<1) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    callback(self,nil);
-                });
-                return;
-            }
-            //Halved
-            image = imageByScalingToMaxSideLengthBlock(fmax(image.size.width, image.size.height)/2);
-        }
-        
-        //Compress to max data length
-        CGFloat compression = 0.99f;
-        NSData *imageData = UIImageJPEGRepresentation(image, compression);
-        while (imageData.length > maxDataLength&&compression>0){
-            compression -= 0.01;
-            if (compression<0) {
-                compression = 0;
+        @autoreleasepool {
+            UIImage *(^imageByScalingToMaxSideLengthBlock)(CGFloat) = ^(CGFloat maxSideLength) {
+                CGFloat ratio = fmax(image.size.height,image.size.width) / maxSideLength;
+                CGSize  sizeForAspectScale = CGSizeMake(image.size.width / ratio, image.size.height / ratio);
+                return [image imageByResizeToSize:sizeForAspectScale];
+            };
+            
+            if (maxSideLength>0) {
+                image = imageByScalingToMaxSideLengthBlock(maxSideLength);
             }
             
-            imageData = UIImageJPEGRepresentation(image, compression);
-            
-            if (compression==0) {
-                break;
+            //Find the max side which has a possibility to compress to maxDataLength
+            while (UIImageJPEGRepresentation(image, 0).length>maxDataLength) {
+                //If side less than 1, just return nil
+                if (fmin(image.size.width, image.size.height)<1) {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        callback(self,nil);
+                    });
+                    return;
+                }
+                //Halved
+                image = imageByScalingToMaxSideLengthBlock(fmax(image.size.width, image.size.height)/2);
             }
+            
+            //Compress to max data length
+            CGFloat compression = 0.99f;
+            NSData *imageData = UIImageJPEGRepresentation(image, compression);
+            while (imageData.length > maxDataLength&&compression>0){
+                compression -= 0.01;
+                if (compression<0) {
+                    compression = 0;
+                }
+                
+                imageData = UIImageJPEGRepresentation(image, compression);
+                
+                if (compression==0) {
+                    break;
+                }
+            }
+            dispatch_async(dispatch_get_main_queue(), ^{
+                callback(self,imageData);
+            });
         }
-        dispatch_async(dispatch_get_main_queue(), ^{
-            callback(self,imageData);
-        });
     });
 }
 
