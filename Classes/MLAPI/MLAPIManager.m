@@ -64,7 +64,7 @@ static inline void mlapi_dispatch_async_on_main_queue(void (^block)()) {
                        success:(void (^)(NSURLSessionDataTask *task, id responseObject))success
                        failure:(void (^)(NSURLSessionDataTask *task, NSError *error))failure {
     NSError *serializationError = nil;
-    NSMutableURLRequest *request = [requestSerializer?:self.requestSerializer multipartFormRequestWithMethod:@"POST" URLString:[[NSURL URLWithString:URLString relativeToURL:baseURL?baseURL:self.baseURL] absoluteString] parameters:parameters constructingBodyWithBlock:constructingBodyWithBlock error:&serializationError];
+    NSMutableURLRequest *request = [requestSerializer?:self.requestSerializer multipartFormRequestWithMethod:@"POST" URLString:[[NSURL URLWithString:URLString relativeToURL:baseURL.scheme?baseURL:self.baseURL] absoluteString] parameters:parameters constructingBodyWithBlock:constructingBodyWithBlock error:&serializationError];
     if (serializationError) {
         if (failure) {
 #pragma clang diagnostic push
@@ -110,7 +110,7 @@ static inline void mlapi_dispatch_async_on_main_queue(void (^block)()) {
                                          success:(void (^)(NSURLSessionDataTask *, id))success
                                          failure:(void (^)(NSURLSessionDataTask *, NSError *))failure {
     NSError *serializationError = nil;
-    NSMutableURLRequest *request = [requestSerializer?:self.requestSerializer requestWithMethod:method URLString:[[NSURL URLWithString:URLString relativeToURL:baseURL?baseURL:self.baseURL] absoluteString] parameters:parameters error:&serializationError];
+    NSMutableURLRequest *request = [requestSerializer?:self.requestSerializer requestWithMethod:method URLString:[[NSURL URLWithString:URLString relativeToURL:baseURL.scheme?baseURL:self.baseURL] absoluteString] parameters:parameters error:&serializationError];
     if (serializationError) {
         if (failure) {
 #pragma clang diagnostic push

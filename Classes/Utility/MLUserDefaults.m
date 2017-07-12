@@ -129,6 +129,9 @@ NSString * const PrefixKeyOfMLUserDefaults = @"com.molon.MLUserDefaults.";
     }else{
         id archiveObject = [object yy_modelToJSONObject];
         if (!archiveObject) {
+            if ([object isKindOfClass:[NSURL class]]) {
+                object = [object absoluteString];
+            }
             [def setObject:object forKey:archiveKey];
         }else{
             [def setObject:archiveObject forKey:archiveKey];
