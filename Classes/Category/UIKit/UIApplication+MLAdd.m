@@ -14,6 +14,8 @@
 #import <sys/sysctl.h>
 #import <mach/mach.h>
 #import <objc/runtime.h>
+#import "NSString+MLAdd.h"
+#import "NSDictionary+MLAdd.h"
 
 SYNTH_DUMMY_CLASS(UIApplication_MLAdd)
 
@@ -242,6 +244,77 @@ SYNTH_DYNAMIC_PROPERTY_OBJECT(networkActivityInfo, setNetworkActivityInfo:, RETA
         if ([[[NSBundle mainBundle] bundlePath] hasSuffix:@".appex"]) isAppExtension = YES;
     });
     return isAppExtension;
+}
+
++ (void)checkWithBundleID:(NSString*)bundleID promptInterval:(NSTimeInterval)promptInterval pullBlock:(void (^)(NSString *bundleID, UIApplicationCheckVersionPullCallBackBlock callback))pullBlock promptBlock:(void(^)(BOOL mustUpdate,NSString *version,NSString *releaseNotes,NSURL *updateURL))promptBlock {
+    NSAssert(pullBlock&&promptBlock, @"必须给予pullBlock和promptBlock");
+    bundleID = [bundleID isNotBlank]?bundleID:kAppBundleID;
+    
+    NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
+    
+    NSDictionary *udJSON = nil;
+    
+    NSString * const kCheckVersionResultJSONUDKey = @"com.molon.MLVersionCheckerResultJSONUDKey";
+    //取出来
+    id r = [ud objectForKey:kCheckVersionResultJSONUDKey];
+    if ([r isKindOfClass:[NSDictionary class]]) {
+        udJSON = r;
+    }
+    
+    //如果bundleID不一致，那之前的缓存就没任何意义
+    if (![[udJSON stringValueForKey:@"bundleID" default:nil]isEqualToString:bundleID]) {
+        udJSON = nil;
+    }
+    
+    BOOL mustUpdate = [udJSON boolValueForKey:@"mustUpdate" default:NO];
+    NSTimeInterval lastPromptTime = [[udJSON numberValueForKey:@"lastPromptTime" default:nil]doubleValue];
+    //没到提醒间隔就不需要继续了，但是如果已知是必须更新，就忽略这个间隔
+    if (!mustUpdate&&fmax(0, [[NSDate date]timeIntervalSince1970]-lastPromptTime)<promptInterval) {
+        return;
+    }
+    
+    BOOL (^doBlock)(NSDictionary *json) = ^BOOL(NSDictionary *json){
+        NSString *version = [json stringValueForKey:@"version" default:nil];
+        if ([version isNotBlank]&&[kAppVersion compare:version options:NSNumericSearch] == NSOrderedAscending) {
+            NSString *releaseNotes = [json stringValueForKey:@"releaseNotes" default:nil];
+            NSURL *updateURL = [json URLValueForKey:@"updateURL" default:nil];
+            BOOL mustUpdate = [json boolValueForKey:@"mustUpdate" default:NO];
+            
+            if ([releaseNotes isNotBlank]&&updateURL.scheme) {
+                //存储记录
+                NSMutableDictionary *mJSON = [json mutableCopy];
+                mJSON[@"lastPromptTime"] = @([[NSDate date]timeIntervalSince1970]);
+                [ud setObject:mJSON forKey:kCheckVersionResultJSONUDKey];
+                [ud synchronize];
+                
+                promptBlock(mustUpdate,version,releaseNotes,updateURL);
+                return YES;
+            }
+        }
+        return NO;
+    };
+    
+    if (doBlock(udJSON)) {
+        return;
+    }
+    
+    //执行拉取方法
+    void(^pullCallback)(BOOL succeed,BOOL mustUpdate,NSString *version,NSString *releaseNotes,NSURL *updateURL) = ^(BOOL succeed,BOOL mustUpdate,NSString *version,NSString *releaseNotes,NSURL *updateURL){
+        if (!succeed) { //没成功就啥也不做呗
+            return;
+        }
+        
+        //存储并做处理
+        NSDictionary *json = @{
+                               @"bundleID":bundleID?:@"",
+                               @"version":version?:@"",
+                               @"mustUpdate":@(mustUpdate),
+                               @"releaseNotes":releaseNotes?:@"",
+                               @"updateURL":[updateURL absoluteString]?:@"",
+                               };
+        doBlock(json);
+    };
+    pullBlock(bundleID,pullCallback);
 }
 
 @end

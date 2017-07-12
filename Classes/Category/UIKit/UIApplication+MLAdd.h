@@ -10,6 +10,9 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+
+typedef void (^UIApplicationCheckVersionPullCallBackBlock)(BOOL succeed,BOOL mustUpdate,NSString *_Nullable version,NSString *_Nullable releaseNotes,NSURL *_Nullable updateURL);
+
 /**
  Provides extensions for `UIApplication`.
  */
@@ -81,6 +84,16 @@ NS_ASSUME_NONNULL_BEGIN
 
 /// Returns YES in App Extension.
 + (BOOL)isAppExtension;
+
+/*!
+ Check version
+ 
+ @param bundleID       bundleID
+ @param promptInterval promptInterval
+ @param pullBlock      pullBlock
+ @param promptBlock    promptBlock
+ */
++ (void)checkWithBundleID:(nullable NSString*)bundleID promptInterval:(NSTimeInterval)promptInterval pullBlock:(void (^)(NSString *bundleID, UIApplicationCheckVersionPullCallBackBlock callback))pullBlock promptBlock:(void(^)(BOOL mustUpdate,NSString *version,NSString *releaseNotes,NSURL *updateURL))promptBlock;
 
 @end
 
