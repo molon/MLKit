@@ -369,6 +369,23 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (nullable id)mutableObjectFromJSONString;
 
+
+#pragma mark - Others
+///=============================================================================
+/// @name Others
+///=============================================================================
+
+/*!
+ Create QRCode image from string
+ 
+ @param side side
+ @param logo logo image
+ @param logoRatio logo ratio
+ 
+ @return QRCode image
+ */
+- (nullable UIImage*)QRCodeImageWithSide:(CGFloat)side logo:(UIImage*)logo logoRatio:(CGFloat)logoRatio;
+
 @end
 
 NS_ASSUME_NONNULL_END

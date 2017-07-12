@@ -26,6 +26,7 @@
 #import "NSString+MLAdd.h"
 #import "NSAttributedString+MLAdd.h"
 #import "NSURLRequest+MLAdd.h"
+#import "NSURL+MLAdd.h"
 
 #import "UIActionSheet+MLAdd.h"
 #import "UIAlertView+MLAdd.h"
