@@ -11,8 +11,16 @@
 #import "MLKitMacro.h"
 #import "NSString+MLAdd.h"
 #import <DHSmartScreenshot/UIView+DHSmartScreenshot.h>
+#import "UIColor+MLAdd.h"
 
 SYNTH_DUMMY_CLASS(UIView_MLAdd)
+
+@interface UIView_MLAdd_PointView : UIView
+@property (nonatomic, weak) id userInfo;
+@end
+
+@implementation UIView_MLAdd_PointView
+@end
 
 @implementation UIView (MLAdd)
 
@@ -320,11 +328,38 @@ SYNTH_DUMMY_CLASS(UIView_MLAdd)
     return [[[NSBundle mainBundle]loadNibNamed:NSStringFromClass([self class]) owner:nil options:nil]lastObject];
 }
 
-- (UIView *)addBadgeValue:(NSString *)badgeValue {
-    return [self addBadgeValue:badgeValue displayOffset:CGPointZero];
+- (UIView*)addPointViewWithColor:(UIColor *)color size:(CGSize)size displayOffset:(UIOffset)displayOffset {
+    [self removePointView];
+    
+    if (CGSizeEqualToSize(size, CGSizeZero)) {
+        size = CGSizeMake(8.0f, 8.0f);
+    }
+    if (!color) {
+        color = UIColorHex(0xDE5D5F);
+    }
+    
+    UIView_MLAdd_PointView *v = [[UIView_MLAdd_PointView alloc]initWithFrame:CGRectMake(0, 0, size.width, size.height)];
+    v.userInfo = self;
+    [v setLayerBackgroundColor:color cornerRadius:fmin(size.width, size.height)/2.0f];
+    [self.superview addSubview:v];
+    v.frame = CGRectMake(self.left+self.width-v.width/2+displayOffset.horizontal, self.top-v.height/2+displayOffset.vertical,v.width, v.height);
+    return v;
 }
 
-- (UIView *)addBadgeValue:(NSString *)badgeValue displayOffset:(CGPoint)displayOffset {
+- (void)removePointView {
+    [self.superview removeSubviewsPassingTest:^BOOL(UIView * _Nonnull subview, BOOL * _Nonnull stop) {
+        if ([subview isKindOfClass:[UIView_MLAdd_PointView class]]&&[SUBCLASS(UIView_MLAdd_PointView, subview).userInfo isEqual:self]) {
+            return YES;
+        }
+        return NO;
+    }];
+}
+
+- (UIView *)addBadgeValue:(NSString *)badgeValue {
+    return [self addBadgeValue:badgeValue displayOffset:UIOffsetZero];
+}
+
+- (UIView *)addBadgeValue:(NSString *)badgeValue displayOffset:(UIOffset)displayOffset {
     NSAssert(self.superview, @"Superview is required before call this method `addBadgeValue:displayOffset:`");
     
     [self removeBadgeValue];
@@ -347,7 +382,7 @@ SYNTH_DUMMY_CLASS(UIView_MLAdd)
                 [subview removeFromSuperview];
                 //add to self.superview
                 [self.superview addSubview:subview];
-                subview.frame = CGRectMake(self.left+self.width-subview.width/2+displayOffset.x, self.top-subview.height/2+displayOffset.y,subview.width, subview.height);
+                subview.frame = CGRectMake(self.left+self.width-subview.width/2+displayOffset.horizontal, self.top-subview.height/2+displayOffset.vertical,subview.width, subview.height);
                 return subview;
             }
         }

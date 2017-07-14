@@ -202,13 +202,29 @@ NS_ASSUME_NONNULL_BEGIN
  
  @return the badge view
  */
-- (nullable UIView *)addBadgeValue:(NSString *)badgeValue displayOffset:(CGPoint)displayOffset;
+- (nullable UIView *)addBadgeValue:(NSString *)badgeValue displayOffset:(UIOffset)displayOffset;
 
 /**
  Remove badge value from self.superview
  @warning self.superview is required before call this method.
  */
 - (void)removeBadgeValue;
+
+/*!
+ @brief Add point view to self.superview on self.rightUP
+ 
+ @param color         color
+ @param size          size
+ @param displayOffset displayOffset
+ 
+ @return point view
+ */
+- (UIView*)addPointViewWithColor:(nullable UIColor *)color size:(CGSize)size displayOffset:(UIOffset)displayOffset;
+
+/*!
+ @brief remove point view which binds self from self.superview
+ */
+- (void)removePointView;
 
 ///=============================================================================
 /// @name Point Color
