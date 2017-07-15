@@ -606,6 +606,9 @@ static void ____cleanupBuffer(void *userData, void *buf_data) {
         @autoreleasepool {
             UIImage *(^imageByScalingToMaxSideLengthBlock)(CGFloat) = ^(CGFloat maxSideLength) {
                 CGFloat ratio = fmax(image.size.height,image.size.width) / maxSideLength;
+                if (ratio<1.0f) {
+                    return image;
+                }
                 CGSize  sizeForAspectScale = CGSizeMake(image.size.width / ratio, image.size.height / ratio);
                 return [image imageByResizeToSize:sizeForAspectScale];
             };
