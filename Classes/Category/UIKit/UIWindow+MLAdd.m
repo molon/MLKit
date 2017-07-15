@@ -14,7 +14,7 @@ SYNTH_DUMMY_CLASS(UIWindow_MLAdd)
 
 @implementation UIWindow (MLAdd)
 
-+ (BOOL)containsInVisibleWindowOnMainScreenReversePassingTest:(BOOL (^)(UIWindow *window,BOOL aboveAppDelegateWindow,BOOL *stop))comparator {
++ (BOOL)containsInVisibleWindowsOnMainScreenReversePassingTest:(BOOL (^)(UIWindow *window,BOOL aboveAppDelegateWindow,BOOL *stop))comparator {
     NSEnumerator *frontToBackWindows = [[[UIApplication sharedApplication]windows] reverseObjectEnumerator];
     UIScreen *mainScreen = [UIScreen mainScreen];
     
@@ -39,7 +39,7 @@ SYNTH_DUMMY_CLASS(UIWindow_MLAdd)
 
 
 + (void)enumerateVisibleWindowsOnMainScreenWithReverse:(BOOL)reverse usingBlock:(void (^)(UIWindow *window,BOOL aboveAppDelegateWindow,BOOL *stop))block {
-    NSEnumerator *windows = reverse?[[[UIApplication sharedApplication]windows] reverseObjectEnumerator]:[[UIApplication sharedApplication]windows];
+    NSArray *windows = reverse?[[[[UIApplication sharedApplication]windows] reverseObjectEnumerator]allObjects ]:[[UIApplication sharedApplication]windows];
     
     UIScreen *mainScreen = [UIScreen mainScreen];
     
