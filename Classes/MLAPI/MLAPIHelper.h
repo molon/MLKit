@@ -42,6 +42,18 @@ FOUNDATION_EXPORT NSString * MLAPI_HTTPMethod(MLAPIHelperRequestMethod requestMe
 FOUNDATION_EXPORT BOOL MLAPI_IsErrorCancelled(NSError *error);
 
 @class MLAPICacheItem;
+
+/*!
+ 有这个参数说明此为上传文件接口，最多只能有一个这类型的参数，上传接口最多只能上传一个文件
+ */
+@interface MLAPIHelperUploadParam : NSObject
+
+@property (nonatomic, copy) NSString *key; //在请求时候会自动根据在MLAPIHelper里的名字进行矫正
+@property (nonatomic, strong) id data; //可NSData，可fileURL
+@property (nonatomic, copy) NSString *mimeType;
+
+@end
+
 @interface MLAPIHelper : NSObject
 
 /**
@@ -253,6 +265,11 @@ FOUNDATION_EXPORT BOOL MLAPI_IsErrorCancelled(NSError *error);
 + (NSDictionary *)customRequestParamKeyMapper __attribute__((objc_requires_super));
 
 #pragma mark - outcall
+/*!
+ 是否是上传接口
+ */
+- (BOOL)isUploadAPI;
+
 /**
  返回是否处于请求完成状态，可能是成功，失败，错误。
  */

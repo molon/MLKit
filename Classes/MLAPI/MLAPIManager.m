@@ -44,8 +44,8 @@ static inline void mlapi_dispatch_async_on_main_queue(void (^block)()) {
 @property (nonatomic, assign) BOOL hasPreloaded;
 
 - (void)reset;
+- (MLAPIHelperUploadParam*)uploadParam;
 - (NSMutableDictionary*)constructRequestParams;
-- (NSMutableDictionary*)constructRequestFileParams;
 - (NSURL*)apiURLWithParameters:(NSDictionary*)parameters;
 
 @end
@@ -384,18 +384,21 @@ GOON_CALLBACK(_method_) \
             }
         }
         
-        NSDictionary *files = [apiHelper constructRequestFileParams];
         AFHTTPRequestSerializer <AFURLRequestSerialization> *requestSerializer = [apiHelper requestSerializer];
-        if (files.count>0) {
+        //如果是上传api
+        if ([apiHelper isUploadAPI]) {
+            MLAPIHelperUploadParam *uploadParam = [apiHelper uploadParam];
+            NSAssert(uploadParam!=nil, @"没有上传文件！%@",apiHelper);
+            
             //执行上传行为
             apiHelper.dataTask = [self.httpSessionManager POST:apiHelper.apiName baseURL:apiHelper.baseURL parameters:params requestSerializer:requestSerializer constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
-                for (NSString *fileKey in [files allKeys]) {
-                    id file = files[fileKey];
-                    static NSString * const kUploadMimeType = @"application/octet-stream";
-                    if ([file isKindOfClass:[NSData class]]) {
-                        [formData appendPartWithFileData:file name:fileKey fileName:fileKey mimeType:kUploadMimeType];
-                    }else if ([file isKindOfClass:[NSURL class]]) {
-                        [formData appendPartWithFileURL:file name:fileKey fileName:fileKey mimeType:kUploadMimeType error:nil];
+                if ([uploadParam.data isKindOfClass:[NSData class]]) {
+                    [formData appendPartWithFileData:uploadParam.data name:uploadParam.key fileName:uploadParam.key mimeType:uploadParam.mimeType];
+                }else if ([uploadParam.data isKindOfClass:[NSURL class]]) {
+                    NSError *error = nil;
+                    [formData appendPartWithFileURL:uploadParam.data name:uploadParam.key fileName:uploadParam.key mimeType:uploadParam.mimeType error:&error];
+                    if (error) {
+                        DDLogError(@"appendPartWithFileURL:name:fileName:mimeType:error:->%@",error);
                     }
                 }
             } constructingRequestWithBlock:^(NSMutableURLRequest *request) {

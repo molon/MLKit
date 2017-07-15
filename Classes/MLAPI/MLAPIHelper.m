@@ -18,7 +18,6 @@ NSTimeInterval const MLAPIHelperDefaultTimeoutInterval = 5.0f;
 
 NSInteger const MLAPIHelperCommonPrefixLength = 2;
 NSString * const MLAPIHelperParamPrefix = @"p_";
-NSString * const MLAPIHelperFileParamPrefix = @"f_";
 NSString * const MLAPIHelperResponsePrefix = @"r_";
 
 NSString * const MLAPIHelperResponseModelArrayKey = @"responseModels";
@@ -73,6 +72,48 @@ BOOL MLAPI_IsErrorCancelled(NSError *error) {
     return ([error.domain isEqualToString:NSURLErrorDomain]
             &&error.code==NSURLErrorCancelled);
 }
+
+@implementation MLAPIHelperUploadParam
+
+- (void)setData:(id)data {
+    _data = data;
+    
+    NSAssert(!data||[data isKindOfClass:[NSData class]]||([data isKindOfClass:[NSURL class]]&&[(NSURL*)data isFileURL]), @"(MLAPIHelperUploadParam)setData: data必须是NSData或者fileURL才有效");
+}
+
+- (BOOL)isValid {
+    if ([_data isKindOfClass:[NSData class]]&&((NSData*)_data).length>0) {
+        return YES;
+    }
+    
+    if ([_data isKindOfClass:[NSURL class]]) {
+        NSURL *file = (NSURL*)_data;
+        if ([file isFileURL]) {
+            BOOL isDirectory = NO;
+            if ([[NSFileManager defaultManager]fileExistsAtPath:[file path] isDirectory:&isDirectory]&&!isDirectory) {
+                return YES;
+            }
+        }
+    }
+    return NO;
+}
+
+- (NSString *)description {
+    if (![self isValid]) {
+        return [NSString stringWithFormat:@"file->无效,mimeType->%@",_mimeType];
+    }
+    
+    if ([_data isKindOfClass:[NSData class]]) {
+        return [NSString stringWithFormat:@"file->%d字节Data,mimeType->%@",((NSData*)_data).length,_mimeType];
+    }
+    
+    if ([_data isKindOfClass:[NSURL class]]) {
+        return [NSString stringWithFormat:@"file->%@,mimeType->%@",([(NSURL*)_data path]).length,_mimeType];
+    }
+    return @"异常MLAPIHelperUploadParam";
+}
+
+@end
 
 @interface MLAPIHelper()
 
@@ -130,6 +171,29 @@ BOOL MLAPI_IsErrorCancelled(NSError *error) {
 }
 
 #pragma mark - outcall
+- (BOOL)isUploadAPI {
+    NSDictionary *paramKeyMapper = [[self class]customRequestParamKeyMapper];
+    if (paramKeyMapper.count<=0) {
+        paramKeyMapper = nil;
+    }
+    
+    //找到p_开头的属性，如果其不为空，则认作是有效参数传过去
+    NSDictionary<NSString *, YYClassPropertyInfo *> *propertyInfos = [[self class] yy_propertyInfosUntilClass:[MLAPIHelper class] ignoreUntilClass:YES];
+    for (NSString *key in [propertyInfos allKeys]) {
+        if (![key hasPrefix:MLAPIHelperParamPrefix]&&!paramKeyMapper[key]) {
+            continue;
+        }
+        
+        YYClassPropertyInfo *info = propertyInfos[key];
+        //有上传文件就认为是上传api
+        if ([info.cls isSubclassOfClass:[MLAPIHelperUploadParam class]]) {
+            return YES;
+        }
+    }
+    
+    return NO;
+}
+
 - (BOOL)isRequestCompleted {
     return _state == MLAPIHelperStateRequestSucceed||_state==MLAPIHelperStateRequestFailed||_state == MLAPIHelperStateRequestError;
 }
@@ -147,7 +211,8 @@ BOOL MLAPI_IsErrorCancelled(NSError *error) {
 
 - (NSURL*)apiURLWithParameters:(NSDictionary*)parameters {
     NSURL *apiURL = [NSURL URLWithString:_apiName relativeToURL:_baseURL];
-    if ([[MLAPIManager defaultManager].httpSessionManager.requestSerializer.HTTPMethodsEncodingParametersInURI containsObject:MLAPI_HTTPMethod(_requestMethod)]) {
+    AFHTTPRequestSerializer *requestSerializer = [self requestSerializer]?:([MLAPIManager defaultManager].httpSessionManager.requestSerializer);
+    if ([requestSerializer.HTTPMethodsEncodingParametersInURI containsObject:MLAPI_HTTPMethod(_requestMethod)]) {
         NSString *query = AFQueryStringFromParameters(parameters);
         if (query && query.length > 0) {
             apiURL = [NSURL URLWithString:[[apiURL absoluteString] stringByAppendingFormat:apiURL.query ? @"&%@" : @"?%@", query]];
@@ -167,6 +232,54 @@ BOOL MLAPI_IsErrorCancelled(NSError *error) {
 }
 
 #pragma mark - helper
+- (MLAPIHelperUploadParam*)uploadParam {
+    NSDictionary *paramKeyMapper = [[self class]customRequestParamKeyMapper];
+    if (paramKeyMapper.count<=0) {
+        paramKeyMapper = nil;
+    }
+    
+    //找到p_开头的属性，如果其不为空，则认作是有效参数传过去
+    NSDictionary<NSString *, YYClassPropertyInfo *> *propertyInfos = [[self class] yy_propertyInfosUntilClass:[MLAPIHelper class] ignoreUntilClass:YES];
+    
+    for (NSString *key in [propertyInfos allKeys]) {
+        if (![key hasPrefix:MLAPIHelperParamPrefix]&&!paramKeyMapper[key]) {
+            continue;
+        }
+        
+        YYClassPropertyInfo *info = propertyInfos[key];
+        if (![info.cls isSubclassOfClass:[MLAPIHelperUploadParam class]]) {
+            continue;
+        }
+        
+        NSAssert(_requestMethod==MLAPIHelperRequestMethodPOST, @"接口%@异常，只有POST请求支持上传文件",self);
+        
+        id object = [self valueForKey:key];
+        if ([object isKindOfClass:[MLAPIHelperUploadParam class]]) {
+            NSString *paramKey = nil;
+            if (paramKeyMapper[key]) {
+                paramKey = paramKeyMapper[key];
+            }else{
+                //去除前缀的名称
+                paramKey = [key substringFromIndex:MLAPIHelperCommonPrefixLength];
+            }
+            
+            MLAPIHelperUploadParam *p = (MLAPIHelperUploadParam*)object;
+            
+            BOOL valid = [p isValid];
+            if (valid) {
+                //设定key传出去
+                p.key = paramKey;
+                return p;
+            }
+            //如果不为nil，但是无效就断言提示
+            NSAssert(valid, @"接口%@的%@参数所指向的上传文件数据是空的，请检查", NSStringFromClass([self class]), paramKey);
+            return nil;
+        }
+        return nil; //只认找到的第一个，其他的忽略
+    }
+    return nil;
+}
+
 - (NSMutableDictionary*)constructRequestParams {
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
     
@@ -192,6 +305,13 @@ BOOL MLAPI_IsErrorCancelled(NSError *error) {
         if (![key hasPrefix:MLAPIHelperParamPrefix]&&!paramKeyMapper[key]) {
             continue;
         }
+        
+        YYClassPropertyInfo *info = propertyInfos[key];
+        //如果是文件，直接忽略
+        if ([info.cls isSubclassOfClass:[MLAPIHelperUploadParam class]]) {
+            continue;
+        }
+        
         id object = [self valueForKey:key];
         if (object && object!= (id)kCFNull) {
             if ([object isKindOfClass:[NSNumber class]]&&
@@ -223,68 +343,6 @@ BOOL MLAPI_IsErrorCancelled(NSError *error) {
     return params;
 }
 
-- (NSMutableDictionary*)constructRequestFileParams {
-    NSMutableDictionary *files = [NSMutableDictionary dictionary];
-    
-    NSDictionary *paramKeyMapper = [[self class]customRequestParamKeyMapper];
-    if (paramKeyMapper.count<=0) {
-        paramKeyMapper = nil;
-    }
-    
-    //找到p_开头的属性，如果其不为空，则认作是有效参数传过去
-    NSDictionary<NSString *, YYClassPropertyInfo *> *propertyInfos = [[self class] yy_propertyInfosUntilClass:[MLAPIHelper class] ignoreUntilClass:YES];
-    for (NSString *key in [propertyInfos allKeys]) {
-        if (![key hasPrefix:MLAPIHelperFileParamPrefix]) {
-            continue;
-        }
-        
-        NSAssert(_requestMethod==MLAPIHelperRequestMethodPOST, @"接口%@异常，只有POST请求支持上传文件",self);
-        
-        id object = [self valueForKey:key];
-        if (object && object!= (id)kCFNull) {
-            NSString *paramKey = nil;
-            if (paramKeyMapper[key]) {
-                paramKey = paramKeyMapper[key];
-            }else{
-                //去除前缀的名称
-                paramKey = [key substringFromIndex:MLAPIHelperCommonPrefixLength];
-            }
-            //NSData是有效的上传数据
-            if ([object isKindOfClass:[NSData class]]) {
-                NSData *fileData = object;
-                if (fileData.length<=0) {
-                    DDLogError(@"接口%@的%@参数所指向的上传文件数据是空的，请检查", NSStringFromClass([self class]), key);
-                    NSAssert(NO, @"接口%@的%@参数所指向的上传文件数据是空的，请检查", NSStringFromClass([self class]), key);
-                    continue;
-                }
-                files[paramKey] = fileData;
-            }else{
-                NSURL *filePath = nil;
-                if ([object isKindOfClass:[NSString class]]) {
-                    filePath = [NSURL fileURLWithPath:object];
-                }else if ([object isKindOfClass:[NSURL class]]) {
-                    filePath = object;
-                }
-                
-                if (!filePath||![filePath isFileURL]) {
-                    DDLogError(@"接口%@的%@参数所指向的上传文件地址有误，请检查", NSStringFromClass([self class]), key);
-                    NSAssert(NO,@"接口%@的%@参数所指向的上传文件地址有误，请检查", NSStringFromClass([self class]), key);
-                    continue;
-                }
-                BOOL isDirectory = NO;
-                if (![[NSFileManager defaultManager]fileExistsAtPath:[filePath path] isDirectory:&isDirectory]||isDirectory) {
-                    DDLogError(@"接口%@的%@参数所指向的上传文件地址不存在，请检查", NSStringFromClass([self class]), key);
-                    NSAssert(NO,@"接口%@的%@参数所指向的上传文件地址不存在，请检查", NSStringFromClass([self class]), key);
-                    continue;
-                }
-                
-                files[paramKey] = filePath;//存储NSURL
-            }
-        }
-    }
-    
-    return files;
-}
 
 - (NSString*)description {
     NSDictionary *params = [self allRequestParams];
@@ -292,7 +350,7 @@ BOOL MLAPI_IsErrorCancelled(NSError *error) {
         return [NSString stringWithFormat:@"\n%@ -> \n%@:%@\n",[super description],MLAPI_HTTPMethod(_requestMethod),[[self apiURL] absoluteString]];
     }
     
-    return [NSString stringWithFormat:@"\n%@ -> \n%@:%@\nParams:%@\n",[super description],MLAPI_HTTPMethod(_requestMethod),[[self apiURL] absoluteString],[self allRequestParams]];
+    return [NSString stringWithFormat:@"\n%@ -> \n%@:%@\nParams:%@\n",[super description],MLAPI_HTTPMethod(_requestMethod),[[self apiURL] absoluteString],params];
 }
 
 - (void)reset {
