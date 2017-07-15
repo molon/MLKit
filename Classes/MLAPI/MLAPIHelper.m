@@ -120,11 +120,11 @@ BOOL MLAPI_IsErrorCancelled(NSError *error) {
     }
     
     if ([_data isKindOfClass:[NSData class]]) {
-        return [NSString stringWithFormat:@"key->%@,file->%d字节Data,mimeType->%@",_key,((NSData*)_data).length,_mimeType];
+        return [NSString stringWithFormat:@"key->%@,file->%ld字节Data,mimeType->%@",_key,(long)(((NSData*)_data).length),_mimeType];
     }
     
     if ([_data isKindOfClass:[NSURL class]]) {
-        return [NSString stringWithFormat:@"key->%@,file->%@,mimeType->%@",_key,([(NSURL*)_data path]).length,_mimeType];
+        return [NSString stringWithFormat:@"key->%@,file->%@,mimeType->%@",_key,[(NSURL*)_data path],_mimeType];
     }
     return @"异常MLAPIHelperUploadParam";
 }
