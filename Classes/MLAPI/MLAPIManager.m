@@ -386,10 +386,11 @@ GOON_CALLBACK(_method_) \
         
         AFHTTPRequestSerializer <AFURLRequestSerialization> *requestSerializer = [apiHelper requestSerializer];
         //如果是上传api
-        if ([apiHelper isUploadAPI]) {
-            MLAPIHelperUploadParam *uploadParam = [apiHelper uploadParam];
-            NSAssert(uploadParam!=nil, @"没有上传文件！%@",apiHelper);
+        if (apiHelper.uploadParam) {
+            NSAssert(apiHelper.requestMethod==MLAPIHelperRequestMethodPOST, @"上传接口%@的请求方法必须得是MLAPIHelperRequestMethodPOST",apiHelper);
             
+            MLAPIHelperUploadParam *uploadParam = apiHelper.uploadParam;
+            NSAssert([uploadParam isValid], @"接口%@的上传文件无效",apiHelper);
             //执行上传行为
             apiHelper.dataTask = [self.httpSessionManager POST:apiHelper.apiName baseURL:apiHelper.baseURL parameters:params requestSerializer:requestSerializer constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
                 if ([uploadParam.data isKindOfClass:[NSData class]]) {

@@ -48,9 +48,12 @@ FOUNDATION_EXPORT BOOL MLAPI_IsErrorCancelled(NSError *error);
  */
 @interface MLAPIHelperUploadParam : NSObject
 
-@property (nonatomic, copy) NSString *key; //在请求时候会自动根据在MLAPIHelper里的名字进行矫正
-@property (nonatomic, strong) id data; //可NSData，可fileURL
-@property (nonatomic, copy) NSString *mimeType;
+@property (nonatomic, copy, readonly) NSString *key; //参数名字
+@property (nonatomic, strong, readonly) id data; //可NSData，可fileURL
+@property (nonatomic, copy, nullable, readonly) NSString *mimeType;
+
++ (instancetype)uploadParamWithKey:(NSString*)key data:(id)data mimeType:(NSString*)mimeType;
+- (BOOL)isValid;
 
 @end
 
@@ -65,6 +68,11 @@ FOUNDATION_EXPORT BOOL MLAPI_IsErrorCancelled(NSError *error);
  只是为了方便传递对象罢了,爱用不用
  */
 @property (nonatomic, strong, nullable) id userInfo;
+
+/*!
+ 上传参数，如果有则认为是上传接口
+ */
+@property (nonatomic, strong, nullable) MLAPIHelperUploadParam *uploadParam;
 
 #pragma mark - 只读的一些属性
 /**
@@ -265,11 +273,6 @@ FOUNDATION_EXPORT BOOL MLAPI_IsErrorCancelled(NSError *error);
 + (NSDictionary *)customRequestParamKeyMapper __attribute__((objc_requires_super));
 
 #pragma mark - outcall
-/*!
- 是否是上传接口
- */
-- (BOOL)isUploadAPI;
-
 /**
  返回是否处于请求完成状态，可能是成功，失败，错误。
  */
