@@ -44,15 +44,34 @@ FOUNDATION_EXPORT BOOL MLAPI_IsErrorCancelled(NSError *error);
 @class MLAPICacheItem;
 
 /*!
- 有这个参数说明此为上传文件接口，最多只能有一个这类型的参数，上传接口最多只能上传一个文件
+ 有这个类型的f_参数说明此为上传文件接口
+ f_属性必须得是这个类型的
  */
 @interface MLAPIHelperUploadParam : NSObject
 
-@property (nonatomic, copy, readonly) NSString *key; //参数名字
-@property (nonatomic, strong, readonly) id data; //可NSData，可fileURL
+/*!
+ 可NSData，可fileURL
+ */
+@property (nonatomic, strong, readonly) id data;
+
+/*!
+ 如果data是NSData的话请设置，若是fileURL且不设置的话，会自动根据后缀投递
+ */
 @property (nonatomic, copy, nullable, readonly) NSString *mimeType;
 
-+ (instancetype)uploadParamWithKey:(NSString*)key data:(id)data mimeType:(NSString*)mimeType;
+/*!
+ 便捷的初始化data和mimeType
+ 
+ @param data     data
+ @param mimeType mimeType
+ 
+ @return upload param
+ */
++ (instancetype)uploadParamWithData:(id)data mimeType:(NSString*)mimeType;
+
+/*!
+ 检查data是否有效
+ */
 - (BOOL)isValid;
 
 @end
@@ -68,11 +87,6 @@ FOUNDATION_EXPORT BOOL MLAPI_IsErrorCancelled(NSError *error);
  只是为了方便传递对象罢了,爱用不用
  */
 @property (nonatomic, strong, nullable) id userInfo;
-
-/*!
- 上传参数，如果有则认为是上传接口
- */
-@property (nonatomic, strong, nullable) MLAPIHelperUploadParam *uploadParam;
 
 #pragma mark - 只读的一些属性
 /**
@@ -207,6 +221,16 @@ FOUNDATION_EXPORT BOOL MLAPI_IsErrorCancelled(NSError *error);
 - (void)treatWithConstructedRequestParams:(NSMutableDictionary*)params __attribute__((objc_requires_super));
 
 /**
+ 构造上传参数之前,每次allUploadParams都会调用,请只做上传参数相关内容
+ */
+- (void)beforeConstructUploadParams __attribute__((objc_requires_super));
+
+/**
+ 对最终构造的上传参数做额外处理，每次allUploadParams最终都会调用，请只做上传参数相关内容
+ */
+- (void)treatWithConstructedUploadParams:(NSMutableDictionary*)params __attribute__((objc_requires_super));
+
+/**
  对构造出来的请求URLRequest进行额外处理，例如重新设置HTTPHeaderField啊等等
  */
 - (void)treatWithConstructedRequest:(NSMutableURLRequest*)mutableRequest __attribute__((objc_requires_super));
@@ -273,6 +297,12 @@ FOUNDATION_EXPORT BOOL MLAPI_IsErrorCancelled(NSError *error);
 + (NSDictionary *)customRequestParamKeyMapper __attribute__((objc_requires_super));
 
 #pragma mark - outcall
+
+/*!
+ 是否是上传接口
+ */
+- (BOOL)isUploadAPI;
+
 /**
  返回是否处于请求完成状态，可能是成功，失败，错误。
  */
@@ -282,6 +312,11 @@ FOUNDATION_EXPORT BOOL MLAPI_IsErrorCancelled(NSError *error);
  当前所对应的请求参数
  */
 - (NSDictionary*)allRequestParams;
+
+/**
+ 当前所对应的上传参数
+ */
+- (NSDictionary*)allUploadParams;
 
 /**
  接口完整地址

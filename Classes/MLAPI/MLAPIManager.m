@@ -44,8 +44,6 @@ static inline void mlapi_dispatch_async_on_main_queue(void (^block)()) {
 @property (nonatomic, assign) BOOL hasPreloaded;
 
 - (void)reset;
-- (MLAPIHelperUploadParam*)uploadParam;
-- (NSMutableDictionary*)constructRequestParams;
 - (NSURL*)apiURLWithParameters:(NSDictionary*)parameters;
 
 @end
@@ -341,13 +339,16 @@ GOON_CALLBACK(_method_) \
         //构造请求参数
         NSDictionary *params = [apiHelper allRequestParams];
         
-        //请求之前回调，想了想还是将此放到缓存判断之前把，因为如果直接用缓存，不需请求的时候，complete回调也会调用，放到这里的话有个呼应关系的感觉。
-        JUST_RETURN_APIHELPER_CALLBACK(beforeRequest,beforeBlock)
+        
+        BOOL beforeCallbackCalled = NO;
         
         //缓存相关
         if (apiHelper.cacheType!=MLAPIHelperCacheTypeNone) {
             NSAssert(apiHelper.requestMethod==MLAPIHelperRequestMethodGET, @"非GET请求不支持缓存");
             if (apiHelper.requestMethod==MLAPIHelperRequestMethodGET) {
+                JUST_RETURN_APIHELPER_CALLBACK(beforeRequest,beforeBlock)
+                beforeCallbackCalled = YES;
+                
                 cacheKey = [self cacheKeyWithDomain:[apiHelper currentCacheDomainName] apiURL:[apiHelper apiURLWithParameters:params]];
                 MLAPICacheItem *cacheItem = (MLAPICacheItem*)[_cache objectForKey:cacheKey];
                 NSAssert(!cacheItem||[cacheItem isKindOfClass:[MLAPICacheItem class]], @"返回的缓存一定要是MLAPICacheItem才正常");
@@ -386,24 +387,35 @@ GOON_CALLBACK(_method_) \
         
         AFHTTPRequestSerializer <AFURLRequestSerialization> *requestSerializer = [apiHelper requestSerializer];
         //如果是上传api
-        if (apiHelper.uploadParam) {
+        if ([apiHelper isUploadAPI]) {
             NSAssert(apiHelper.requestMethod==MLAPIHelperRequestMethodPOST, @"上传接口%@的请求方法必须得是MLAPIHelperRequestMethodPOST",apiHelper);
             
-            MLAPIHelperUploadParam *uploadParam = apiHelper.uploadParam;
-            NSAssert([uploadParam isValid], @"接口%@的上传文件无效",apiHelper);
+            NSMutableDictionary *uploadParams = [apiHelper allUploadParams];
+            NSAssert(uploadParams.count>0, @"上传接口%@没有有效上传内容",apiHelper);
+            
             //执行上传行为
+            if (!beforeCallbackCalled) {
+                JUST_RETURN_APIHELPER_CALLBACK(beforeRequest,beforeBlock)
+            }
             apiHelper.dataTask = [self.httpSessionManager POST:apiHelper.apiName baseURL:apiHelper.baseURL parameters:params requestSerializer:requestSerializer constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
-                if ([uploadParam.data isKindOfClass:[NSData class]]) {
-                    [formData appendPartWithFileData:uploadParam.data name:uploadParam.key fileName:uploadParam.key mimeType:uploadParam.mimeType];
-                }else if ([uploadParam.data isKindOfClass:[NSURL class]]) {
-                    NSError *error = nil;
-                    [formData appendPartWithFileURL:uploadParam.data name:uploadParam.key fileName:uploadParam.key mimeType:uploadParam.mimeType error:&error];
-                    if (error) {
-                        DDLogError(@"appendPartWithFileURL:name:fileName:mimeType:error:->%@",error);
+                for (NSString *key in [uploadParams allKeys]) {
+                    MLAPIHelperUploadParam *p = uploadParams[key];
+                    if ([p.data isKindOfClass:[NSData class]]) {
+                        [formData appendPartWithFileData:p.data name:key fileName:key mimeType:p.mimeType];
+                    }else if ([p.data isKindOfClass:[NSURL class]]) {
+                        NSError *error = nil;
+                        [formData appendPartWithFileURL:p.data name:key fileName:key mimeType:p.mimeType error:&error];
+                        if (error) {
+                            DDLogError(@"appendPartWithFileURL:name:fileName:mimeType:error:->%@",error);
+                        }
                     }
                 }
             } constructingRequestWithBlock:^(NSMutableURLRequest *request) {
                 NSTimeInterval timeoutInterval = [apiHelper timeoutInterval];
+                if (timeoutInterval<10.0f) {
+                    DDLogWarn(@"上传接口%@的超时时间小于10秒",apiHelper);
+                }
+                
                 if (timeoutInterval>0) {
                     [request setTimeoutInterval:timeoutInterval];
                 }
@@ -411,6 +423,9 @@ GOON_CALLBACK(_method_) \
             } progress:uploadProgressWrapper success:requestSuccessWrapper failure:errorWrapper];
         }else{
             //执行标准的请求方式
+            if (!beforeCallbackCalled) {
+                JUST_RETURN_APIHELPER_CALLBACK(beforeRequest,beforeBlock)
+            }
             apiHelper.dataTask = [self.httpSessionManager dataTaskWithHTTPMethod:MLAPI_HTTPMethod(apiHelper.requestMethod) URLString:apiHelper.apiName baseURL:apiHelper.baseURL parameters:params requestSerializer:requestSerializer constructingRequestWithBlock:^(NSMutableURLRequest *request) {
                     NSTimeInterval timeoutInterval = [apiHelper timeoutInterval];
                     if (timeoutInterval>0) {
