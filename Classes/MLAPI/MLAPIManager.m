@@ -390,7 +390,7 @@ GOON_CALLBACK(_method_) \
         if ([apiHelper isUploadAPI]) {
             NSAssert(apiHelper.requestMethod==MLAPIHelperRequestMethodPOST, @"上传接口%@的请求方法必须得是MLAPIHelperRequestMethodPOST",apiHelper);
             
-            NSMutableDictionary *uploadParams = [apiHelper allUploadParams];
+            NSDictionary *uploadParams = [apiHelper allUploadParams];
             NSAssert(uploadParams.count>0, @"上传接口%@没有有效上传内容",apiHelper);
             
             //执行上传行为
