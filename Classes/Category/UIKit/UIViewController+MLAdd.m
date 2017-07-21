@@ -45,7 +45,7 @@ SYNTH_DUMMY_CLASS(UIViewController_MLAdd)
     if (self.navigationController.navigationBarHidden) {
         return 0.0f;
     }
-    return ([UIApplication sharedApplication].statusBarHidden?0.0f:[UIViewController statusBarHeight]) + self.navigationController.navigationBar.intrinsicContentSize.height;
+    return (self.prefersStatusBarHidden?0.0f:[UIViewController statusBarHeight]) + self.navigationController.navigationBar.intrinsicContentSize.height;
 }
 
 - (CGFloat)tabBarOccupiedHeight {
@@ -79,6 +79,14 @@ SYNTH_DUMMY_CLASS(UIViewController_MLAdd)
         }
     }
     
+    return vc;
+}
+
+- (UIViewController*)topPresentedViewController {
+    UIViewController *vc = self;
+    while (vc.presentedViewController) {
+        vc = vc.presentedViewController;
+    }
     return vc;
 }
 

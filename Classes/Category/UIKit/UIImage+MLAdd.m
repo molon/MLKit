@@ -148,6 +148,39 @@ CGRect ____CGRectFitWithContentMode(CGRect rect, CGSize size, UIViewContentMode 
     return image;
 }
 
++ (instancetype )imageFitCurrentScreenWithName:(NSString *)fileName extension:(NSString*)extension {
+    NSString *magicSuffix = @"";
+    
+    CGFloat greaterPixelDimension = (CGFloat)fmaxf(kScreenWidth,kScreenHeight);
+    switch ((NSInteger)greaterPixelDimension) {
+        case 480:
+            magicSuffix = kScreenScale>1.0f?@"-480h@2x":@"";
+            break;
+        case 568:
+            magicSuffix = @"-568h@2x";
+            break;
+        case 667:
+            magicSuffix = @"-667h@2x";
+            break;
+        case 736:
+            magicSuffix = @"-736h@3x";
+            break;
+        case 1024:
+            magicSuffix = kScreenScale>1.0f?@"~ipad@2x":@"~ipad";
+            break;
+        default:
+            magicSuffix = @"";
+            break;
+    }
+    
+    NSString *nameWithSuffix = [fileName stringByAppendingString:magicSuffix];
+    if (extension) {
+        nameWithSuffix = [nameWithSuffix stringByAppendingString:extension];
+    }
+    
+    return [UIImage imageNamed:nameWithSuffix];
+}
+
 - (BOOL)hasAlphaChannel {
     if (self.CGImage == NULL) return NO;
     CGImageAlphaInfo alpha = CGImageGetAlphaInfo(self.CGImage) & kCGBitmapAlphaInfoMask;

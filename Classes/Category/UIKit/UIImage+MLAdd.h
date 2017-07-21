@@ -60,6 +60,16 @@ NS_ASSUME_NONNULL_BEGIN
  */
 + (UIImage *)resizableImageWithColor:(UIColor *)color byRoundCornerRadius:(CGFloat)radius;
 
+/*!
+ Create image which fit screen
+ 
+ @param fileName  image file name
+ @param extension can be nil
+ 
+ @return image
+ */
++ (instancetype )imageFitCurrentScreenWithName:(NSString *)fileName extension:(nullable NSString*)extension;
+
 #pragma mark - Image Info
 ///=============================================================================
 /// @name Image Info

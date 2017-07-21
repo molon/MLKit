@@ -152,6 +152,10 @@ SYNTH_DUMMY_CLASS(UIDevice_MLAdd)
                               @"iPhone8,1" : @"iPhone 6s",
                               @"iPhone8,2" : @"iPhone 6s Plus",
                               @"iPhone8,4" : @"iPhone SE",
+                              @"iPhone9,1" : @"iPhone 7",
+                              @"iPhone9,3" : @"iPhone 7",
+                              @"iPhone9,2" : @"iPhone 7 Plus",
+                              @"iPhone9,4" : @"iPhone 7 Plus",
                               
                               @"iPad1,1" : @"iPad 1",
                               @"iPad2,1" : @"iPad 2 (WiFi)",
@@ -184,6 +188,12 @@ SYNTH_DUMMY_CLASS(UIDevice_MLAdd)
                               @"iPad6,4" : @"iPad Pro (9.7 inch)",
                               @"iPad6,7" : @"iPad Pro (12.9 inch)",
                               @"iPad6,8" : @"iPad Pro (12.9 inch)",
+                              @"iPad6,11" : @"iPad 5",
+                              @"iPad6,12" : @"iPad 5",
+                              @"iPad7,1" : @"iPad Pro (12.9-inch, 2nd generation)",
+                              @"iPad7,2" : @"iPad Pro (12.9-inch, 2nd generation)",
+                              @"iPad7,3" : @"iPad Pro (10.5-inch)",
+                              @"iPad7,4" : @"iPad Pro (10.5-inch)",
                               
                               @"AppleTV2,1" : @"Apple TV 2",
                               @"AppleTV3,1" : @"Apple TV 3",
