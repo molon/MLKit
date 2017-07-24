@@ -154,7 +154,7 @@ CGRect ____CGRectFitWithContentMode(CGRect rect, CGSize size, UIViewContentMode 
     CGFloat greaterPixelDimension = (CGFloat)fmaxf(kScreenWidth,kScreenHeight);
     switch ((NSInteger)greaterPixelDimension) {
         case 480:
-            magicSuffix = kScreenScale>1.0f?@"-480h@2x":@"";
+            magicSuffix = kScreenScale>1.0f?@"-480h@2x":@"-480h";
             break;
         case 568:
             magicSuffix = @"-568h@2x";
