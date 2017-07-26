@@ -27,4 +27,32 @@ static UIImageView * ____FindHairlineImageViewUnder(UIView *view) {
     return ____FindHairlineImageViewUnder(self);
 }
 
+- (UIView*)viewForBarItemAtIndex:(NSUInteger)index fromLeft:(BOOL)fromLeft {
+    NSMutableArray *barItems = [NSMutableArray arrayWithCapacity:[self.items count]];
+    for (UIView *view in self.subviews) {
+        if ([view isKindOfClass:NSClassFromString(@"UINavigationButton")] && [view respondsToSelector:@selector(frame)]) {
+            [barItems addObject:view];
+        }
+    }
+    if ([barItems count] == 0) {
+        return nil;
+    }
+    
+    //sort
+    [barItems sortUsingComparator:^NSComparisonResult(UIView *view1, UIView *view2) {
+        if (view1.frame.origin.x < view2.frame.origin.x) {
+            return fromLeft?NSOrderedAscending:NSOrderedDescending;
+        }
+        if (view1.frame.origin.x > view2.frame.origin.x) {
+            return fromLeft?NSOrderedDescending:NSOrderedAscending;
+        }
+        return NSOrderedSame;
+    }];
+    
+    if (index < [barItems count]) {
+        return barItems[index];
+    }
+    return nil;
+}
+
 @end

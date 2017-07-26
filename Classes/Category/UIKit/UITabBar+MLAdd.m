@@ -38,19 +38,12 @@ SYNTH_DUMMY_CLASS(UITabBar_MLAdd)
     }];
     
     if (index < [tabBarItems count]) {
-        UIView *tabView = tabBarItems[index];
-        if ([tabView respondsToSelector:@selector(frame)]) {
-            return tabView;
-        }
-    }else {
-        //Because of dispaly count of tabBars must <=5, the more tabBarItem will be moved in more style tabBar.
-        //So we return the last display tabBar
-        UIView *tabView = [tabBarItems lastObject];
-        if ([tabView respondsToSelector:@selector(frame)]) {
-            return tabView;
-        }
+        return tabBarItems[index];
     }
-    return nil;
+    
+    //Because of dispaly count of tabBars must <=5, the more tabBarItem will be moved in more style tabBar.
+    //So we return the last display tabBar
+    return [tabBarItems lastObject];
 }
 
 @end
