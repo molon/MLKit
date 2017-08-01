@@ -246,16 +246,49 @@ SYNTH_DYNAMIC_PROPERTY_OBJECT(networkActivityInfo, setNetworkActivityInfo:, RETA
     return isAppExtension;
 }
 
-+ (void)checkWithBundleID:(NSString*)bundleID promptInterval:(NSTimeInterval)promptInterval pullBlock:(void (^)(NSString *bundleID, UIApplicationCheckVersionPullCallBackBlock callback))pullBlock promptBlock:(void(^)(BOOL mustUpdate,NSString *version,NSString *releaseNotes,NSURL *updateURL))promptBlock {
-    NSAssert(pullBlock&&promptBlock, @"必须给予pullBlock和promptBlock");
++ (void)checkNewVersionWithBundleID:(NSString*)bundleID promptInterval:(NSTimeInterval)promptInterval pullBlock:(void (^)(NSString *bundleID, UIApplicationCheckVersionPullCallBackBlock callback))pullBlock mustUpdateBlock:(BOOL(^)(NSString *version,NSDate *releaseDate))mustUpdateBlock promptBlock:(void(^)(BOOL mustUpdate,NSString *version,NSDate *releaseDate,NSString *releaseNotes,NSURL *updateURL))promptBlock {
+    
+    NSAssert(pullBlock&&mustUpdateBlock&&promptBlock, @"必须给予pullBlock和mustUpdateBlock以及promptBlock");
     bundleID = [bundleID isNotBlank]?bundleID:kAppBundleID;
     
     NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
+    NSString * const kCheckVersionResultJSONUDKey = @"com.molon.VersionCheckerResultJSONUDKey";
+    
+    //返回布尔值表示是否应该执行pull操作
+    BOOL (^doBlock)(NSDictionary *) = ^BOOL(NSDictionary *json){
+        NSString *version = [json stringValueForKey:@"version" default:nil];
+        if ([version isNotBlank]&&[kAppVersion compare:version options:NSNumericSearch] == NSOrderedAscending) {
+            NSURL *updateURL = [json URLValueForKey:@"updateURL" default:nil];
+            if (updateURL.scheme) {
+                NSNumber *releaseTime = [json numberValueForKey:@"releaseTime" default:nil];
+                NSDate *releaseDate = [NSDate dateWithTimeIntervalSince1970:[releaseTime doubleValue]];
+                
+                //是否必须更新
+                BOOL mustUpdate = mustUpdateBlock(version,releaseDate);
+                
+                //判断是否需要提示，如果必须更新的话，那肯定要提示，忽略lastPromptTime
+                NSTimeInterval lastPromptTime = [[json numberValueForKey:@"lastPromptTime" default:nil]doubleValue];
+                if (!mustUpdate&&fmax(0, [[NSDate date]timeIntervalSince1970]-lastPromptTime)<promptInterval) {
+                    [ud setObject:json forKey:kCheckVersionResultJSONUDKey];
+                    [ud synchronize];
+                    return YES;
+                }
+                
+                //存储记录
+                NSMutableDictionary *mJSON = [json mutableCopy];
+                mJSON[@"lastPromptTime"] = @([[NSDate date]timeIntervalSince1970]);
+                [ud setObject:mJSON forKey:kCheckVersionResultJSONUDKey];
+                [ud synchronize];
+                
+                NSString *releaseNotes = [json stringValueForKey:@"releaseNotes" default:nil];
+                promptBlock(mustUpdate,version,releaseDate,releaseNotes,updateURL);
+                return YES;
+            }
+        }
+        return NO;
+    };
     
     NSDictionary *udJSON = nil;
-    
-    NSString * const kCheckVersionResultJSONUDKey = @"com.molon.MLVersionCheckerResultJSONUDKey";
-    //取出来
     id r = [ud objectForKey:kCheckVersionResultJSONUDKey];
     if ([r isKindOfClass:[NSDictionary class]]) {
         udJSON = r;
@@ -265,41 +298,12 @@ SYNTH_DYNAMIC_PROPERTY_OBJECT(networkActivityInfo, setNetworkActivityInfo:, RETA
     if (![[udJSON stringValueForKey:@"bundleID" default:nil]isEqualToString:bundleID]) {
         udJSON = nil;
     }
-    
-    BOOL mustUpdate = [udJSON boolValueForKey:@"mustUpdate" default:NO];
-    NSTimeInterval lastPromptTime = [[udJSON numberValueForKey:@"lastPromptTime" default:nil]doubleValue];
-    //没到提醒间隔就不需要继续了，但是如果已知是必须更新，就忽略这个间隔
-    if (!mustUpdate&&fmax(0, [[NSDate date]timeIntervalSince1970]-lastPromptTime)<promptInterval) {
-        return;
-    }
-    
-    BOOL (^doBlock)(NSDictionary *json) = ^BOOL(NSDictionary *json){
-        NSString *version = [json stringValueForKey:@"version" default:nil];
-        if ([version isNotBlank]&&[kAppVersion compare:version options:NSNumericSearch] == NSOrderedAscending) {
-            NSString *releaseNotes = [json stringValueForKey:@"releaseNotes" default:nil];
-            NSURL *updateURL = [json URLValueForKey:@"updateURL" default:nil];
-            BOOL mustUpdate = [json boolValueForKey:@"mustUpdate" default:NO];
-            
-            if ([releaseNotes isNotBlank]&&updateURL.scheme) {
-                //存储记录
-                NSMutableDictionary *mJSON = [json mutableCopy];
-                mJSON[@"lastPromptTime"] = @([[NSDate date]timeIntervalSince1970]);
-                [ud setObject:mJSON forKey:kCheckVersionResultJSONUDKey];
-                [ud synchronize];
-                
-                promptBlock(mustUpdate,version,releaseNotes,updateURL);
-                return YES;
-            }
-        }
-        return NO;
-    };
-    
     if (doBlock(udJSON)) {
         return;
     }
     
     //执行拉取方法
-    void(^pullCallback)(BOOL succeed,BOOL mustUpdate,NSString *version,NSString *releaseNotes,NSURL *updateURL) = ^(BOOL succeed,BOOL mustUpdate,NSString *version,NSString *releaseNotes,NSURL *updateURL){
+    void(^pullCallback)(BOOL,NSString *,NSDate *, NSString *,NSURL *) = ^(BOOL succeed,NSString *version,NSDate *releaseDate, NSString *releaseNotes,NSURL *updateURL){
         if (!succeed) { //没成功就啥也不做呗
             return;
         }
@@ -308,7 +312,7 @@ SYNTH_DYNAMIC_PROPERTY_OBJECT(networkActivityInfo, setNetworkActivityInfo:, RETA
         NSDictionary *json = @{
                                @"bundleID":bundleID?:@"",
                                @"version":version?:@"",
-                               @"mustUpdate":@(mustUpdate),
+                               @"releaseTime":@([(releaseDate?:[NSDate date]) timeIntervalSince1970]),
                                @"releaseNotes":releaseNotes?:@"",
                                @"updateURL":[updateURL absoluteString]?:@"",
                                };

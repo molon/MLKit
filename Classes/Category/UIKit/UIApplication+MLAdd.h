@@ -11,7 +11,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 
-typedef void (^UIApplicationCheckVersionPullCallBackBlock)(BOOL succeed,BOOL mustUpdate,NSString *_Nullable version,NSString *_Nullable releaseNotes,NSURL *_Nullable updateURL);
+typedef void (^UIApplicationCheckVersionPullCallBackBlock)(BOOL succeed,NSString *_Nullable version,NSDate *_Nullable releaseDate, NSString *_Nullable releaseNotes,NSURL *_Nullable updateURL);
 
 /**
  Provides extensions for `UIApplication`.
@@ -86,14 +86,15 @@ typedef void (^UIApplicationCheckVersionPullCallBackBlock)(BOOL succeed,BOOL mus
 + (BOOL)isAppExtension;
 
 /*!
- Check version
+ Check new version
  
- @param bundleID       bundleID
- @param promptInterval promptInterval
- @param pullBlock      pullBlock
- @param promptBlock    promptBlock
+ @param bundleID        bundleID
+ @param promptInterval  promptInterval //这个玩意只有mustUpdate返回FALSE时候有效
+ @param pullBlock       pullBlock //拉取新版本信息，在拉去了需要更新版本信息后会缓存下来，不会去重复拉取。
+ @param mustUpdateBlock mustUpdateBlock //根据version和releaseDate来返回是否需要强制更新，可以实现新版本上线后N久内非强制，然后再强制这种需求等等
+ @param promptBlock     promptBlock //外部需要做下UI弹窗逻辑
  */
-+ (void)checkWithBundleID:(nullable NSString*)bundleID promptInterval:(NSTimeInterval)promptInterval pullBlock:(void (^)(NSString *bundleID, UIApplicationCheckVersionPullCallBackBlock callback))pullBlock promptBlock:(void(^)(BOOL mustUpdate,NSString *version,NSString *releaseNotes,NSURL *updateURL))promptBlock;
++ (void)checkNewVersionWithBundleID:(nullable NSString*)bundleID promptInterval:(NSTimeInterval)promptInterval pullBlock:(void (^)(NSString *bundleID, UIApplicationCheckVersionPullCallBackBlock callback))pullBlock mustUpdateBlock:(BOOL(^)(NSString *version,NSDate *releaseDate))mustUpdateBlock promptBlock:(void(^)(BOOL mustUpdate,NSString *version,NSDate *releaseDate,NSString *releaseNotes,NSURL *updateURL))promptBlock;
 
 @end
 
