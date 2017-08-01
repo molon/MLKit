@@ -90,6 +90,14 @@ SYNTH_DUMMY_CLASS(UIViewController_MLAdd)
     return vc;
 }
 
+- (UIViewController*)topParentViewController {
+    UIViewController *topParentViewController = self;
+    while (topParentViewController.parentViewController!=nil) {
+        topParentViewController = topParentViewController.parentViewController;
+    }
+    return topParentViewController;
+}
+
 - (void)disappear {
     //If locate in a navigationController and self is the first child of naviagtionController. just dismiss the navigationController. othewise pop.
     //If not locate in a navigationController,just dismiss self.

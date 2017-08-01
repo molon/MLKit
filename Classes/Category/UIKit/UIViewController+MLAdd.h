@@ -55,6 +55,11 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (UIViewController*)topPresentedViewController;
 
+/*!
+ Returns the top parent view controller
+ */
+- (UIViewController*)topParentViewController;
+
 /**
  If locate in a navigationController and is not the first child of it,just pop. otherwise dismiss.
  */
