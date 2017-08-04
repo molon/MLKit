@@ -302,6 +302,17 @@ SYNTH_DUMMY_CLASS(UIView_MLAdd)
     return NO;
 }
 
+- (NSArray*)retrieveDescendantsPassingTest:(BOOL (^)(UIView *v))comparator {
+    NSMutableArray *vs = [NSMutableArray array];
+    for (UIView *v in self.subviews) {
+        if (comparator(v)) {
+            [vs addObject:v];
+        }
+        [vs addObjectsFromArray:[v retrieveDescendantsPassingTest:comparator]];
+    }
+    return vs;
+}
+
 - (BOOL)isDescendantOfAncestorPassingTest:(BOOL (^)(UIView *ancestor))comparator {
     UIView *superview = self.superview;
     while (superview) {

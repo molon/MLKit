@@ -7,6 +7,8 @@
 //
 
 #import "UINavigationBar+MLAdd.h"
+#import "UIView+MLAdd.h"
+#import "UIDevice+MLAdd.h"
 
 static UIImageView * ____FindHairlineImageViewUnder(UIView *view) {
     if ([view isKindOfClass:UIImageView.class] && view.bounds.size.height <= 1.0) {
@@ -27,11 +29,39 @@ static UIImageView * ____FindHairlineImageViewUnder(UIView *view) {
     return ____FindHairlineImageViewUnder(self);
 }
 
-- (UIView*)viewForBarItemAtIndex:(NSUInteger)index fromLeft:(BOOL)fromLeft {
+- (UIButton*)buttonAtIndex:(NSUInteger)index fromLeft:(BOOL)fromLeft {
     NSMutableArray *barItems = [NSMutableArray arrayWithCapacity:[self.items count]];
-    for (UIView *view in self.subviews) {
-        if ([view isKindOfClass:NSClassFromString(@"UINavigationButton")] && [view respondsToSelector:@selector(frame)]) {
-            [barItems addObject:view];
+    
+//    if (@available(iOS 11.0, *)) {
+    if (kiOS11Later){
+        //这玩意比较复杂
+        NSArray *(^subviewsWithClassNameBlock)(UIView *,NSString *) = ^NSArray *(UIView *v,NSString *clsName){
+            NSMutableArray *vs = [NSMutableArray array];
+            Class cls = NSClassFromString(clsName);
+            for (UIView *subview in v.subviews) {
+                if ([subview isKindOfClass:cls]){
+                    [vs addObject:subview];
+                }
+            }
+            return vs;
+        };
+        UIView *contentView = [subviewsWithClassNameBlock(self,@"_UINavigationBarContentView")firstObject];
+        if (!contentView) {
+            return nil;
+        }
+        //找到所有_UIButtonBarStackView _UIButtonBarButton
+        NSArray *stackViews = subviewsWithClassNameBlock(contentView,@"_UIButtonBarStackView");
+        //找到所有stackViews里是UIButton的玩意
+        for (UIView *stackView in stackViews) {
+            [barItems addObjectsFromArray:[stackView retrieveDescendantsPassingTest:^BOOL(UIView * _Nonnull v) {
+                return [v isKindOfClass:[UIButton class]] && [v respondsToSelector:@selector(frame)];
+            }]];
+        }
+    }else{
+        for (UIView *view in self.subviews) {
+            if ([view isKindOfClass:[UIButton class]] && [view respondsToSelector:@selector(frame)]) {
+                [barItems addObject:view];
+            }
         }
     }
     if ([barItems count] == 0) {
@@ -40,10 +70,13 @@ static UIImageView * ____FindHairlineImageViewUnder(UIView *view) {
     
     //sort
     [barItems sortUsingComparator:^NSComparisonResult(UIView *view1, UIView *view2) {
-        if (view1.frame.origin.x < view2.frame.origin.x) {
+        CGRect frame1 = [view1.superview convertRect:view1.frame toViewOrWindow:self];
+        CGRect frame2 = [view2.superview convertRect:view2.frame toViewOrWindow:self];
+        
+        if (frame1.origin.x < frame2.origin.x) {
             return fromLeft?NSOrderedAscending:NSOrderedDescending;
         }
-        if (view1.frame.origin.x > view2.frame.origin.x) {
+        if (frame1.origin.x > frame2.origin.x) {
             return fromLeft?NSOrderedDescending:NSOrderedAscending;
         }
         return NSOrderedSame;

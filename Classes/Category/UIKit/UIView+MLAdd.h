@@ -144,6 +144,15 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL)containsSubviewPassingTest:(BOOL (^)(UIView *subview))comparator;
 
 /**
+ retrieve all descendants with test block
+ 
+ @param comparator test block
+ 
+ @return escendants
+ */
+- (NSArray*)retrieveDescendantsPassingTest:(BOOL (^)(UIView *v))comparator;
+
+/**
  Detect whether self is descendant of (ancestor with test block, not contains self)
  
  @param comparator test block

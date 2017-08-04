@@ -15,7 +15,7 @@ SYNTH_DUMMY_CLASS(UISearchBar_MLAdd)
 
 @implementation UISearchBar (MLAdd)
 
-SYNTH_DYNAMIC_PROPERTY_CTYPE(enableCancelButtonAfterResignFirstResponder, setEnableCancelButtonAfterResignFirstResponder, BOOL)
+SYNTH_DYNAMIC_PROPERTY_CTYPE(enableCancelButtonAfterResignFirstResponder, setEnableCancelButtonAfterResignFirstResponder:, BOOL)
 
 + (void)load {
     static dispatch_once_t onceToken;

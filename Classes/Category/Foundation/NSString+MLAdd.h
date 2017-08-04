@@ -67,6 +67,16 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (NSString *)stringByEscapingQuotes;
 
+/**
+ Simple encrypt
+ */
+- (NSString *)mlEncryptString;
+
+/**
+ Simple decrypt
+ */
+- (NSString *)mlDecryptString;
+
 #pragma mark - Regular Expression
 ///=============================================================================
 /// @name Regular Expression

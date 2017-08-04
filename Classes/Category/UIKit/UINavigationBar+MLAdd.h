@@ -21,14 +21,14 @@ NS_ASSUME_NONNULL_BEGIN
 - (UIImageView *)hairlineImageView;
 
 /*!
- Return the UINavigationButton with its display index from left or right
+ Return the button with its display index from left or right
  
  @param index    display index
  @param fromLeft direction
  
- @return view or nil
+ @return button or nil
  */
-- (nullable UIView*)viewForBarItemAtIndex:(NSUInteger)index fromLeft:(BOOL)fromLeft;
+- (nullable UIButton*)buttonAtIndex:(NSUInteger)index fromLeft:(BOOL)fromLeft;
 
 @end
 
