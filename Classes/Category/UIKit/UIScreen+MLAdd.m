@@ -12,7 +12,6 @@
 SYNTH_DUMMY_CLASS(UIScreen_MLAdd);
 
 static CGFloat ____screenScale;
-static CGSize ____screenSize;
 
 @implementation UIScreen (MLAdd)
 
@@ -20,14 +19,6 @@ static CGSize ____screenSize;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         ____screenScale = [UIScreen mainScreen].scale;
-        
-        CGSize screenSize = [UIScreen mainScreen].bounds.size;
-        if (screenSize.height < screenSize.width) {
-            CGFloat tmp = screenSize.height;
-            screenSize.height = screenSize.width;
-            screenSize.width = tmp;
-        }
-        ____screenSize = screenSize;
     });
 }
 
@@ -36,7 +27,13 @@ static CGSize ____screenSize;
 }
 
 + (CGSize)screenSize {
-    return ____screenSize;
+    CGSize screenSize = [UIScreen mainScreen].bounds.size;
+    if (screenSize.height < screenSize.width) {
+        CGFloat tmp = screenSize.height;
+        screenSize.height = screenSize.width;
+        screenSize.width = tmp;
+    }
+    return screenSize;
 }
 
 - (CGRect)currentBounds {
