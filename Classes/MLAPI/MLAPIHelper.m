@@ -423,7 +423,7 @@ BOOL MLAPI_IsErrorCancelled(NSError *error) {
 - (void)treatWithConstructedRequestParams:(NSMutableDictionary*)params{}
 - (void)beforeConstructUploadParams{}
 - (void)treatWithConstructedUploadParams:(NSMutableDictionary*)params{}
-- (void)treatWithConstructedRequest:(NSMutableURLRequest*)mutableRequest{}
+- (void)treatWithConstructedRequest:(NSMutableURLRequest*)mutableRequest requestParams:(NSDictionary*)requestParams uploadParams:(NSDictionary*)uploadParams {}
 - (void)beforeRequest{}
 - (void)afterCachePreloaded{}
 - (void)uploadProgress:(NSProgress *)progress{}

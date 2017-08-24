@@ -231,9 +231,9 @@ FOUNDATION_EXPORT BOOL MLAPI_IsErrorCancelled(NSError *error);
 - (void)treatWithConstructedUploadParams:(NSMutableDictionary*)params __attribute__((objc_requires_super));
 
 /**
- 对构造出来的请求URLRequest进行额外处理，例如重新设置HTTPHeaderField啊等等
+ 对构造出来的请求URLRequest进行额外处理，例如重新设置HTTPHeaderField啊，打印日志啊等等等等，但是requestParams和uploadParams是修改不了的，这俩只是提供出来便于处理的
  */
-- (void)treatWithConstructedRequest:(NSMutableURLRequest*)mutableRequest __attribute__((objc_requires_super));
+- (void)treatWithConstructedRequest:(NSMutableURLRequest*)mutableRequest requestParams:(nullable NSDictionary*)requestParams uploadParams:(nullable NSDictionary*)uploadParams __attribute__((objc_requires_super));
 
 /**
  执行请求之前

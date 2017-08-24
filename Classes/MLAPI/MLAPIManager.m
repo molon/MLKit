@@ -419,7 +419,7 @@ GOON_CALLBACK(_method_) \
                 if (timeoutInterval>0) {
                     [request setTimeoutInterval:timeoutInterval];
                 }
-                [apiHelper treatWithConstructedRequest:request];
+                [apiHelper treatWithConstructedRequest:request requestParams:params uploadParams:uploadParams];
             } progress:uploadProgressWrapper success:requestSuccessWrapper failure:errorWrapper];
         }else{
             //执行标准的请求方式
@@ -431,7 +431,7 @@ GOON_CALLBACK(_method_) \
                     if (timeoutInterval>0) {
                         [request setTimeoutInterval:timeoutInterval];
                     }
-                    [apiHelper treatWithConstructedRequest:request];
+                [apiHelper treatWithConstructedRequest:request requestParams:params uploadParams:nil];
             } uploadProgress:uploadProgressWrapper downloadProgress:downloadProgressWrapper success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
                 if (apiHelper.requestMethod==MLAPIHelperRequestMethodHEAD) {
                     responseObject = nil;
