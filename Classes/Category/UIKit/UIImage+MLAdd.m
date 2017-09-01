@@ -230,21 +230,16 @@ CGRect ____CGRectFitWithContentMode(CGRect rect, CGSize size, UIViewContentMode 
 }
 
 - (UIImage *)imageByResizeToSize:(CGSize)size {
-    if (size.width <= 0 || size.height <= 0) return nil;
-    CGFloat scaleRatio = kScreenScale/self.scale;
-    size.width = size.width*scaleRatio;
-    size.height = size.height*scaleRatio;
-
-    UIGraphicsBeginImageContextWithOptions(size, NO, self.scale);
-    [self drawInRect:CGRectMake(0, 0, size.width, size.height)];
-    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    return image;
+    return [self imageByResizeToSize:size contentMode:UIViewContentModeScaleToFill];
 }
 
 - (UIImage *)imageByResizeToSize:(CGSize)size contentMode:(UIViewContentMode)contentMode {
+    return [self imageByResizeToSize:size contentMode:contentMode scale:kScreenScale];
+}
+
+- (UIImage *)imageByResizeToSize:(CGSize)size contentMode:(UIViewContentMode)contentMode scale:(CGFloat)scale {
     if (size.width <= 0 || size.height <= 0) return nil;
-    CGFloat scaleRatio = kScreenScale/self.scale;
+    CGFloat scaleRatio = scale/self.scale;
     size.width = size.width*scaleRatio;
     size.height = size.height*scaleRatio;
     
@@ -634,16 +629,19 @@ static void ____cleanupBuffer(void *userData, void *buf_data) {
 }
 
 - (void)compressImageToMaxSideLength:(CGFloat)maxSideLength maxDataLength:(NSUInteger)maxDataLength withCallback:(void(^)(UIImage *originalImage,NSData *compressedData))callback {
-    __block UIImage *image = [self copy];
+    __block UIImage *image = [UIImage imageWithCGImage:[self CGImage]
+                                                 scale:1.0f
+                                           orientation:self.imageOrientation];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         @autoreleasepool {
             UIImage *(^imageByScalingToMaxSideLengthBlock)(CGFloat) = ^(CGFloat maxSideLength) {
                 CGFloat ratio = fmax(image.size.height,image.size.width) / maxSideLength;
-                if (ratio<1.0f) {
+                if (ratio<=(1.0f+DBL_EPSILON)) {
                     return image;
                 }
                 CGSize  sizeForAspectScale = CGSizeMake(image.size.width / ratio, image.size.height / ratio);
-                return [image imageByResizeToSize:sizeForAspectScale];
+//                NSLog(@"compress to sizeForAspectScale:%@",NSStringFromCGSize(sizeForAspectScale));
+                return [image imageByResizeToSize:sizeForAspectScale contentMode:UIViewContentModeScaleToFill scale:1.0f];
             };
             
             if (maxSideLength>0) {
@@ -667,11 +665,12 @@ static void ____cleanupBuffer(void *userData, void *buf_data) {
             CGFloat compression = 0.99f;
             NSData *imageData = UIImageJPEGRepresentation(image, compression);
             while (imageData.length > maxDataLength&&compression>0){
-                compression -= 0.01;
+                compression -= 0.02;
                 if (compression<0) {
                     compression = 0;
                 }
                 
+//                NSLog(@"compress to compression:%.2f",compression);
                 imageData = UIImageJPEGRepresentation(image, compression);
                 
                 if (compression==0) {
