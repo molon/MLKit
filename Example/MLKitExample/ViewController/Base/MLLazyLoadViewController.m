@@ -104,7 +104,7 @@
     
     //MLRefreshControl
     if ([self autoEnableMLRefreshControl]) {
-        [self.tableView enableRefreshingWithAction:^{
+        [self.tableView enableRefreshControlWithAction:^{
             STRONG_SELF
             [self.tableView doRefresh];
         } style:MLRefreshControlViewStyleFollow originalTopInset:self.tableView.contentInset.top scrollToTopAfterEndRefreshing:NO];

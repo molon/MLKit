@@ -12,6 +12,7 @@
 #import "MLKitMacro.h"
 #import "NSString+MLAdd.h"
 #import <SAMKeychain/SAMKeychain.h>
+#import "UIScreen+MLAdd.h"
 
 SYNTH_DUMMY_CLASS(UIDevice_MLAdd)
 
@@ -117,6 +118,17 @@ SYNTH_DUMMY_CLASS(UIDevice_MLAdd)
     return model;
 }
 
+- (BOOL)isFullScreenDevice {
+    static dispatch_once_t one;
+    static BOOL b;
+    dispatch_once(&one, ^{
+        CGSize size = [UIScreen screenSize];
+        b = (size.width==812&&size.height==375)
+        ||(size.width==375&&size.height==812);
+    });
+    return b;
+}
+
 - (NSString *)machineModelName {
     static dispatch_once_t one;
     static NSString *name;
@@ -156,6 +168,12 @@ SYNTH_DUMMY_CLASS(UIDevice_MLAdd)
                               @"iPhone9,3" : @"iPhone 7",
                               @"iPhone9,2" : @"iPhone 7 Plus",
                               @"iPhone9,4" : @"iPhone 7 Plus",
+                              @"iPhone10,1" : @"iPhone 8",
+                              @"iPhone10,3" : @"iPhone 8",
+                              @"iPhone10,2" : @"iPhone 8 Plus",
+                              @"iPhone10,4" : @"iPhone 8 Plus",
+                              @"iPhone10,5" : @"iPhone X",
+                              @"iPhone10,6" : @"iPhone X",
                               
                               @"iPad1,1" : @"iPad 1",
                               @"iPad2,1" : @"iPad 2 (WiFi)",

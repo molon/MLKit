@@ -26,6 +26,9 @@ NS_ASSUME_NONNULL_BEGIN
 /// UUID
 @property (nonatomic, copy, readonly) NSString *UUID;
 
+/// isFullScreenDevice
+@property (nonatomic, readonly) BOOL isFullScreenDevice;
+
 /// Whether the device is iPad/iPad mini.
 @property (nonatomic, readonly) BOOL isPad;
 

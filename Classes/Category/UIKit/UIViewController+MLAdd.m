@@ -21,13 +21,15 @@ SYNTH_DUMMY_CLASS(UIViewController_MLAdd)
 }
 
 + (CGFloat)statusBarHeight {
-    //    CGSize statusBarSize = [[UIApplication sharedApplication] statusBarFrame].size;
-    //    return [UIApplication sharedApplication].statusBarHidden?0.0f:fmin(statusBarSize.width, statusBarSize.height);
+    if ([UIDevice currentDevice].isFullScreenDevice) {
+        CGSize statusBarSize = [[UIApplication sharedApplication] statusBarFrame].size;
+        return [UIApplication sharedApplication].statusBarHidden?0.0f:fmin(statusBarSize.width, statusBarSize.height);
+    }
     
     // When a tel call comes in, the statusBarHeight should be 40.0f
     // But but !! if use 40, the view's height will be reduced by 20 simultaneously.
     // So always using 20 is well.
-    return 20.0f;
+    return [UIApplication sharedApplication].statusBarHidden?0.0f:20.0f;
 }
 
 - (CGFloat)navigationBarBottom {
@@ -45,6 +47,7 @@ SYNTH_DUMMY_CLASS(UIViewController_MLAdd)
     if (self.navigationController.navigationBarHidden) {
         return 0.0f;
     }
+    //如果prefersStatusBarHidden为true，则直接为0.0f，此时有可能[UIApplication sharedApplication].statusBarHidden还未变成true呢
     return (self.prefersStatusBarHidden?0.0f:[UIViewController statusBarHeight]) + self.navigationController.navigationBar.intrinsicContentSize.height;
 }
 

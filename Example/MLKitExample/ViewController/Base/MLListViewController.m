@@ -73,6 +73,18 @@
 
 #pragma mark - helper
 - (void)adjustTableViewContentInset {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wundeclared-selector"
+    SEL sel = @selector(setContentInsetAdjustmentBehavior:);
+    if (class_getInstanceMethod([UIScrollView class], sel)||class_getInstanceMethod([UITableView class], sel)) {
+        @try {
+            [_tableView performSelectorWithArgs:sel,2]; //setContentInsetAdjustmentBehavior:Nerver
+        } @catch  (NSException *exception) {
+            NSLog(@"%@",exception);
+        }
+    }
+#pragma clang diagnostic pop
+    
     _tableView.contentInsetBottom = [self tabBarOccupiedHeight];
     
     CGFloat topInset = [self navigationBarBottom];
