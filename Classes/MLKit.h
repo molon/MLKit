@@ -8,7 +8,7 @@
 #pragma once
 
 #import "MLKitMacro.h"
-#import <MLPersonalModel/YYModel.h>
+#import <MLPersonalModel/XXModel.h>
 
 #import "MLThread.h"
 #import "MLWeakProxy.h"

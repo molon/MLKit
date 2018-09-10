@@ -8,7 +8,7 @@
 
 #import "AppDelegate.h"
 
-@interface MLAPIModelTransformProtocol : YYModelTransformProtocol
+@interface MLAPIModelTransformProtocol : XXModelTransformProtocol
 
 @end
 @implementation MLAPIModelTransformProtocol
@@ -30,7 +30,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
-    [YYModelTransformProtocol registerClass:[MLAPIModelTransformProtocol class]];
+    [XXModelTransformProtocol registerClass:[MLAPIModelTransformProtocol class]];
     
     [[MLKitManager defaultManager]setupWithDDLog:YES];
     [[MLAPIManager defaultManager]setupWithSessionConfiguration:nil];

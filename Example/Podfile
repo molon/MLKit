@@ -7,7 +7,7 @@ workspace 'MLKitExample.xcworkspace'
 target 'MLKitExample' do
 	project 'MLKitExample.xcodeproj'
     
-    pod 'MLProgressHUD', '~>1.0.4'
+    pod 'MLProgressHUD', '~>1.0.5'
     pod 'MLKit', :path => '../MLKit.podspec'
 #    pod 'MLLayout', :path => '~/MLProjects/MLLayout'
 end

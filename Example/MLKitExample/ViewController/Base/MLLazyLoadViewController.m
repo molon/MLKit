@@ -193,7 +193,7 @@
         if (!self.tableView.refreshing&&rows.count>0) {
             if ([_keyOfEntryIDForDeduplication isNotBlank]) {
                 //check whether keyOfEntryID exist
-                BOOL exist = [[[rows firstObject] class]yy_containsPropertyKey:_keyOfEntryIDForDeduplication];
+                BOOL exist = [[[rows firstObject] class]xx_containsPropertyKey:_keyOfEntryIDForDeduplication];
                 NSAssert(exist, @"_keyOfEntryIDForDeduplication is not exist in entry of `r_rows`");
                 if (exist) {
                     [rows removeNilAndDuplicateValueObjectsForKeyPath:_keyOfEntryIDForDeduplication andSameValueObjectsWithOtherObjects:self.tableView.entries];

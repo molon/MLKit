@@ -14,34 +14,47 @@ PODS:
   - AFNetworking/Serialization (3.1.0)
   - AFNetworking/UIKit (3.1.0):
     - AFNetworking/NSURLSession
-  - CocoaLumberjack (3.2.0):
-    - CocoaLumberjack/Default (= 3.2.0)
-    - CocoaLumberjack/Extensions (= 3.2.0)
-  - CocoaLumberjack/Default (3.2.0)
-  - CocoaLumberjack/Extensions (3.2.0):
+  - CocoaLumberjack (3.2.1):
+    - CocoaLumberjack/Default (= 3.2.1)
+    - CocoaLumberjack/Extensions (= 3.2.1)
+  - CocoaLumberjack/Default (3.2.1)
+  - CocoaLumberjack/Extensions (3.2.1):
     - CocoaLumberjack/Default
   - DHSmartScreenshot (1.3.1)
   - MBProgressHUD (1.0.0)
-  - MLKit (0.5.0):
+  - MLKit (0.5.5):
     - AFNetworking (~> 3.1.0)
     - CocoaLumberjack (~> 3.2.0)
     - DHSmartScreenshot (~> 1.3.1)
     - MLLayout (~> 0.4.3)
-    - MLPersonalModel (~> 11.2.1)
+    - MLPersonalModel (~> 12.2.2)
     - MLRefreshControl (~> 1.1.0)
-    - SAMKeychain (~> 1.5.2)
+    - SAMKeychain (~> 1.5.3)
     - YYCache (~> 1.0.4)
   - MLLayout (0.4.3)
-  - MLPersonalModel (11.2.1)
-  - MLProgressHUD (1.0.4):
+  - MLPersonalModel (12.2.2)
+  - MLProgressHUD (1.0.5):
     - MBProgressHUD (= 1.0.0)
   - MLRefreshControl (1.1.0)
-  - SAMKeychain (1.5.2)
+  - SAMKeychain (1.5.3)
   - YYCache (1.0.4)
 
 DEPENDENCIES:
   - MLKit (from `../MLKit.podspec`)
-  - MLProgressHUD (~> 1.0.3)
+  - MLProgressHUD (~> 1.0.5)
+
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - AFNetworking
+    - CocoaLumberjack
+    - DHSmartScreenshot
+    - MBProgressHUD
+    - MLLayout
+    - MLPersonalModel
+    - MLProgressHUD
+    - MLRefreshControl
+    - SAMKeychain
+    - YYCache
 
 EXTERNAL SOURCES:
   MLKit:
@@ -49,17 +62,17 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   AFNetworking: 5e0e199f73d8626b11e79750991f5d173d1f8b67
-  CocoaLumberjack: 9b4aed7073d242f29cc2f62068d995faf67f703a
+  CocoaLumberjack: 2800c03334042fe80589423c8d80e582dcaec482
   DHSmartScreenshot: ee749048bd7126c4826748f98df3a4adc6ad6c78
   MBProgressHUD: 4890f671c94e8a0f3cf959aa731e9de2f036d71a
-  MLKit: ebbfbc537bb19603ff25caf6eecb5a0392dc7a11
+  MLKit: 7c4e5bbf77ae73fb8308c3a9ae4db85d1b81c4af
   MLLayout: 6ac7b51c7cadfeab852524035710a68a1368a19c
-  MLPersonalModel: 1dba0b5f424a8f99069c4e18c8f7666e5124b32e
-  MLProgressHUD: e99dc710e7c640574088574323e5f1e4933c5d07
+  MLPersonalModel: 53b6f93de029286e8445ee9980a462a1d4a5cf94
+  MLProgressHUD: 3a183773efae4d5c469a9c73147fad40e9b6938b
   MLRefreshControl: 245417c9719c27ef1787cccedd0c20407740d333
-  SAMKeychain: 1865333198217411f35327e8da61b43de79b635b
+  SAMKeychain: 483e1c9f32984d50ca961e26818a534283b4cd5c
   YYCache: 8105b6638f5e849296c71f331ff83891a4942952
 
-PODFILE CHECKSUM: 3d6268c45f0441f2a1b216bce009910a58af11e8
+PODFILE CHECKSUM: 0b4acd0dd12b52372ed84212fd099eff83aacc89
 
-COCOAPODS: 1.2.1
+COCOAPODS: 1.5.3

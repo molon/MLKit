@@ -7,7 +7,7 @@
 //
 
 #import "MLAPIHelper.h"
-#import <MLPersonalModel/YYModel.h>
+#import <MLPersonalModel/XXModel.h>
 #import "NSString+MLAdd.h"
 #import "MLKitMacro.h"
 #import "MLAPIManager.h"
@@ -35,12 +35,12 @@ static inline NSDictionary *kResetResponseProtypeDictionary(Class cls) {
     
     NSString *clsName = NSStringFromClass(cls);
     if (!protypeResponses[clsName]) {
-        NSDictionary<NSString *, YYClassPropertyInfo *> *propertyInfos = [cls yy_propertyInfosUntilClass:[MLAPIHelper class] ignoreUntilClass:YES];
+        NSDictionary<NSString *, XXClassPropertyInfo *> *propertyInfos = [cls xx_propertyInfosUntilClass:[MLAPIHelper class] ignoreUntilClass:YES];
         
         NSMutableDictionary *protypeResponse = [NSMutableDictionary dictionary];
         //先保证所有代表返回结果的属性值全部会被重置
         if (propertyInfos[MLAPIHelperResponseModelArrayKey]) {
-            YYClassPropertyInfo *info = propertyInfos[MLAPIHelperResponseModelArrayKey];
+            XXClassPropertyInfo *info = propertyInfos[MLAPIHelperResponseModelArrayKey];
             if (![info.cls isSubclassOfClass:[NSArray class]]||!info.pseudoGenericCls) {
                 NSCAssert(@"接口类%@的%@属性必须是实现了有效伪泛型的NSArray类型",clsName,MLAPIHelperResponseModelArrayKey);
             }else{
@@ -154,7 +154,7 @@ BOOL MLAPI_IsErrorCancelled(NSError *error) {
 - (instancetype)init {
     self = [super init];
     if (self) {
-        [self yy_resetAllPropertyValues];
+        [self xx_resetAllPropertyValues];
         
         NSURL *baseURL = [self configureBaseURL];
         // Ensure terminal slash for baseURL path, so that NSURL +URLWithString:relativeToURL: works as expected
@@ -188,7 +188,7 @@ BOOL MLAPI_IsErrorCancelled(NSError *error) {
 #pragma mark - outcall
 - (BOOL)isUploadAPI {
     __block BOOL result = NO;
-    [self enumParamsWithPrefix:MLAPIHelperUploadParamPrefix block:^(NSString *paramKey, NSString *key, YYClassPropertyInfo *info, BOOL *stop) {
+    [self enumParamsWithPrefix:MLAPIHelperUploadParamPrefix block:^(NSString *paramKey, NSString *key, XXClassPropertyInfo *info, BOOL *stop) {
         //有这个类型就OK
         if ([info.cls isSubclassOfClass:[MLAPIHelperUploadParam class]]) {
             result = YES;
@@ -245,7 +245,7 @@ BOOL MLAPI_IsErrorCancelled(NSError *error) {
 }
 
 #pragma mark - helper
-- (void)enumParamsWithPrefix:(NSString*)prefix block:(void(^)(NSString *paramKey,NSString *key,YYClassPropertyInfo *info,BOOL *stop))block {
+- (void)enumParamsWithPrefix:(NSString*)prefix block:(void(^)(NSString *paramKey,NSString *key,XXClassPropertyInfo *info,BOOL *stop))block {
     NSAssert(block, @"必须提供block");
     
     NSDictionary *paramKeyMapper = [[self class]customRequestParamKeyMapper];
@@ -254,7 +254,7 @@ BOOL MLAPI_IsErrorCancelled(NSError *error) {
     }
     
     //找到p_开头的属性，如果其不为空，则认作是有效参数传过去
-    NSDictionary<NSString *, YYClassPropertyInfo *> *propertyInfos = [[self class] yy_propertyInfosUntilClass:[MLAPIHelper class] ignoreUntilClass:YES];
+    NSDictionary<NSString *, XXClassPropertyInfo *> *propertyInfos = [[self class] xx_propertyInfosUntilClass:[MLAPIHelper class] ignoreUntilClass:YES];
     for (NSString *key in [propertyInfos allKeys]) {
         if (![key hasPrefix:prefix]&&!paramKeyMapper[key]) {
             continue;
@@ -271,7 +271,7 @@ BOOL MLAPI_IsErrorCancelled(NSError *error) {
         if ([paramKey isNotBlank]) {
             BOOL stop = NO;
             
-            YYClassPropertyInfo *info = propertyInfos[key];
+            XXClassPropertyInfo *info = propertyInfos[key];
             NSAssert(![prefix isEqualToString:MLAPIHelperUploadParamPrefix]||([prefix isEqualToString:MLAPIHelperUploadParamPrefix]&&[info.cls isSubclassOfClass:[MLAPIHelperUploadParam class]]), @"f_开头的一定要是MLAPIHelperUploadParam类型！");
             block(paramKey,key,info,&stop);
             if (stop) {
@@ -284,10 +284,10 @@ BOOL MLAPI_IsErrorCancelled(NSError *error) {
 - (NSMutableDictionary*)constructRequestParams {
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
     
-    if ([[self class]yy_containsPropertyKey:MLAPIHelperRequestModelKey untilClass:[MLAPIHelper class] ignoreUntilClass:YES]) {
+    if ([[self class]xx_containsPropertyKey:MLAPIHelperRequestModelKey untilClass:[MLAPIHelper class] ignoreUntilClass:YES]) {
         id requestModel = [self valueForKey:MLAPIHelperRequestModelKey];
         if (requestModel) {
-            id requestModelDict = [requestModel yy_modelToJSONObjectOrRootSelf:NO];
+            id requestModelDict = [requestModel xx_modelToJSONObjectOrRootSelf:NO];
             NSAssert([requestModelDict isKindOfClass:[NSDictionary class]], @"%@只支持可转换为NSDictionary的对象",MLAPIHelperRequestModelKey);
             if ([requestModelDict isKindOfClass:[NSDictionary class]]) {
                 [params addEntriesFromDictionary:requestModelDict];
@@ -295,7 +295,7 @@ BOOL MLAPI_IsErrorCancelled(NSError *error) {
         }
     }
     
-    [self enumParamsWithPrefix:MLAPIHelperParamPrefix block:^(NSString *paramKey, NSString *key, YYClassPropertyInfo *info, BOOL *stop) {
+    [self enumParamsWithPrefix:MLAPIHelperParamPrefix block:^(NSString *paramKey, NSString *key, XXClassPropertyInfo *info, BOOL *stop) {
         id object = [self valueForKey:key];
         if (object && object!= (id)kCFNull) {
             if ([object isKindOfClass:[NSNumber class]]&&
@@ -312,7 +312,7 @@ BOOL MLAPI_IsErrorCancelled(NSError *error) {
                 NSAssert(![object isFileURL], @"作为参数的属性值不可谓 FileURL");
                 params[paramKey] = [object absoluteString];
             }else{
-                params[paramKey] = [object yy_modelToJSONObjectOrRootSelf:YES];
+                params[paramKey] = [object xx_modelToJSONObjectOrRootSelf:YES];
             }
         }
     }];
@@ -322,7 +322,7 @@ BOOL MLAPI_IsErrorCancelled(NSError *error) {
 - (NSMutableDictionary*)constructUploadParams {
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
     
-    [self enumParamsWithPrefix:MLAPIHelperUploadParamPrefix block:^(NSString *paramKey, NSString *key, YYClassPropertyInfo *info, BOOL *stop) {
+    [self enumParamsWithPrefix:MLAPIHelperUploadParamPrefix block:^(NSString *paramKey, NSString *key, XXClassPropertyInfo *info, BOOL *stop) {
         if (![info.cls isSubclassOfClass:[MLAPIHelperUploadParam class]]) {
             return;
         }
@@ -360,7 +360,7 @@ BOOL MLAPI_IsErrorCancelled(NSError *error) {
     
     //重置response相关的属性
     NSMutableDictionary *response = [kResetResponseProtypeDictionary([self class]) mutableCopy];
-    [self yy_modelSetWithJSON:response];
+    [self xx_modelSetWithJSON:response];
     
     self.state = MLAPIHelperStateInit;
 }
@@ -468,7 +468,7 @@ BOOL MLAPI_IsErrorCancelled(NSError *error) {
         }
     }
     
-    [self yy_modelSetWithJSON:response];
+    [self xx_modelSetWithJSON:response];
 }
 
 + (NSDictionary *)modelCustomPropertyDefaultValueMapper {

@@ -281,7 +281,7 @@
     
     NSMutableArray *indexPaths = [NSMutableArray array];
     NSIndexSet *indexes = [_entries indexesOfObjectsPassingTest:^BOOL(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        NSAssert([[obj class]yy_containsPropertyKey:keyOfEntryID], @"keyOfEntryID is not exist in entry:%@",obj);
+        NSAssert([[obj class]xx_containsPropertyKey:keyOfEntryID], @"keyOfEntryID is not exist in entry:%@",obj);
         
         id value = nil;
         @try {
@@ -338,7 +338,7 @@
     NSParameterAssert(keyOfEntryID);
     NSParameterAssert(entry);
     
-    NSAssert([[entry class]yy_containsPropertyKey:keyOfEntryID], @"keyOfEntryID is not exist in entry:%@",entry);
+    NSAssert([[entry class]xx_containsPropertyKey:keyOfEntryID], @"keyOfEntryID is not exist in entry:%@",entry);
     id entryID = nil;
     @try {
         entryID = [entry valueForKeyPath:keyOfEntryID];
@@ -349,7 +349,7 @@
     NSMutableArray *arr = [NSMutableArray array];
     NSMutableArray *indexPaths = [NSMutableArray array];
     NSIndexSet *indexes = [_entries indexesOfObjectsPassingTest:^BOOL(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        NSAssert([[obj class]yy_containsPropertyKey:keyOfEntryID], @"keyOfEntryID is not exist in entry:%@",obj);
+        NSAssert([[obj class]xx_containsPropertyKey:keyOfEntryID], @"keyOfEntryID is not exist in entry:%@",obj);
         
         id value = nil;
         @try {

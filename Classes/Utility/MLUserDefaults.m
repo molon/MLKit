@@ -7,7 +7,7 @@
 //
 
 #import "MLUserDefaults.h"
-#import <MLPersonalModel/YYModel.h>
+#import <MLPersonalModel/XXModel.h>
 
 NSString * const PrefixKeyOfMLUserDefaults = @"com.molon.MLUserDefaults.";
 
@@ -47,7 +47,7 @@ NSString * const PrefixKeyOfMLUserDefaults = @"com.molon.MLUserDefaults.";
         self.ignoreKeys = [self configureIgnoreKeys];
         
         //get the propertyInfos of self, dont contain MLUserDefaults's
-        NSDictionary<NSString *, YYClassPropertyInfo *> *propertyInfos = [[self class]yy_propertyInfosUntilClass:[MLUserDefaults class] ignoreUntilClass:YES];
+        NSDictionary<NSString *, XXClassPropertyInfo *> *propertyInfos = [[self class]xx_propertyInfosUntilClass:[MLUserDefaults class] ignoreUntilClass:YES];
         
         //get the standardUserDefaults
         NSUserDefaults *def = [NSUserDefaults standardUserDefaults];
@@ -67,7 +67,7 @@ NSString * const PrefixKeyOfMLUserDefaults = @"com.molon.MLUserDefaults.";
         }
         
         //set
-        [self yy_modelSetWithDictionary:setterDict];
+        [self xx_modelSetWithDictionary:setterDict];
         
         //add kvo
         for (NSString *key in [propertyInfos allKeys]) {
@@ -83,7 +83,7 @@ NSString * const PrefixKeyOfMLUserDefaults = @"com.molon.MLUserDefaults.";
 }
 
 - (void)dealloc {
-    NSDictionary<NSString *, YYClassPropertyInfo *> *propertyInfos = [[self class]yy_propertyInfosUntilClass:[MLUserDefaults class] ignoreUntilClass:YES];
+    NSDictionary<NSString *, XXClassPropertyInfo *> *propertyInfos = [[self class]xx_propertyInfosUntilClass:[MLUserDefaults class] ignoreUntilClass:YES];
     
     for (NSString *key in [propertyInfos allKeys]) {
         if ([_ignoreKeys containsObject:key]) {
@@ -127,7 +127,7 @@ NSString * const PrefixKeyOfMLUserDefaults = @"com.molon.MLUserDefaults.";
     if (!object || object == (id)kCFNull) {
         [def removeObjectForKey:archiveKey];
     }else{
-        id archiveObject = [object yy_modelToJSONObject];
+        id archiveObject = [object xx_modelToJSONObject];
         if (!archiveObject) {
             if ([object isKindOfClass:[NSURL class]]) {
                 object = [object absoluteString];
